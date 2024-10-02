@@ -2,37 +2,27 @@ package org.firstinspires.ftc.teamcode.opmode.auto.league;
 
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.commands.arm.position.ResetCommand;
-import org.firstinspires.ftc.teamcode.commands.arm.position.SlideCommand;
-import org.firstinspires.ftc.teamcode.commands.drive.trajectory.sequence.DisplacementCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.trajectory.sequence.TrajectorySequenceContainerFollowCommand;
 import org.firstinspires.ftc.teamcode.opmode.auto.Speed;
-import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.PowerIntake;
 import org.firstinspires.ftc.teamcode.subsystems.Slide;
 import org.firstinspires.ftc.teamcode.subsystems.drive.mec.MecDrive;
 import org.firstinspires.ftc.teamcode.util.PoseStorage;
-
 import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
 import org.firstinspires.ftc.teamcode.util.trajectorysequence.container.Back;
-import org.firstinspires.ftc.teamcode.util.trajectorysequence.container.Forward;
 import org.firstinspires.ftc.teamcode.util.trajectorysequence.container.Pose2dContainer;
 import org.firstinspires.ftc.teamcode.util.trajectorysequence.container.TrajectorySequenceContainer;
 import org.firstinspires.ftc.teamcode.util.trajectorysequence.container.Turn;
-import java.util.logging.Level;
+
 //@Disabled
 @Autonomous(preselectTeleOp = "TeleOpMain")
-public class BlueBackstageNew extends MatchOpMode {
+public class NewAuto extends MatchOpMode {
     // Subsystems
     private MecDrive drivetrain;
-    private PowerIntake intake;
-    private Arm arm;
-    private Slide slide;
-    private Claw claw;
 
     public static class DropSpikeMark {
         public static Pose2dContainer startPose = new Pose2dContainer(10, 65, (270));
@@ -71,10 +61,7 @@ public class BlueBackstageNew extends MatchOpMode {
 
     @Override
     public void robotInit() {
-        intake = new PowerIntake(telemetry, hardwareMap, true);
-        arm = new Arm(telemetry, hardwareMap, true);
-        claw = new Claw(telemetry, hardwareMap, true);
-        slide = new Slide(telemetry, hardwareMap, true);
+        drivetrain = new MecDrive();
     }
 
     @Override
@@ -84,16 +71,17 @@ public class BlueBackstageNew extends MatchOpMode {
 
     public void matchStart() {
         schedule(
-            new SequentialCommandGroup(
-                new TrajectorySequenceContainerFollowCommand(drivetrain,
-                        new TrajectorySequenceContainer(Speed::getBaseConstraints,
-                                new Back(27))),
-                new SequentialCommandGroup(
-                ),
-                /* Save Pose and end opmode*/
-                run(() -> PoseStorage.currentPose = drivetrain.getPose()),
-                run(this::stop)
-            )
+
+//            new SequentialCommandGroup(
+//                new TrajectorySequenceContainerFollowCommand(drivetrain,
+//                        new TrajectorySequenceContainer(Speed::getBaseConstraints,
+//                                new Back(27))),
+//                new SequentialCommandGroup(
+//                ),
+//                /* Save Pose and end opmode*/
+//                run(() -> PoseStorage.currentPose = drivetrain.getPose()),
+//                run(this::stop)
+//            )
         );
 
     }

@@ -9,7 +9,7 @@ import com.arcrobotics.ftclib.geometry.Vector2d;
 
 
 public class MecDrive extends SubsystemBase {
-    private final RoadrunnerMecanumDrive mecDrive =
+    private final RoadrunnerMecanumDrive drivetrain =
             new RoadrunnerMecanumDrive(hardwareMap, new Pose2d(0,0,0));
     public MecDrive(){
     }
@@ -109,13 +109,15 @@ public class MecDrive extends SubsystemBase {
      */
     public void driveWithMotorPowers(double frontLeftSpeed, double frontRightSpeed,
                                      double backLeftSpeed, double backRightSpeed) {
-        mecDrive.motors[RoadrunnerMecanumDrive.lFNum].setPower(frontLeftSpeed);
-        mecDrive.motors[RoadrunnerMecanumDrive.lRNum].setPower(frontRightSpeed);
-        mecDrive.motors[RoadrunnerMecanumDrive.rRNum].setPower(backLeftSpeed);
-        mecDrive.motors[RoadrunnerMecanumDrive.rFNum].setPower(backRightSpeed);
+        drivetrain.motors[RoadrunnerMecanumDrive.lFNum].setPower(frontLeftSpeed);
+        drivetrain.motors[RoadrunnerMecanumDrive.lRNum].setPower(frontRightSpeed);
+        drivetrain.motors[RoadrunnerMecanumDrive.rRNum].setPower(backLeftSpeed);
+        drivetrain.motors[RoadrunnerMecanumDrive.rFNum].setPower(backRightSpeed);
     }
 
-    public void setPose(){
-        mecDrive.updatePoseEstimate();
+    public Pose2d getPose(){
+        return new Pose2d(drivetrain.updatePoseEstimate().component1(),
+                drivetrain.updatePoseEstimate().component2());
+//        return drivetrain.updatePoseEstimate().component1();
     }
 }

@@ -78,7 +78,7 @@ public final class RoadrunnerMecanumDrive {
         public double minProfileAccel = -30;
         public double maxProfileAccel = 50;
 
-        // turn profile parameters (in radians)
+        // turn profile parameters (in radians) PI=180deg
         public double maxAngVel = Math.PI; // shared with path
         public double maxAngAccel = Math.PI;
 
