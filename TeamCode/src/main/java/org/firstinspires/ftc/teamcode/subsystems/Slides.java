@@ -23,7 +23,7 @@ public class Slides {
     public static int MANUAL_MOVE_SPEED = 10;
     private int position = 0;
 
-        public Slides(OpMode opMode) {
+        public Slides (OpMode opMode) {
             driver1 = opMode.gamepad1;
             driver2 = opMode.gamepad2;
             hardwareMap = opMode.hardwareMap;
