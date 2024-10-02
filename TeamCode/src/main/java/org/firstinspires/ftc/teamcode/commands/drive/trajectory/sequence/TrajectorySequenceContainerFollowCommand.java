@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.commands.drive.trajectory.sequence;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.subsystems.drive.mec.Drivetrain;
+import org.firstinspires.ftc.teamcode.subsystems.drive.mec.MecDrive;
 import org.firstinspires.ftc.teamcode.util.PoseStorage;
 import org.firstinspires.ftc.teamcode.util.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.util.trajectorysequence.TrajectorySequenceBuilder;
@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TrajectorySequenceContainerFollowCommand extends CommandBase implements Command {
-    private final org.firstinspires.ftc.teamcode.subsystems.drive.mec.Drivetrain drivetrain;
+    private final MecDrive drivetrain;
     private final TrajectorySequence trajectorySequence;
     private final List<MarkerCommand> markerCommands = new ArrayList<>();
 
-    public TrajectorySequenceContainerFollowCommand(Drivetrain drivetrain, TrajectorySequenceContainer trajectorySequenceContainer, MarkerCommand... markerCommands) {
+    public TrajectorySequenceContainerFollowCommand(MecDrive drivetrain, TrajectorySequenceContainer trajectorySequenceContainer, MarkerCommand... markerCommands) {
         this.drivetrain = drivetrain;
         TrajectorySequenceBuilder trajectorySequenceBuilder = trajectorySequenceContainer.getBuilder(PoseStorage.trajectoryPose);
         for (MarkerCommand markerCommand: markerCommands) {

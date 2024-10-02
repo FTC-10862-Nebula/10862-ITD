@@ -13,11 +13,9 @@ import org.firstinspires.ftc.teamcode.commands.ClimberMoveManual;
 import org.firstinspires.ftc.teamcode.commands.arm.position.ResetCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.position.SlideCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.slide.SlideMoveManual;
-import org.firstinspires.ftc.teamcode.commands.drive.teleop.DefaultDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.climber.Climber;
-import org.firstinspires.ftc.teamcode.subsystems.drive.mec.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.PowerIntake;
 import org.firstinspires.ftc.teamcode.subsystems.SensorColor;
 import org.firstinspires.ftc.teamcode.subsystems.Slide;
@@ -29,7 +27,6 @@ import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
 public class TeleOpMain extends MatchOpMode {
     //TODO: Add a on/off switch for drivetrain
     private GamepadEx driverGamepad, operatorGamepad;
-    private Drivetrain drivetrain;
     private Slide slide;
     private PowerIntake intake;
     private Arm arm;
@@ -44,7 +41,6 @@ public class TeleOpMain extends MatchOpMode {
         operatorGamepad = new GamepadEx(gamepad2);
 
         claw = new Claw(telemetry, hardwareMap, true);
-        drivetrain = new Drivetrain(new ProjectDrive(hardwareMap, telemetry), telemetry);  //Works
         intake = new PowerIntake(telemetry, hardwareMap, true);
         climb = new Climber(telemetry,hardwareMap, true);
         arm = new Arm(telemetry, hardwareMap, true);
@@ -109,7 +105,7 @@ public class TeleOpMain extends MatchOpMode {
             .whenPressed(new InstantCommand(()->slide.resetEncoder()));
 
         //Driver
-        drivetrain.setDefaultCommand(new DefaultDriveCommand(drivetrain, driverGamepad, true);
+//        drivetrain.setDefaultCommand(new DefaultDriveCommand(drivetrain, driverGamepad, true);
 
         //y - up/dowm
         //x- right left
