@@ -11,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.NebulaConstants;
 import org.firstinspires.ftc.teamcode.util.nebulaHardware.NebulaMotor;
 
+@Deprecated
 @Config
 public class Climber extends SubsystemBase {
     protected Telemetry telemetry;
@@ -34,21 +35,18 @@ public class Climber extends SubsystemBase {
 
     public Climber(Telemetry tl, HardwareMap hw, boolean isEnabled) {
         climber = new NebulaMotor(hw,
-            NebulaConstants.Climber.climberName,
-            NebulaConstants.Climber.climberType,
-            NebulaConstants.Climber.climberDirection,
-            NebulaConstants.Climber.climberIdleMode,
+            "climb",
+            NebulaMotor.MotorType.RPM_117,
+            NebulaMotor.Direction.Forward,
+            NebulaMotor.IdleMode.Brake,
             isEnabled);
 
-        climber.setDistancePerPulse(NebulaConstants.Climber.climberDistancePerPulse);
+        climber.setDistancePerPulse(1);
 
-        climberController = new PIDFController(NebulaConstants.Climber.climberPID.p,
-            NebulaConstants.Climber.climberPID.i,
-            NebulaConstants.Climber.climberPID.d,
-            NebulaConstants.Climber.climberPID.f,
+        climberController = new PIDFController(0.002, 0.015, 0.0,0,
             getEncoderDistance(),
             getEncoderDistance());
-        climberController.setTolerance(NebulaConstants.Climber.climberTolerance);
+        climberController.setTolerance(1);
     
         setSetPointCommand(Climber.ClimbEnum.REST);
         this.telemetry = tl;

@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems.drive.mec;
 
-import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.FORWARD;
-import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.mec.DriveConstants.MAX_ACCEL;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.mec.DriveConstants.MAX_ANG_ACCEL;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.mec.DriveConstants.MAX_ANG_VEL;
@@ -9,7 +7,6 @@ import static org.firstinspires.ftc.teamcode.subsystems.drive.mec.DriveConstants
 import static org.firstinspires.ftc.teamcode.subsystems.drive.mec.DriveConstants.MOTOR_VELO_PID;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.mec.DriveConstants.RUN_USING_ENCODER;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.mec.DriveConstants.TRACK_WIDTH;
-import static org.firstinspires.ftc.teamcode.subsystems.drive.mec.DriveConstants.encoderTicksToInches;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.mec.DriveConstants.kA;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.mec.DriveConstants.kStatic;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.mec.DriveConstants.kV;
@@ -17,37 +14,26 @@ import static org.firstinspires.ftc.teamcode.subsystems.drive.mec.DriveConstants
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.control.PIDCoefficients;
-import com.acmerobotics.roadrunner.drive.DriveSignal;
-import com.acmerobotics.roadrunner.followers.HolonomicPIDVAFollower;
-import com.acmerobotics.roadrunner.followers.TrajectoryFollower;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
-import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint;
-import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint;
-import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint;
-import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint;
-import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
-import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Trajectory;
+import com.acmerobotics.roadrunner.TrajectoryBuilder;
+import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.util.misc.LynxModuleUtil;
 import org.firstinspires.ftc.teamcode.util.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.util.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.util.trajectorysequence.TrajectorySequenceRunner;
-
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,11 +43,10 @@ import java.util.List;
  * Simple mecanum drive hardware implementation for REV hardware.
  */
 @Config
-public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive {
+public class SampleMecanumDrive extends MecanumDrive {
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
 
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(10, 0, 0); //6,1,0
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(7, 0, 0);//6,0,0
-    //May not be right^^
     public static double LATERAL_MULTIPLIER = 1;
 
     public static double VX_WEIGHT = 1;
@@ -73,22 +58,20 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
     private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(MAX_VEL, MAX_ANG_VEL, TRACK_WIDTH);
     private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(MAX_ACCEL);
 
-    private final TrajectoryFollower follower;
+    private TrajectoryFollower follower;
 
-    private final DcMotorEx leftFront, leftRear, rightRear, rightFront;
-    private final List<DcMotorEx> motors;
+    private DcMotorEx leftFront, leftRear, rightRear, rightFront;
+    private List<DcMotorEx> motors;
 
-    private final ElapsedTime voltageResetTimer = new ElapsedTime();
-    private final IMU imu;
-//    private final BNO055IMU imu;
-    private final VoltageSensor batteryVoltageSensor;
-    private final Telemetry telemetry;
+    private IMU imu;
+    private VoltageSensor batteryVoltageSensor;
+
     private List<Integer> lastEncPositions = new ArrayList<>();
     private List<Integer> lastEncVels = new ArrayList<>();
-    private double voltage;
 
-    public MecanumDrive(HardwareMap hardwareMap, Telemetry telemetry) {
+    public SampleMecanumDrive(HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
+
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
                 new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
 
@@ -100,15 +83,16 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
 
+        // TODO: adjust the names of the following hardware devices to match your configuration
         imu = hardwareMap.get(IMU.class, "imu");
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
         imu.initialize(parameters);
 
-        leftFront = hardwareMap.get(DcMotorEx.class, "FL");
-        leftRear = hardwareMap.get(DcMotorEx.class, "BL");
-        rightRear = hardwareMap.get(DcMotorEx.class, "BR");
-        rightFront = hardwareMap.get(DcMotorEx.class, "FR");
+        leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
+        leftRear = hardwareMap.get(DcMotorEx.class, "leftRear");
+        rightRear = hardwareMap.get(DcMotorEx.class, "rightRear");
+        rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
@@ -128,17 +112,13 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
             setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, MOTOR_VELO_PID);
         }
 
-        //Motor Direction
-        leftFront.setDirection(REVERSE);
-        leftRear.setDirection(REVERSE);
-        rightFront.setDirection(FORWARD);
-        rightRear.setDirection(FORWARD);
+        // TODO: reverse any motors using DcMotor.setDirection()
 
         List<Integer> lastTrackingEncPositions = new ArrayList<>();
         List<Integer> lastTrackingEncVels = new ArrayList<>();
 
-        // Using drive encoder (put odo here if you use it)
-        this.telemetry = telemetry;
+        // TODO: if desired, use setLocalizer() to change the localization method
+        // setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap, lastTrackingEncPositions, lastTrackingEncVels));
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(
                 follower, HEADING_PID, batteryVoltageSensor,
@@ -199,11 +179,6 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
     public void followTrajectorySequence(TrajectorySequence trajectorySequence) {
         followTrajectorySequenceAsync(trajectorySequence);
         waitForIdle();
-    }
-
-    // Break Following
-    public void breakFollowing() {
-        trajectorySequenceRunner.breakFollowing();
     }
 
     public Pose2d getLastError() {
@@ -296,11 +271,11 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
     }
 
     @Override
-    public void setMotorPowers(double lFP, double lRP, double rFP, double rRP) {
-        leftFront.setPower(lFP);
-        leftRear.setPower(lRP);
-        rightRear.setPower(rFP);
-        rightFront.setPower(rRP);
+    public void setMotorPowers(double v, double v1, double v2, double v3) {
+        leftFront.setPower(v);
+        leftRear.setPower(v1);
+        rightRear.setPower(v2);
+        rightFront.setPower(v3);
     }
 
     @Override
@@ -313,10 +288,6 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         return (double) imu.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate;
     }
 
-    public void resetImu() {
-        imu.resetYaw();
-    }
-
     public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
         return new MinVelocityConstraint(Arrays.asList(
                 new AngularVelocityConstraint(maxAngularVel),
@@ -327,18 +298,4 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
     public static TrajectoryAccelerationConstraint getAccelerationConstraint(double maxAccel) {
         return new ProfileAccelerationConstraint(maxAccel);
     }
-
-//    public int getRightAngle(){
-//        return wheelLocalizer.returnRightPos();
-//    }
-//    public int getLeftAngle(){
-//        return wheelLocalizer.returnLeftPos();
-//    }
-
-//    public void returnData(){
-//        this.telemetry.addData("leftFront", leftFront.getCurrentPosition());
-//        this.telemetry.addData("leftrear", leftRear.getCurrentPosition());
-//        this.telemetry.addData("rightFront", rightFront.getCurrentPosition());
-//        this.telemetry.addData("rightrear", rightRear.getCurrentPosition());
-//    }
 }

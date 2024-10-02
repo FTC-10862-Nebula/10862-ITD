@@ -8,15 +8,18 @@ import androidx.annotation.Nullable;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.acmerobotics.roadrunner.control.PIDCoefficients;
-import com.acmerobotics.roadrunner.control.PIDFController;
-import com.acmerobotics.roadrunner.drive.DriveSignal;
-import com.acmerobotics.roadrunner.followers.TrajectoryFollower;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.profile.MotionState;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.acmerobotics.roadrunner.trajectory.TrajectoryMarker;
-import com.acmerobotics.roadrunner.util.NanoClock;
+//import com.acmerobotics.roadrunner.control.PIDCoefficients;
+//import com.acmerobotics.roadrunner.control.PIDFController;
+//import com.acmerobotics.roadrunner.drive.DriveSignal;
+//import com.acmerobotics.roadrunner.followers.TrajectoryFollower;
+//import com.acmerobotics.roadrunner.geometry.Pose2d;
+//import com.acmerobotics.roadrunner.profile.MotionState;
+//import com.acmerobotics.roadrunner.trajectory.Trajectory;
+//import com.acmerobotics.roadrunner.trajectory.TrajectoryMarker;
+//import com.acmerobotics.roadrunner.util.NanoClock;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.arcrobotics.ftclib.controller.PIDFController;
+import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.subsystems.drive.mec.DriveConstants;
@@ -55,7 +58,7 @@ public class TrajectorySequenceRunner {
     private int currentSegmentIndex;
     private int lastSegmentIndex;
 
-    private Pose2d lastPoseError = new Pose2d();
+    private Pose2d lastPoseError = new Pose2d(0,0,0);
 
     List<TrajectoryMarker> remainingMarkers = new ArrayList<>();
 

@@ -10,20 +10,18 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.ClimberMoveManual;
-import org.firstinspires.ftc.teamcode.commands.ColorSensorCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.position.ResetCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.position.SlideCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.slide.SlideMoveManual;
 import org.firstinspires.ftc.teamcode.commands.drive.teleop.DefaultDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
-import org.firstinspires.ftc.teamcode.subsystems.arm.Arm;
+import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.climber.Climber;
 import org.firstinspires.ftc.teamcode.subsystems.drive.mec.Drivetrain;
-import org.firstinspires.ftc.teamcode.subsystems.drive.mec.MecanumDrive;
-import org.firstinspires.ftc.teamcode.subsystems.intake.PowerIntake;
-import org.firstinspires.ftc.teamcode.subsystems.sensor.SensorColor;
-import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
-import org.firstinspires.ftc.teamcode.subsystems.slide.Slide;
+import org.firstinspires.ftc.teamcode.subsystems.drive.mec.ProjectDrive;
+import org.firstinspires.ftc.teamcode.subsystems.PowerIntake;
+import org.firstinspires.ftc.teamcode.subsystems.SensorColor;
+import org.firstinspires.ftc.teamcode.subsystems.Slide;
 import org.firstinspires.ftc.teamcode.util.teleop.GamepadTrigger;
 import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
 
@@ -37,8 +35,6 @@ public class TeleOpMain extends MatchOpMode {
     private PowerIntake intake;
     private Arm arm;
     private Claw claw;
-    private AutoDropper dropper;
-    private Shooter shooter;
     private Climber climb;
    private SensorColor sensorColor;
     public TeleOpMain() {}
@@ -49,15 +45,12 @@ public class TeleOpMain extends MatchOpMode {
         operatorGamepad = new GamepadEx(gamepad2);
 
         claw = new Claw(telemetry, hardwareMap, true);
-        drivetrain = new Drivetrain(new MecanumDrive(hardwareMap, telemetry), telemetry);  //Works
+        drivetrain = new Drivetrain(new ProjectDrive(hardwareMap, telemetry), telemetry);  //Works
         intake = new PowerIntake(telemetry, hardwareMap, true);
         climb = new Climber(telemetry,hardwareMap, true);
         arm = new Arm(telemetry, hardwareMap, true);
-        shooter = new Shooter(telemetry, hardwareMap, true);
         slide = new Slide(telemetry, hardwareMap, true);
         sensorColor = new SensorColor(telemetry, hardwareMap);
-        dropper = new AutoDropper(telemetry, hardwareMap, true);
-        dropper.dropperSetPositionCommand(AutoDropper.DropPos.TELEOP_HOLD);
     }
 
 
@@ -86,11 +79,6 @@ public class TeleOpMain extends MatchOpMode {
 //                .whenPressed(cycleTracker.trackCycle())
             .whenReleased(intake.setSetPointCommand(PowerIntake.IntakePower.STOP))
             .whenReleased(new InstantCommand(intake::setUp));
-
-      //  Shooter
-        Button Shoot = (new GamepadButton(driverGamepad,  GamepadKeys.Button.RIGHT_BUMPER))
-              .whenPressed(shooter.shoot())
-                .whenReleased(shooter.ready());
 
 
 
@@ -122,24 +110,12 @@ public class TeleOpMain extends MatchOpMode {
             .whenPressed(new InstantCommand(()->slide.resetEncoder()));
 
         //Driver
-        drivetrain.setDefaultCommand(new DefaultDriveCommand(drivetrain, driverGamepad, true));
-        claw.setDefaultCommand(new ColorSensorCommand(claw, sensorColor));
-
+        drivetrain.setDefaultCommand(new DefaultDriveCommand(drivetrain, driverGamepad, true);
 
         //y - up/dowm
         //x- right left
     }
 
     @Override
-    public void matchStart() {
-
-    }
-
-    /*@Override
-    public void matchLoop() {}
-    @Override
-    public void disabledPeriodic() { }
-    @Override
-    public void robotPeriodic(){
-    }*/
+    public void matchStart() {}
 }

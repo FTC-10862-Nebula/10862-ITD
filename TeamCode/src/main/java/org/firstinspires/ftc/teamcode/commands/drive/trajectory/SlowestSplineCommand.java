@@ -1,11 +1,16 @@
 package org.firstinspires.ftc.teamcode.commands.drive.trajectory;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
-import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint;
+import com.acmerobotics.roadrunner.MinVelConstraint;
+//import com.acmerobotics.roadrunner.geometry.Pose2d;
+//import com.acmerobotics.roadrunner.geometry.Vector2d;
+//import com.acmerobotics.roadrunner.trajectory.Trajectory;
+//import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
+//import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Trajectory;
+import com.acmerobotics.roadrunner.TrajectoryBuilder;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.subsystems.drive.mec.Drivetrain;
@@ -21,8 +26,8 @@ public class SlowestSplineCommand extends CommandBase{
     double endHeading;
     Pose2d poseToUse;
 
-    MinVelocityConstraint maxVelConstraint;
-    public SlowestSplineCommand(Drivetrain drive, MinVelocityConstraint constraint, boolean reverse, Vector2d splinePos, double endHeading, Pose2d poseToUse) {
+    MinVelConstraint maxVelConstraint;
+    public SlowestSplineCommand(Drivetrain drive, MinVelConstraint constraint, boolean reverse, Vector2d splinePos, double endHeading, Pose2d poseToUse) {
         this.drive = drive;
         this.reverse = reverse;
         this.splinePos = splinePos;
@@ -80,7 +85,7 @@ public class SlowestSplineCommand extends CommandBase{
     @Override
     public boolean isFinished() {
 //        new ResetPoseCommand(drive, splinePos, endHeading);
-        PoseStorage.currentPose = new Pose2d(splinePos.getX(), splinePos.getY(), endHeading);
+        PoseStorage.currentPose = new Pose2d(splinePos.x, splinePos.y, endHeading);
 //        PoseStorage.currentPose = trajectory.end();
         return !drive.isBusy();
     }

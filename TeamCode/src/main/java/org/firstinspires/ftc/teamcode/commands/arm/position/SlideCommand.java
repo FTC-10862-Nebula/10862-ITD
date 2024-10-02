@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.commands.arm.position;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
-import org.firstinspires.ftc.teamcode.subsystems.arm.Arm;
-import org.firstinspires.ftc.teamcode.subsystems.slide.Slide;
+import org.firstinspires.ftc.teamcode.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.subsystems.Slide;
 
 public class SlideCommand extends SequentialCommandGroup {
     public SlideCommand(Slide slide, Arm arm, Claw claw, Slide.SlideEnum pos) {

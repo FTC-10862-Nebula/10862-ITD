@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands.arm.slide;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import org.firstinspires.ftc.teamcode.subsystems.slide.Slide;
+import org.firstinspires.ftc.teamcode.subsystems.Slide;
 import java.util.function.Supplier;
 
 public class SlideMoveManual extends CommandBase {

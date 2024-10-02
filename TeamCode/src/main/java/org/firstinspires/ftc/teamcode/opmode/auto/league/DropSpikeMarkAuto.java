@@ -1,20 +1,18 @@
 package org.firstinspires.ftc.teamcode.opmode.auto.league;
 
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.commands.drive.trajectory.sequence.TrajectorySequenceContainerFollowCommand;
 import org.firstinspires.ftc.teamcode.opmode.auto.Speed;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
-import org.firstinspires.ftc.teamcode.subsystems.arm.Arm;
+import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.climber.Climber;
 import org.firstinspires.ftc.teamcode.subsystems.drive.mec.Drivetrain;
-import org.firstinspires.ftc.teamcode.subsystems.drive.mec.MecanumDrive;
-import org.firstinspires.ftc.teamcode.subsystems.intake.PowerIntake;
+import org.firstinspires.ftc.teamcode.subsystems.drive.mec.ProjectDrive;
+import org.firstinspires.ftc.teamcode.subsystems.PowerIntake;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
-import org.firstinspires.ftc.teamcode.subsystems.slide.Slide;
+import org.firstinspires.ftc.teamcode.subsystems.Slide;
 import org.firstinspires.ftc.teamcode.subsystems.vision.ff.TeamMarkerPipeline;
 import org.firstinspires.ftc.teamcode.subsystems.vision.ff.FFVision;
 import org.firstinspires.ftc.teamcode.util.PoseStorage;
@@ -31,7 +29,6 @@ import java.util.logging.Level;
 public class DropSpikeMarkAuto extends MatchOpMode {
     // Subsystems
     private Drivetrain drivetrain;
-    private FFVision vision;
     private PowerIntake intake;
     private Climber climber;
     private Arm arm;
@@ -39,7 +36,6 @@ public class DropSpikeMarkAuto extends MatchOpMode {
     private Slide slide;
     private Claw claw;
 
-    private AutoDropper dropper;
     public static Pose2dContainer startPose = new Pose2dContainer(10, 65, 270);
     //^^ Has Wrong Coordinates
     static TrajectorySequenceContainer getTurnDrop(TeamMarkerPipeline.FFPosition position) {
@@ -70,7 +66,7 @@ public class DropSpikeMarkAuto extends MatchOpMode {
 
     @Override
     public void robotInit() {
-        drivetrain = new Drivetrain(new MecanumDrive(hardwareMap, telemetry), telemetry);
+        drivetrain = new Drivetrain(new ProjectDrive(hardwareMap, telemetry), telemetry);
 //        drivetrain.init();
         vision = new FFVision(hardwareMap, telemetry);
         intake = new PowerIntake(telemetry, hardwareMap, true);

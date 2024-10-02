@@ -2,9 +2,10 @@
 package org.firstinspires.ftc.teamcode.subsystems.drive.mec;
 
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
+//import com.acmerobotics.roadrunner.geometry.Pose2d;
+//import com.acmerobotics.roadrunner.trajectory.Trajectory;
+//import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
+import com.acmerobotics.roadrunner.Pose2d;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class Drivetrain extends SubsystemBase {
 
-    private final MecanumDrive drive;
+    private final ProjectDrive drive;
     private Telemetry telemetry;
 //    private BNO055IMU imu;
     private final int LFVal = 0,
@@ -29,7 +30,7 @@ public class Drivetrain extends SubsystemBase {
 
 
 
-    public Drivetrain(MecanumDrive drive, Telemetry tl) {
+    public Drivetrain(ProjectDrive drive, Telemetry tl) {
         this.drive = drive;
         this.telemetry = tl;
 //        imu = hardwareMap.get(BNO055IMU.class, "imu");
@@ -63,7 +64,7 @@ public class Drivetrain extends SubsystemBase {
 
     public void  fieldCentric(double y, double x, double rx, double multiplier, double offset){
 //        double theta = -imu.getAngularOrientation().firstAngle;
-        double theta = -drive.getExternalHeading()+offset;//Ok?
+        double theta = -drive.getRawExternalHeading()+offset;//Ok?
 
         double rotX = x * Math.cos(theta) - y * Math.sin(theta);
         double rotY = x * Math.sin(theta) + y * Math.cos(theta);
@@ -105,49 +106,7 @@ public class Drivetrain extends SubsystemBase {
     public double getHeading() {
         return Math.toDegrees(drive.getExternalHeading());
     }
-    /**
-     * Returns minimum range value if the given value is less than
-     * the set minimum. If the value is greater than the set maximum,
-     * then the method returns the maximum value.
-     *
-     * value - The value to clip.
-     */
-//    public double clipRange(double value) {
-//        return value <= -1 ? -1
-//                : value >= 1 ? 1
-//                : value;
-//    }
 
-    /*protected void normalize(double[] wheelSpeeds, double magnitude) {
-        double maxMagnitude = Math.abs(wheelSpeeds[0]);
-        for (int i = 1; i < wheelSpeeds.length; i++) {
-            double temp = Math.abs(wheelSpeeds[i]);
-            if (maxMagnitude < temp) {
-                maxMagnitude = temp;
-            }
-        }
-        for (int i = 0; i < wheelSpeeds.length; i++) {
-            wheelSpeeds[i] = (wheelSpeeds[i] / maxMagnitude) * magnitude;
-        }
-
-    }
-
-//     Normalize the wheel speeds
-
-    protected void normalize(double[] wheelSpeeds) {
-        double maxMagnitude = Math.abs(wheelSpeeds[0]);
-        for (int i = 1; i < wheelSpeeds.length; i++) {
-            double temp = Math.abs(wheelSpeeds[i]);
-            if (maxMagnitude < temp) {
-                maxMagnitude = temp;
-            }
-        }
-        if(maxMagnitude > 1) {
-            for (int i = 0; i < wheelSpeeds.length; i++) {
-                wheelSpeeds[i] = (wheelSpeeds[i] / maxMagnitude);
-            }
-        }
-    }*/
 
     @Override
     public void periodic() {

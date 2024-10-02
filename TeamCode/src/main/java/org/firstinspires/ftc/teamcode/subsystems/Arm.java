@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems.arm;
+package org.firstinspires.ftc.teamcode.subsystems;
 
 
 import com.acmerobotics.dashboard.config.Config;
@@ -10,8 +10,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.NebulaConstants;
 import org.firstinspires.ftc.teamcode.util.nebulaHardware.NebulaServo;
-
-import java.util.function.Supplier;
 
 @Config
 public class Arm extends SubsystemBase
@@ -42,8 +40,7 @@ public class Arm extends SubsystemBase
                 NebulaConstants.Arm.minAngle,
                 NebulaConstants.Arm.maxAngle,
                 isEnabled);
-//        armSetPositionCommand(ArmPos.TRANSFER);
-        armSetPosition(ArmPos.TRANSFER.armRPos,ArmPos.TRANSFER.armLPos );
+        armSetPosition(ArmPos.TRANSFER.armRPos,ArmPos.TRANSFER.armLPos);
         this.telemetry = tl;
     }
 
@@ -52,17 +49,15 @@ public class Arm extends SubsystemBase
         telemetry.addData("ArmR Pos: ", armR.getPosition());
         telemetry.addData("ArmL Pos: ", armL.getPosition());
     }
-    private void armSetPosition(double rNum, double lNum) {
+    public void armSetPosition(double rNum, double lNum) {
         armR.setPosition(rNum);
         armL.setPosition(lNum);
     }
     public Command armSetPositionCommand(ArmPos armPos) {
-        return new InstantCommand(()->
-            {armSetPosition(armPos.armRPos,
-                    armPos.armLPos);});
-    }
-    public Command armSetPositionCommand(double rNum, double lNum) {
-        return new InstantCommand(()->{armSetPosition(rNum, lNum);});
+        return new InstantCommand(()-> {
+            armR.setPosition(armPos.armRPos);
+            armL.setPosition(armPos.armLPos);
+        });
     }
     public double getRPosition(){
         return armR.getPosition();

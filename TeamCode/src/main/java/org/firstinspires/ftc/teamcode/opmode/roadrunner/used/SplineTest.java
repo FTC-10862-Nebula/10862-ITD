@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.subsystems.drive.mec.MecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystems.drive.mec.ProjectDrive;
 
 
 /*
@@ -19,7 +19,7 @@ public class SplineTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 //        MecanumDrive drive = new MecanumDrive(hardwareMap, telemetry);
-        MecanumDrive drive = new MecanumDrive(hardwareMap, telemetry);
+        ProjectDrive drive = new ProjectDrive(hardwareMap, telemetry);
         
         waitForStart();
 

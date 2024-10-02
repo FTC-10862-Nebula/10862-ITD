@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.util.misc;
 
 import com.acmerobotics.dashboard.canvas.Canvas;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.path.Path;
+import com.arcrobotics.ftclib.purepursuit.Path;
+//import com.acmerobotics.roadrunner.geometry.Pose2d;
+//import com.acmerobotics.roadrunner.geometry.Vector2d;
+//import com.acmerobotics.roadrunner.path.Path;
 
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class DashboardUtil {
         double dx = path.length() / (samples - 1);
         for (int i = 0; i < samples; i++) {
             double displacement = i * dx;
-            Pose2d pose = path.get(displacement);
+            Pose2d pose = path.get((int) displacement);
             xPoints[i] = pose.getX();
             yPoints[i] = pose.getY();
         }

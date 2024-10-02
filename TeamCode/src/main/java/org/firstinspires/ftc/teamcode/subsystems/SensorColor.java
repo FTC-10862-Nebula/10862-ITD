@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems.sensor;
+package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.ColorSensor;
