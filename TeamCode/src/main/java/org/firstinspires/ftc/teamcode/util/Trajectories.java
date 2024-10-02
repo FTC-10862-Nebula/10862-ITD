@@ -30,7 +30,5 @@ public class Trajectories {
             new AngularVelocityConstraint(MAX_ANG_VEL),
             new TankVelocityConstraint(MAX_VEL/10, TRACK_WIDTH)
     ));
-
-
     public static ProfileAccelerationConstraint accelConstraint = new ProfileAccelerationConstraint(MAX_ACCEL);
 }

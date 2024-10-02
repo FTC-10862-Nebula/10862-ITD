@@ -9,12 +9,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.commands.AutoIntakeCommand;
-import org.firstinspires.ftc.teamcode.commands.arm.position.ResetCommand;
-import org.firstinspires.ftc.teamcode.commands.arm.position.SlideCommand;
-import org.firstinspires.ftc.teamcode.commands.drive.trajectory.sequence.DisplacementCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.trajectory.sequence.TrajectorySequenceContainerFollowCommand;
 import org.firstinspires.ftc.teamcode.opmode.auto.Speed;
-import org.firstinspires.ftc.teamcode.subsystems.AutoDropper;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.arm.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.drive.mec.Drivetrain;
@@ -34,7 +30,6 @@ import org.firstinspires.ftc.teamcode.util.trajectorysequence.container.StrafeLe
 import org.firstinspires.ftc.teamcode.util.trajectorysequence.container.StrafeRight;
 import org.firstinspires.ftc.teamcode.util.trajectorysequence.container.TrajectorySequenceContainer;
 import org.firstinspires.ftc.teamcode.util.trajectorysequence.container.Turn;
-import org.opencv.video.SparsePyrLKOpticalFlow;
 
 import java.util.logging.Level;
 

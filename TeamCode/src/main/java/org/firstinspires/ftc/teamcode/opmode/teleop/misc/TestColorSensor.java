@@ -10,21 +10,9 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.commands.ClimberMoveManual;
 import org.firstinspires.ftc.teamcode.commands.ColorSensorCommand;
-import org.firstinspires.ftc.teamcode.commands.arm.position.ResetCommand;
-import org.firstinspires.ftc.teamcode.commands.arm.position.SlideCommand;
-import org.firstinspires.ftc.teamcode.commands.arm.slide.SlideMoveManual;
-import org.firstinspires.ftc.teamcode.commands.drive.teleop.DefaultDriveCommand;
-import org.firstinspires.ftc.teamcode.subsystems.AutoDropper;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
-import org.firstinspires.ftc.teamcode.subsystems.arm.Arm;
-import org.firstinspires.ftc.teamcode.subsystems.climber.Climber;
-import org.firstinspires.ftc.teamcode.subsystems.drive.mec.Drivetrain;
-import org.firstinspires.ftc.teamcode.subsystems.drive.mec.MecanumDrive;
-import org.firstinspires.ftc.teamcode.subsystems.intake.PowerIntake;
 import org.firstinspires.ftc.teamcode.subsystems.sensor.SensorColor;
-import org.firstinspires.ftc.teamcode.subsystems.slide.Slide;
 import org.firstinspires.ftc.teamcode.util.teleop.GamepadTrigger;
 import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
 @Disabled
