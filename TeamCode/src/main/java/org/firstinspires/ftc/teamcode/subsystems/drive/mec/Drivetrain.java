@@ -20,7 +20,7 @@ import java.util.List;
 public class Drivetrain extends SubsystemBase {
 
     private final ProjectDrive drive;
-    private Telemetry telemetry;
+    private final Telemetry telemetry;
 //    private BNO055IMU imu;
     private final int LFVal = 0,
             LRVal = 1,
@@ -104,7 +104,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public double getHeading() {
-        return Math.toDegrees(drive.getExternalHeading());
+        return Math.toDegrees(drive.getRawExternalHeading());
     }
 
 
