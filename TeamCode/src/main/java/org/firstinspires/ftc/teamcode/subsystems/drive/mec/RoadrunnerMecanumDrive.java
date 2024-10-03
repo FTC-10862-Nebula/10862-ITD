@@ -142,7 +142,6 @@ public final class RoadrunnerMecanumDrive {
 
             imu = lazyImu.get();
 
-            // TODO: reverse encoders if needed
             //   leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         }
 
