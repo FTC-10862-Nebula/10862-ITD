@@ -9,7 +9,7 @@ import com.arcrobotics.ftclib.geometry.Vector2d;
 
 
 public class MecDrive extends SubsystemBase {
-    private final RoadrunnerMecanumDrive drivetrain =
+    public final RoadrunnerMecanumDrive drivetrain =
             new RoadrunnerMecanumDrive(hardwareMap, new Pose2d(0,0,0));
     public MecDrive(){
     }

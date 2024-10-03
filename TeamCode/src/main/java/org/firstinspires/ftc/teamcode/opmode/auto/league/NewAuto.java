@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode.opmode.auto.league;
 
 
+import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -22,46 +26,21 @@ import org.firstinspires.ftc.teamcode.util.trajectorysequence.container.Turn;
 @Autonomous(preselectTeleOp = "TeleOpMain")
 public class NewAuto extends MatchOpMode {
     // Subsystems
-    private MecDrive drivetrain;
+    private MecDrive drive;
+    private TrajectoryActionBuilder builder = new TrajectoryActionBuilder();
 
-    public static class DropSpikeMark {
-        public static Pose2dContainer startPose = new Pose2dContainer(10, 65, (270));
+    Action pathOne = drive.drivetrain.actionBuilder(drive.getPose())
+            .lineToX(10)
+            .splineTo(new Vector2d(0,0), 4)
+            .turnTo(3)
+            .build();
 
-        static TrajectorySequenceContainer preload() {
-            return new TrajectorySequenceContainer(
-                Speed::getBaseConstraints,
-                new Back(4.4),
-                new Turn(-90),
-                new Back(4)
-            );
-        }
-        static TrajectorySequenceContainer getOne() {
-            return new TrajectorySequenceContainer(
-                    Speed::getBaseConstraints,
-                    new Back(4.4),
-                    new Turn(-90),
-                    new Back(4)
-            );
-        }
-        static TrajectorySequenceContainer dropOne() {
-            return new TrajectorySequenceContainer(
-                    Speed::getBaseConstraints,
-                    new Back(4.4),
-                    new Turn(-90),
-                    new Back(4)
-            );
-        }
-
-    }
-
-
-//     public static Back b = new Back(9);
-
-
-
+    Action pathTwo = drive.drivetrain.actionBuilder(new Pose2d(15,20,0))
+            .splineTo(new Vector2d(5,5), Math.toRadians(90))
+            .build();
     @Override
     public void robotInit() {
-        drivetrain = new MecDrive();
+        drive = new MecDrive();
     }
 
     @Override
@@ -71,6 +50,16 @@ public class NewAuto extends MatchOpMode {
 
     public void matchStart() {
         schedule(
+
+//                builder
+//                        .lineToX(-12)
+//                        .afterDisp(5, dispMarker)
+//                        .splineTo(Vector2d(-24, -12), -Math.PI / 2)
+//                        .turn(Math.PI / 2)
+//                        .afterTime(0.5, tempMarker)
+//                        .turn(Math.PI / 2)
+//                        .setReversed(true)
+//                        .splineTo(Vector2d(-36, 0), Math.PI)
 
 //            new SequentialCommandGroup(
 //                new TrajectorySequenceContainerFollowCommand(drivetrain,
