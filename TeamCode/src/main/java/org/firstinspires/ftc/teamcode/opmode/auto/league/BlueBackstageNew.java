@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.opmode.auto.Speed;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.intake.PowerIntake;
-import org.firstinspires.ftc.teamcode.subsystems.intake.VerticalSlide;
+import org.firstinspires.ftc.teamcode.subsystems.intake.HorizontalSlide;
 import org.firstinspires.ftc.teamcode.subsystems.drive.mec.MecDrive;
 import org.firstinspires.ftc.teamcode.util.PoseStorage;
 
@@ -26,7 +26,7 @@ public class BlueBackstageNew extends MatchOpMode {
     private MecDrive drivetrain;
     private PowerIntake intake;
     private Arm arm;
-    private VerticalSlide verticalSlide;
+    private HorizontalSlide horizontalSlide;
     private Claw claw;
 
     public static class DropSpikeMark {
@@ -69,7 +69,7 @@ public class BlueBackstageNew extends MatchOpMode {
         intake = new PowerIntake(telemetry, hardwareMap, true);
         arm = new Arm(telemetry, hardwareMap, true);
         claw = new Claw(telemetry, hardwareMap, true);
-        verticalSlide = new VerticalSlide(telemetry, hardwareMap, true);
+        horizontalSlide = new HorizontalSlide(telemetry, hardwareMap, true);
     }
 
     @Override

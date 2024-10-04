@@ -4,14 +4,14 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
-import org.firstinspires.ftc.teamcode.subsystems.intake.VerticalSlide;
+import org.firstinspires.ftc.teamcode.subsystems.intake.HorizontalSlide;
 
 public class SlideCommand extends SequentialCommandGroup {
-    public SlideCommand(VerticalSlide verticalSlide, Arm arm, Claw claw, VerticalSlide.SlideEnum pos) {
+    public SlideCommand(HorizontalSlide horizontalSlide, Arm arm, Claw claw, HorizontalSlide.SlideEnum pos) {
         addCommands(
             claw.setBothClaw(Claw.ClawPos.CLOSE_POS),
 //            new ParallelCommandGroup(
-            verticalSlide.setSetPoint(pos),
+            horizontalSlide.setSetPoint(pos),
             arm.armSetPositionCommand(Arm.ArmPos.OUTTAKE)
 //            )
         );

@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.climber.Climber;
 import org.firstinspires.ftc.teamcode.subsystems.intake.PowerIntake;
 import org.firstinspires.ftc.teamcode.subsystems.SensorColor;
-import org.firstinspires.ftc.teamcode.subsystems.intake.VerticalSlide;
+import org.firstinspires.ftc.teamcode.subsystems.intake.HorizontalSlide;
 import org.firstinspires.ftc.teamcode.util.teleop.GamepadTrigger;
 import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
 
@@ -27,7 +27,7 @@ import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
 public class TeleOpMain extends MatchOpMode {
     //TODO: Add a on/off switch for drivetrain
     private GamepadEx driverGamepad, operatorGamepad;
-    private VerticalSlide verticalSlide;
+    private HorizontalSlide horizontalSlide;
     private PowerIntake intake;
     private Arm arm;
     private Claw claw;
@@ -44,7 +44,7 @@ public class TeleOpMain extends MatchOpMode {
         intake = new PowerIntake(telemetry, hardwareMap, true);
         climb = new Climber(telemetry,hardwareMap, true);
         arm = new Arm(telemetry, hardwareMap, true);
-        verticalSlide = new VerticalSlide(telemetry, hardwareMap, true);
+        horizontalSlide = new HorizontalSlide(telemetry, hardwareMap, true);
         sensorColor = new SensorColor(telemetry, hardwareMap);
     }
 
@@ -93,16 +93,16 @@ public class TeleOpMain extends MatchOpMode {
 
         //Slide
         Button slideRest  = (new GamepadButton(operatorGamepad, GamepadKeys.Button.A))
-            .whenPressed(new ResetCommand(verticalSlide, arm, claw));
+            .whenPressed(new ResetCommand(horizontalSlide, arm, claw));
         Button slideLow  = (new GamepadButton(operatorGamepad, GamepadKeys.Button.X))
-            .whenPressed(new SlideCommand(verticalSlide,arm,claw, VerticalSlide.SlideEnum.LOW));
+            .whenPressed(new SlideCommand(horizontalSlide,arm,claw, HorizontalSlide.SlideEnum.LOW));
         Button slideMid  = (new GamepadButton(operatorGamepad, GamepadKeys.Button.B))
-            .whenPressed(new SlideCommand(verticalSlide,arm, claw, VerticalSlide.SlideEnum.MID));
+            .whenPressed(new SlideCommand(horizontalSlide,arm, claw, HorizontalSlide.SlideEnum.MID));
         Button slideHigh  = (new GamepadButton(operatorGamepad, GamepadKeys.Button.Y))
-            .whenPressed(new SlideCommand(verticalSlide,arm, claw, VerticalSlide.SlideEnum.HIGH));
-        verticalSlide.setDefaultCommand(new SlideMoveManual(verticalSlide, operatorGamepad::getRightY));
+            .whenPressed(new SlideCommand(horizontalSlide,arm, claw, HorizontalSlide.SlideEnum.HIGH));
+        horizontalSlide.setDefaultCommand(new SlideMoveManual(horizontalSlide, operatorGamepad::getRightY));
         Button resetSlide  = (new GamepadButton(operatorGamepad, GamepadKeys.Button.START))
-            .whenPressed(new InstantCommand(()-> verticalSlide.resetEncoder()));
+            .whenPressed(new InstantCommand(()-> horizontalSlide.resetEncoder()));
 
         //Driver
 //        drivetrain.setDefaultCommand(new DefaultDriveCommand(drivetrain, driverGamepad, true);

@@ -5,17 +5,17 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
-import org.firstinspires.ftc.teamcode.subsystems.intake.VerticalSlide;
+import org.firstinspires.ftc.teamcode.subsystems.intake.HorizontalSlide;
 
 public class ResetCommand extends SequentialCommandGroup {
-    public ResetCommand(VerticalSlide verticalSlide, Arm arm, Claw claw) {
+    public ResetCommand(HorizontalSlide horizontalSlide, Arm arm, Claw claw) {
         addCommands(
             claw.setBothClaw(Claw.ClawPos.CLOSE_POS),
 //            new WaitCommand(200),
             arm.armSetPositionCommand(Arm.ArmPos.TRANSFER),
 //            new ParallelCommandGroup(
             new WaitCommand(600),
-            verticalSlide.setSetPoint(VerticalSlide.SlideEnum.TRANSFER),
+            horizontalSlide.setSetPoint(HorizontalSlide.SlideEnum.TRANSFER),
             new WaitCommand(800),
             claw.setBothClaw(Claw.ClawPos.OPEN_POS)
 

@@ -54,10 +54,7 @@ public class Arm extends SubsystemBase
         armL.setPosition(lNum);
     }
     public Command armSetPositionCommand(ArmPos armPos) {
-        return new InstantCommand(()-> {
-            armR.setPosition(armPos.armRPos);
-            armL.setPosition(armPos.armLPos);
-        });
+        return new InstantCommand(()-> armSetPosition(armPos.armRPos, armPos.armLPos));
     }
     public double getRPosition(){
         return armR.getPosition();

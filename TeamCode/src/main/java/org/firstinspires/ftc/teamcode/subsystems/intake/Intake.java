@@ -22,12 +22,12 @@ public class Intake {
         }
     }
 
-    public VerticalSlide verticalSlide;
+    public HorizontalSlide horizontalSlide;
     public IntakeServo intakeServo;
     public PowerIntake powerIntake;
 
-    public Intake(VerticalSlide verticalSlide, IntakeServo intakeServo, PowerIntake powerIntake){
-        this.verticalSlide = verticalSlide;
+    public Intake(HorizontalSlide horizontalSlide, IntakeServo intakeServo, PowerIntake powerIntake){
+        this.horizontalSlide = horizontalSlide;
         this.intakeServo = intakeServo;
         this.powerIntake = powerIntake;
 
@@ -35,7 +35,7 @@ public class Intake {
 
     public Command setPosition(Value value){
         return new SequentialCommandGroup(
-                new InstantCommand(()->verticalSlide.setSetPoint(value.slidePos)),
+                new InstantCommand(()-> horizontalSlide.setSetPoint(value.slidePos)),
                 new InstantCommand(()-> intakeServo.setSetPoint(value.servoPose)),
                 new InstantCommand(()-> powerIntake.setSetPoint(value.intakePower))
         );

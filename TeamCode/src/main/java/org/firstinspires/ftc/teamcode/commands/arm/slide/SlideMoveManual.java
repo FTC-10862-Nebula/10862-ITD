@@ -1,22 +1,22 @@
 package org.firstinspires.ftc.teamcode.commands.arm.slide;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import org.firstinspires.ftc.teamcode.subsystems.intake.VerticalSlide;
+import org.firstinspires.ftc.teamcode.subsystems.intake.HorizontalSlide;
 import java.util.function.Supplier;
 
 public class SlideMoveManual extends CommandBase {
-    private final VerticalSlide verticalSlide;
+    private final HorizontalSlide horizontalSlide;
     private final Supplier<Double> doubleSupplier;
-    public SlideMoveManual(VerticalSlide verticalSlide, Supplier<Double> doubleSupplier) {
-        this.verticalSlide = verticalSlide;
+    public SlideMoveManual(HorizontalSlide horizontalSlide, Supplier<Double> doubleSupplier) {
+        this.horizontalSlide = horizontalSlide;
         this.doubleSupplier = doubleSupplier;
-        addRequirements(verticalSlide);
+        addRequirements(horizontalSlide);
     }
     @Override
     public void execute() {
         double position = doubleSupplier.get();
         if (Math.abs(position) > 0.05) {
-            verticalSlide.setSetPoint(verticalSlide.getSetPoint() + position * -20);
+            horizontalSlide.setSetPoint(horizontalSlide.getSetPoint() + position * -20);
         }
     }
 }
