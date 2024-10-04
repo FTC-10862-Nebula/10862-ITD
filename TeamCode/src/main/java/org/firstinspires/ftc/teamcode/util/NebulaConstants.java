@@ -64,14 +64,6 @@ public class NebulaConstants {
         public static final double slideDistancePerPulse = 1;//(365/751.8)
         public static final NebulaMotor.IdleMode slideIdleMode = NebulaMotor.IdleMode.Brake;
         public static final NebulaMotor.MotorType slideType = NebulaMotor.MotorType.RPM_312;
-        public static final double ks=0,
-                kcos=0,
-                ka=0,
-                kv=0;
-        public static final double maxVelocity = 0,
-                maxAcceleration = 0,
-                MIN_POSITION = 0,//mm
-                MAX_POSITION = 0;
     }
 
     /** Drive **/

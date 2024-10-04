@@ -72,10 +72,10 @@ public class Test extends LinearOpMode {
                                     motor1.setPower(1);
                                     return false;
                                 }
-                        ),
-                        drive.actionBuilder(new Pose2d(15,10,Math.toRadians(125))) // Another way of running a trajectory (not recommended because trajectories take time to build and will slow down your code, always try to build them beforehand)
-                                .splineTo(new Vector2d(25, 15), 0)
-                                .build()
+                        )
+//                        drive.actionBuilder(new Pose2d(15,10,Math.toRadians(125))) // Another way of running a trajectory (not recommended because trajectories take time to build and will slow down your code, always try to build them beforehand)
+//                                .splineTo(new Vector2d(25, 15), 0)
+//                                .build()
 
                 )
         );

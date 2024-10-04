@@ -2,28 +2,23 @@ package org.firstinspires.ftc.teamcode.opmode.auto.league;
 
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.commands.arm.position.ResetCommand;
-import org.firstinspires.ftc.teamcode.commands.arm.position.SlideCommand;
-import org.firstinspires.ftc.teamcode.commands.drive.trajectory.sequence.DisplacementCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.trajectory.sequence.TrajectorySequenceContainerFollowCommand;
 import org.firstinspires.ftc.teamcode.opmode.auto.Speed;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
-import org.firstinspires.ftc.teamcode.subsystems.PowerIntake;
-import org.firstinspires.ftc.teamcode.subsystems.Slide;
+import org.firstinspires.ftc.teamcode.subsystems.intake.PowerIntake;
+import org.firstinspires.ftc.teamcode.subsystems.intake.VerticalSlide;
 import org.firstinspires.ftc.teamcode.subsystems.drive.mec.MecDrive;
 import org.firstinspires.ftc.teamcode.util.PoseStorage;
 
 import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
 import org.firstinspires.ftc.teamcode.util.trajectorysequence.container.Back;
-import org.firstinspires.ftc.teamcode.util.trajectorysequence.container.Forward;
 import org.firstinspires.ftc.teamcode.util.trajectorysequence.container.Pose2dContainer;
 import org.firstinspires.ftc.teamcode.util.trajectorysequence.container.TrajectorySequenceContainer;
 import org.firstinspires.ftc.teamcode.util.trajectorysequence.container.Turn;
-import java.util.logging.Level;
+
 //@Disabled
 @Autonomous(preselectTeleOp = "TeleOpMain")
 public class BlueBackstageNew extends MatchOpMode {
@@ -31,7 +26,7 @@ public class BlueBackstageNew extends MatchOpMode {
     private MecDrive drivetrain;
     private PowerIntake intake;
     private Arm arm;
-    private Slide slide;
+    private VerticalSlide verticalSlide;
     private Claw claw;
 
     public static class DropSpikeMark {
@@ -74,7 +69,7 @@ public class BlueBackstageNew extends MatchOpMode {
         intake = new PowerIntake(telemetry, hardwareMap, true);
         arm = new Arm(telemetry, hardwareMap, true);
         claw = new Claw(telemetry, hardwareMap, true);
-        slide = new Slide(telemetry, hardwareMap, true);
+        verticalSlide = new VerticalSlide(telemetry, hardwareMap, true);
     }
 
     @Override

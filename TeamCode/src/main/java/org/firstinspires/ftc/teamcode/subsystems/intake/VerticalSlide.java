@@ -1,8 +1,7 @@
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode.subsystems.intake;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.Command;
-import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
@@ -13,7 +12,7 @@ import org.firstinspires.ftc.teamcode.util.NebulaConstants;
 import org.firstinspires.ftc.teamcode.util.nebulaHardware.NebulaMotor;
 
 @Config
-public class Slide extends SubsystemBase {
+public class VerticalSlide extends SubsystemBase {
     protected Telemetry telemetry;
     protected NebulaMotor slideR, slideL;
     
@@ -39,7 +38,7 @@ public class Slide extends SubsystemBase {
 
     protected static SlideEnum slidePos;
 
-    public Slide(Telemetry tl, HardwareMap hw, boolean isEnabled) {
+    public VerticalSlide(Telemetry tl, HardwareMap hw, boolean isEnabled) {
         slideR = new NebulaMotor(hw,
             NebulaConstants.Slide.slideRName,
             NebulaConstants.Slide.slideType,
@@ -80,12 +79,9 @@ public class Slide extends SubsystemBase {
         output = slideController.calculate(getEncoderDistance());
         setPower(output* multiplier);
     
-        telemetry.addData("Slide SetPoint:", getSetPoint());
-        telemetry.addData("Slide Position Word:", slidePos.name());
+        telemetry.addData("Slide SetPoint:" + getSetPoint() + "; ", slidePos.name());
         telemetry.addData("Slide Motor Output:", output* multiplier);
-        telemetry.addData("SlideR Encoder: ", slideR.getPosition());
-        telemetry.addData("SlideL Encoder: ", slideL.getPosition());
-        
+        telemetry.addData("EncoderR: " + slideR.getPosition() + "EncoderL:", slideL.getPosition());
     }
 
     public double getEncoderDistance() {
@@ -109,10 +105,6 @@ public class Slide extends SubsystemBase {
             slideController.setP(NebulaConstants.Slide.slidePID.p * 1);
         }
         slideController.setSetPoint(setPoint);
-    }
-    public Command setSetPointCommand(SlideEnum pos) {
-        slidePos = pos;
-        return  new InstantCommand(()->setSetPoint(pos.slidePos));
     }
     public double getSetPoint() {
         return slideController.getSetPoint();
