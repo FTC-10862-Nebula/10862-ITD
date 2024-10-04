@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.commands.drive.trajectory.sequence;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.subsystems.drive.mec.MecDrive;
+import org.firstinspires.ftc.teamcode.subsystems.drive.MecDrive;
 import org.firstinspires.ftc.teamcode.util.PoseStorage;
 import org.firstinspires.ftc.teamcode.util.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.util.trajectorysequence.TrajectorySequenceBuilder;

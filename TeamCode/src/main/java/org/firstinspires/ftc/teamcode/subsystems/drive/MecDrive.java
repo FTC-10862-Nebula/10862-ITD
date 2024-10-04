@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems.drive.mec;
+package org.firstinspires.ftc.teamcode.subsystems.drive;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 import static org.firstinspires.ftc.teamcode.util.NebulaConstants.squareInput;

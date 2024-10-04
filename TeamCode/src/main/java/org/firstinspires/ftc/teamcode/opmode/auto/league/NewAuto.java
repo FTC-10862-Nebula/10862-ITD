@@ -7,7 +7,7 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.subsystems.drive.mec.MecDrive;
+import org.firstinspires.ftc.teamcode.subsystems.drive.MecDrive;
 import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
 
 //@Disabled

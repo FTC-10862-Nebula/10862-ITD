@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.intake.PowerIntake;
 import org.firstinspires.ftc.teamcode.subsystems.intake.HorizontalSlide;
-import org.firstinspires.ftc.teamcode.subsystems.drive.mec.MecDrive;
+import org.firstinspires.ftc.teamcode.subsystems.drive.MecDrive;
 import org.firstinspires.ftc.teamcode.util.PoseStorage;
 
 import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
