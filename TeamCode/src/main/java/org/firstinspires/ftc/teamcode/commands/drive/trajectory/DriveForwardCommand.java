@@ -1,23 +1,23 @@
 package org.firstinspires.ftc.teamcode.commands.drive.trajectory;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
-import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint;
+import com.acmerobotics.roadrunner.MinVelConstraint;
+import com.acmerobotics.roadrunner.Trajectory;
+import com.acmerobotics.roadrunner.TrajectoryBuilder;
 import com.arcrobotics.ftclib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.subsystems.drive.mec.Drivetrain;
+import org.firstinspires.ftc.teamcode.subsystems.drive.MecDrive;
 import org.firstinspires.ftc.teamcode.util.Trajectories;
 import org.firstinspires.ftc.teamcode.util.PoseStorage;
 
 @Config
 public class DriveForwardCommand extends CommandBase{
 
-    Drivetrain drive;
+    MecDrive drive;
     double distance;
     Trajectory trajectory;
-    MinVelocityConstraint constraint;
-    public DriveForwardCommand(Drivetrain drive, double distance) {
+    MinVelConstraint constraint;
+    public DriveForwardCommand(MecDrive drive, double distance) {
         this.drive = drive;
         this.distance = distance;
         constraint = Trajectories.velConstraint;
@@ -25,7 +25,7 @@ public class DriveForwardCommand extends CommandBase{
 //        new DriveForwardCommand(drive, distance, Trajectories.velConstraint);
     }
 
-    public DriveForwardCommand(Drivetrain drive, double distance, MinVelocityConstraint constraint) {
+    public DriveForwardCommand(MecDrive drive, double distance, MinVelConstraint constraint) {
         this.drive = drive;
         this.distance = distance;
         this.constraint = constraint;
@@ -54,7 +54,7 @@ public class DriveForwardCommand extends CommandBase{
 
     @Override
     public void execute() {
-        drive.update();
+
     }
 
     @Override
@@ -66,7 +66,7 @@ public class DriveForwardCommand extends CommandBase{
 
     @Override
     public boolean isFinished() {
-        PoseStorage.currentPose = trajectory.end();
+        PoseStorage.currentPose = drive.getPose();
         return !drive.isBusy();
     }
 }

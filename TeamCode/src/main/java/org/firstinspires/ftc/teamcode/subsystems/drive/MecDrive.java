@@ -115,6 +115,9 @@ public class MecDrive extends SubsystemBase {
         drivetrain.motors[RoadrunnerMecanumDrive.rFNum].setPower(backRightSpeed);
     }
 
+    public void stop() {
+        driveWithMotorPowers(0,0,0,0);
+    }
     public Pose2d getPose(){
         return new Pose2d(drivetrain.updatePoseEstimate().component1(),
                 drivetrain.updatePoseEstimate().component2());

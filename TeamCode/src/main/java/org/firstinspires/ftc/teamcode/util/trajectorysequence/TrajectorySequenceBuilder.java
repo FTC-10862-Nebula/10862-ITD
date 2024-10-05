@@ -1,23 +1,11 @@
 package org.firstinspires.ftc.teamcode.util.trajectorysequence;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.path.PathContinuityViolationException;
-import com.acmerobotics.roadrunner.profile.MotionProfile;
-import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
-import com.acmerobotics.roadrunner.profile.MotionState;
-import com.acmerobotics.roadrunner.trajectory.DisplacementMarker;
-import com.acmerobotics.roadrunner.trajectory.DisplacementProducer;
-import com.acmerobotics.roadrunner.trajectory.MarkerCallback;
-import com.acmerobotics.roadrunner.trajectory.SpatialMarker;
-import com.acmerobotics.roadrunner.trajectory.TemporalMarker;
-import com.acmerobotics.roadrunner.trajectory.TimeProducer;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
-import com.acmerobotics.roadrunner.trajectory.TrajectoryMarker;
-import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
-import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
-import com.acmerobotics.roadrunner.util.Angle;
+
+import com.acmerobotics.roadrunner.AccelConstraint;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.TrajectoryBuilder;
+import com.acmerobotics.roadrunner.Vector2d;
+import com.acmerobotics.roadrunner.VelConstraint;
 
 import org.firstinspires.ftc.teamcode.util.trajectorysequence.sequencesegment.SequenceSegment;
 import org.firstinspires.ftc.teamcode.util.trajectorysequence.sequencesegment.TrajectorySegment;
@@ -124,121 +112,41 @@ public class TrajectorySequenceBuilder {
         return addPath(() -> currentTrajectoryBuilder.lineTo(endPosition, currentVelConstraint, currentAccelConstraint));
     }
 
-    public TrajectorySequenceBuilder lineTo(
-            Vector2d endPosition,
-            TrajectoryVelocityConstraint velConstraint,
-            TrajectoryAccelerationConstraint accelConstraint
-    ) {
-        return addPath(() -> currentTrajectoryBuilder.lineTo(endPosition, velConstraint, accelConstraint));
-    }
-
     public TrajectorySequenceBuilder lineToConstantHeading(Vector2d endPosition) {
         return addPath(() -> currentTrajectoryBuilder.lineToConstantHeading(endPosition, currentVelConstraint, currentAccelConstraint));
-    }
-
-    public TrajectorySequenceBuilder lineToConstantHeading(
-            Vector2d endPosition,
-            TrajectoryVelocityConstraint velConstraint,
-            TrajectoryAccelerationConstraint accelConstraint
-    ) {
-        return addPath(() -> currentTrajectoryBuilder.lineToConstantHeading(endPosition, velConstraint, accelConstraint));
     }
 
     public TrajectorySequenceBuilder lineToLinearHeading(Pose2d endPose) {
         return addPath(() -> currentTrajectoryBuilder.lineToLinearHeading(endPose, currentVelConstraint, currentAccelConstraint));
     }
 
-    public TrajectorySequenceBuilder lineToLinearHeading(
-            Pose2d endPose,
-            TrajectoryVelocityConstraint velConstraint,
-            TrajectoryAccelerationConstraint accelConstraint
-    ) {
-        return addPath(() -> currentTrajectoryBuilder.lineToLinearHeading(endPose, velConstraint, accelConstraint));
-    }
-
     public TrajectorySequenceBuilder lineToSplineHeading(Pose2d endPose) {
         return addPath(() -> currentTrajectoryBuilder.lineToSplineHeading(endPose, currentVelConstraint, currentAccelConstraint));
     }
 
-    public TrajectorySequenceBuilder lineToSplineHeading(
-            Pose2d endPose,
-            TrajectoryVelocityConstraint velConstraint,
-            TrajectoryAccelerationConstraint accelConstraint
-    ) {
-        return addPath(() -> currentTrajectoryBuilder.lineToSplineHeading(endPose, velConstraint, accelConstraint));
-    }
 
     public TrajectorySequenceBuilder strafeTo(Vector2d endPosition) {
         return addPath(() -> currentTrajectoryBuilder.strafeTo(endPosition, currentVelConstraint, currentAccelConstraint));
-    }
-
-    public TrajectorySequenceBuilder strafeTo(
-            Vector2d endPosition,
-            TrajectoryVelocityConstraint velConstraint,
-            TrajectoryAccelerationConstraint accelConstraint
-    ) {
-        return addPath(() -> currentTrajectoryBuilder.strafeTo(endPosition, velConstraint, accelConstraint));
     }
 
     public TrajectorySequenceBuilder forward(double distance) {
         return addPath(() -> currentTrajectoryBuilder.forward(distance, currentVelConstraint, currentAccelConstraint));
     }
 
-    public TrajectorySequenceBuilder forward(
-            double distance,
-            TrajectoryVelocityConstraint velConstraint,
-            TrajectoryAccelerationConstraint accelConstraint
-    ) {
-        return addPath(() -> currentTrajectoryBuilder.forward(distance, velConstraint, accelConstraint));
-    }
-
     public TrajectorySequenceBuilder back(double distance) {
         return addPath(() -> currentTrajectoryBuilder.back(distance, currentVelConstraint, currentAccelConstraint));
-    }
-
-    public TrajectorySequenceBuilder back(
-            double distance,
-            TrajectoryVelocityConstraint velConstraint,
-            TrajectoryAccelerationConstraint accelConstraint
-    ) {
-        return addPath(() -> currentTrajectoryBuilder.back(distance, velConstraint, accelConstraint));
     }
 
     public TrajectorySequenceBuilder strafeLeft(double distance) {
         return addPath(() -> currentTrajectoryBuilder.strafeLeft(distance, currentVelConstraint, currentAccelConstraint));
     }
 
-    public TrajectorySequenceBuilder strafeLeft(
-            double distance,
-            TrajectoryVelocityConstraint velConstraint,
-            TrajectoryAccelerationConstraint accelConstraint
-    ) {
-        return addPath(() -> currentTrajectoryBuilder.strafeLeft(distance, velConstraint, accelConstraint));
-    }
-
     public TrajectorySequenceBuilder strafeRight(double distance) {
         return addPath(() -> currentTrajectoryBuilder.strafeRight(distance, currentVelConstraint, currentAccelConstraint));
     }
 
-    public TrajectorySequenceBuilder strafeRight(
-            double distance,
-            TrajectoryVelocityConstraint velConstraint,
-            TrajectoryAccelerationConstraint accelConstraint
-    ) {
-        return addPath(() -> currentTrajectoryBuilder.strafeRight(distance, velConstraint, accelConstraint));
-    }
-
     public TrajectorySequenceBuilder splineTo(Vector2d endPosition, double endHeading) {
         return addPath(() -> currentTrajectoryBuilder.splineTo(endPosition, endHeading, currentVelConstraint, currentAccelConstraint));
-    }
-
-    public TrajectorySequenceBuilder splineTo(
-            Vector2d endPosition,
-            double endHeading,
-            TrajectoryVelocityConstraint velConstraint,
-            TrajectoryAccelerationConstraint accelConstraint
-    ) {
-        return addPath(() -> currentTrajectoryBuilder.splineTo(endPosition, endHeading, velConstraint, accelConstraint));
     }
 
     public TrajectorySequenceBuilder splineToConstantHeading(Vector2d endPosition, double endHeading) {
@@ -258,26 +166,8 @@ public class TrajectorySequenceBuilder {
         return addPath(() -> currentTrajectoryBuilder.splineToLinearHeading(endPose, endHeading, currentVelConstraint, currentAccelConstraint));
     }
 
-    public TrajectorySequenceBuilder splineToLinearHeading(
-            Pose2d endPose,
-            double endHeading,
-            TrajectoryVelocityConstraint velConstraint,
-            TrajectoryAccelerationConstraint accelConstraint
-    ) {
-        return addPath(() -> currentTrajectoryBuilder.splineToLinearHeading(endPose, endHeading, velConstraint, accelConstraint));
-    }
-
     public TrajectorySequenceBuilder splineToSplineHeading(Pose2d endPose, double endHeading) {
         return addPath(() -> currentTrajectoryBuilder.splineToSplineHeading(endPose, endHeading, currentVelConstraint, currentAccelConstraint));
-    }
-
-    public TrajectorySequenceBuilder splineToSplineHeading(
-            Pose2d endPose,
-            double endHeading,
-            TrajectoryVelocityConstraint velConstraint,
-            TrajectoryAccelerationConstraint accelConstraint
-    ) {
-        return addPath(() -> currentTrajectoryBuilder.splineToSplineHeading(endPose, endHeading, velConstraint, accelConstraint));
     }
 
     private TrajectorySequenceBuilder addPath(AddPathCallback callback) {
@@ -328,8 +218,8 @@ public class TrajectorySequenceBuilder {
     }
 
     public TrajectorySequenceBuilder setConstraints(
-            TrajectoryVelocityConstraint velConstraint,
-            TrajectoryAccelerationConstraint accelConstraint
+            VelConstraint velConstraint,
+            AccelConstraint accelConstraint
     ) {
         this.currentVelConstraint = velConstraint;
         this.currentAccelConstraint = accelConstraint;
@@ -344,7 +234,7 @@ public class TrajectorySequenceBuilder {
         return this;
     }
 
-    public TrajectorySequenceBuilder setVelConstraint(TrajectoryVelocityConstraint velConstraint) {
+    public TrajectorySequenceBuilder setVelConstraint(VelConstraint velConstraint) {
         this.currentVelConstraint = velConstraint;
 
         return this;
@@ -356,7 +246,7 @@ public class TrajectorySequenceBuilder {
         return this;
     }
 
-    public TrajectorySequenceBuilder setAccelConstraint(TrajectoryAccelerationConstraint accelConstraint) {
+    public TrajectorySequenceBuilder setAccelConstraint(AccelConstraint accelConstraint) {
         this.currentAccelConstraint = accelConstraint;
 
         return this;

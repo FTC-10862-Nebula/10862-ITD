@@ -23,7 +23,8 @@ public class TrajectorySequenceContainer {
         for (PathSegment pathSegment : pathSegments) {
             if (pathSegment.getClass() == LineTo.class) {
                 LineTo lineTo = (LineTo) pathSegment;
-                trajectorySequenceBuilder = trajectorySequenceBuilder.lineTo(
+                trajectorySequenceBuilder = trajectorySequenceBuilder.lineTo(new Vector2d(0,0))
+                        .lineTo(
                         new Vector2d(
                                 lineTo.x,
                                 lineTo.y
