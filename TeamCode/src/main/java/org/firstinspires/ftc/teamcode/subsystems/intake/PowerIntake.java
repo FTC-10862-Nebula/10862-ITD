@@ -40,10 +40,6 @@ public class PowerIntake extends SubsystemBase {
         motor.setPower(power);
     }
 
-    public void encoderReset() {//Motors wouldn't need reset
-        motor.resetEncoder();
-    }
-
     public int red(){
         return colorSensor.red();
     }

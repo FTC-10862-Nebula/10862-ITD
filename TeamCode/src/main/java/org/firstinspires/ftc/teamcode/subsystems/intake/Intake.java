@@ -34,11 +34,18 @@ public class Intake {
     }
 
     public Command setPosition(Value value){
-        return new SequentialCommandGroup(
-                new InstantCommand(()-> horizontalSlide.setSetPoint(value.slidePos)),
-                new InstantCommand(()-> intakeServo.setSetPoint(value.servoPose)),
-                new InstantCommand(()-> powerIntake.setSetPoint(value.intakePower))
-        );
+        switch(value) {
+            case OUTTAKE:
+                return new InstantCommand();
+            case HOLD:
+                return new SequentialCommandGroup();
+            default:
+                return new SequentialCommandGroup(
+                        new InstantCommand(()-> horizontalSlide.setSetPoint(value.slidePos)),
+                        new InstantCommand(()-> intakeServo.setSetPoint(value.servoPose)),
+                        new InstantCommand(()-> powerIntake.setSetPoint(value.intakePower))
+                );
+        }
     }
 
     public Command intakePeriodic(){

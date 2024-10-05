@@ -1,18 +1,13 @@
 package org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
-import org.firstinspires.ftc.teamcode.subsystems.intake.HorizontalSlide;
-import org.firstinspires.ftc.teamcode.subsystems.intake.IntakeServo;
-import org.firstinspires.ftc.teamcode.subsystems.intake.PowerIntake;
 
 public class Outtake {
     private static final double OPEN =0.1, CLOSE =0;
-    public enum Value {
+    public enum Value{
         START   (0,0,0,0,CLOSE),
         OUTTAKE (0,0,0,0,OPEN),
         INTAKE  (0,0,0,0,CLOSE),
@@ -42,10 +37,17 @@ public class Outtake {
     }
 
     public Command setPosition(Value value){
-        return new SequentialCommandGroup(
-                new InstantCommand(()-> verticalSlide.setSetPoint(value.slidePos)),
-                new InstantCommand(()-> arm.setSetPoint(value.armRPos,value.armLPos)),
-                new InstantCommand(()-> claw.setSetPoint(value.turnPos, value.clawPos))
-        );
+        switch(value) {
+            case OUTTAKE:
+                return new InstantCommand();
+            case START:
+                return new SequentialCommandGroup();
+            default:
+                return new SequentialCommandGroup(
+                    new InstantCommand(()-> verticalSlide.setSetPoint(value.slidePos)),
+                    new InstantCommand(()-> arm.setSetPoint(value.armRPos,value.armLPos)),
+                    new InstantCommand(()-> claw.setSetPoint(value.turnPos, value.clawPos))
+                );
+        }
     }
 }
