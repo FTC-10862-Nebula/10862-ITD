@@ -1,13 +1,13 @@
-package org.firstinspires.ftc.teamcode.commands.arm.slide;
+package org.firstinspires.ftc.teamcode.commands.slide;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import org.firstinspires.ftc.teamcode.subsystems.intake.HorizontalSlide;
 import java.util.function.Supplier;
 
-public class SlideMoveManual extends CommandBase {
+public class SlideHorizontalManual extends CommandBase {
     private final HorizontalSlide horizontalSlide;
     private final Supplier<Double> doubleSupplier;
-    public SlideMoveManual(HorizontalSlide horizontalSlide, Supplier<Double> doubleSupplier) {
+    public SlideHorizontalManual(HorizontalSlide horizontalSlide, Supplier<Double> doubleSupplier) {
         this.horizontalSlide = horizontalSlide;
         this.doubleSupplier = doubleSupplier;
         addRequirements(horizontalSlide);
