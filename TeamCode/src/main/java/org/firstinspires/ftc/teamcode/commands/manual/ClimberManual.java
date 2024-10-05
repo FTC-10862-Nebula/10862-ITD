@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.commands;
+package org.firstinspires.ftc.teamcode.commands.manual;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
@@ -6,10 +6,10 @@ import org.firstinspires.ftc.teamcode.subsystems.climber.Climber;
 
 import java.util.function.Supplier;
 
-public class ClimberMoveManual extends CommandBase {
-    private final Climber climber;
+public class ClimberManual extends CommandBase {
+        private final Climber climber;
     private final Supplier<Double> doubleSupplier;
-    public ClimberMoveManual(Climber climber, Supplier<Double> doubleSupplier) {
+    public ClimberManual(Climber climber, Supplier<Double> doubleSupplier) {
         this.climber = climber;
         this.doubleSupplier = doubleSupplier;
         addRequirements(climber);
