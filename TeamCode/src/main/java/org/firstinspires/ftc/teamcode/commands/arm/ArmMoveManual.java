@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.commands.arm;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.subsystems.Outtake.Arm;
 
 import java.util.function.Supplier;
 
@@ -18,7 +18,7 @@ public class ArmMoveManual extends CommandBase {
     public void execute() {
         double position = doubleSupplier.get();
         if (Math.abs(position) > 0.05) {
-            arm.armSetPosition(arm.getRPosition()+0.01, arm.getLPosition()+0.01);
+            arm.setSetPoint(arm.getRPosition()+0.01, arm.getLPosition()+0.01);
         }
     }
 }

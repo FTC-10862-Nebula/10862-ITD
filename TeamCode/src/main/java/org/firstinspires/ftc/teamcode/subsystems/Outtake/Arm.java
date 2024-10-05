@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
 
 import com.acmerobotics.dashboard.config.Config;
@@ -14,16 +14,6 @@ import org.firstinspires.ftc.teamcode.util.nebulaHardware.NebulaServo;
 @Config
 public class Arm extends SubsystemBase
 {
-    public enum ArmPos {
-        TRANSFER(0.03,0.03),
-        OUTTAKE(0.37,0.37);
-
-        public final double armRPos, armLPos;
-        ArmPos(double armRPos, double armLPos) {
-            this.armRPos = armRPos;
-            this.armLPos = armLPos;
-        }
-    }
     Telemetry telemetry;
     private final NebulaServo armR, armL;
 
@@ -40,21 +30,17 @@ public class Arm extends SubsystemBase
                 NebulaConstants.Arm.minAngle,
                 NebulaConstants.Arm.maxAngle,
                 isEnabled);
-        armSetPosition(ArmPos.TRANSFER.armRPos,ArmPos.TRANSFER.armLPos);
+//        setSetPoint(Outtake.Value.);
         this.telemetry = tl;
     }
 
     @Override
     public void periodic() {
-        telemetry.addData("ArmR Pos: ", armR.getPosition());
-        telemetry.addData("ArmL Pos: ", armL.getPosition());
+        telemetry.addData("ArmR Pos: " + armR.getPosition() +"; ArmLPos: ", armL.getPosition());
     }
-    public void armSetPosition(double rNum, double lNum) {
+    public void setSetPoint(double rNum, double lNum) {
         armR.setPosition(rNum);
         armL.setPosition(lNum);
-    }
-    public Command armSetPositionCommand(ArmPos armPos) {
-        return new InstantCommand(()-> armSetPosition(armPos.armRPos, armPos.armLPos));
     }
     public double getRPosition(){
         return armR.getPosition();
