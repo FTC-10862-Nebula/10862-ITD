@@ -49,22 +49,6 @@ public class Test extends LinearOpMode {
         Actions.runBlocking(
                 new SequentialAction(
                         pathOne, // Example of a drive action
-
-                        // This action and the following action do the same thing
-                        new Action() {
-                            @Override
-                            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                                telemetry.addLine("Action!");
-                                telemetry.update();
-                                return false;
-                            }
-                        },
-                        // Only that this action uses a Lambda expression to reduce complexity
-                        (telemetryPacket) -> {
-                            telemetry.addLine("Action!");
-                            telemetry.update();
-                            return false; // Returning true causes the action to run again, returning false causes it to cease
-                        },
                         new ParallelAction( // several actions being run in parallel
                                 pathTwo, // Run second trajectory
                                 (telemetryPacket) -> { // Run some action
@@ -72,10 +56,6 @@ public class Test extends LinearOpMode {
                                     return false;
                                 }
                         )
-//                        drive.actionBuilder(new Pose2d(15,10,Math.toRadians(125))) // Another way of running a trajectory (not recommended because trajectories take time to build and will slow down your code, always try to build them beforehand)
-//                                .splineTo(new Vector2d(25, 15), 0)
-//                                .build()
-
                 )
         );
 

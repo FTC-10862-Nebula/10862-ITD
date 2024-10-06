@@ -110,14 +110,13 @@ public final class RoadrunnerMecanumDrive {
     public DcMotorEx leftFront, leftBack, rightBack, rightFront;
     public final DcMotorEx[] motors = new DcMotorEx[]{leftFront, leftBack, rightBack, rightFront};
     public static final int lFNum =0, lRNum =1,rRNum =2, rFNum =3;
-//    public final MotorEx leftFront, leftBack, rightBack, rightFront;
 
     public final VoltageSensor voltageSensor;
 
-    public final LazyImu lazyImu;
-
     public final Localizer localizer;
     public Pose2d pose;
+
+    public IMU imu;
 
     private final LinkedList<Pose2d> poseHistory = new LinkedList<>();
 
@@ -128,7 +127,6 @@ public final class RoadrunnerMecanumDrive {
 
     public class DriveLocalizer implements Localizer {
         public final Encoder leftFront, leftBack, rightBack, rightFront;
-        public final IMU imu;
 
         private int lastLeftFrontPos, lastLeftBackPos, lastRightBackPos, lastRightFrontPos;
         private Rotation2d lastHeading;
@@ -139,8 +137,6 @@ public final class RoadrunnerMecanumDrive {
             leftBack = new OverflowEncoder(new RawEncoder(RoadrunnerMecanumDrive.this.leftBack));
             rightBack = new OverflowEncoder(new RawEncoder(RoadrunnerMecanumDrive.this.rightBack));
             rightFront = new OverflowEncoder(new RawEncoder(RoadrunnerMecanumDrive.this.rightFront));
-
-            imu = lazyImu.get();
 
             //   leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         }
@@ -235,8 +231,10 @@ public final class RoadrunnerMecanumDrive {
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
-        lazyImu = new LazyImu(hardwareMap, "imu", new RevHubOrientationOnRobot(
+        imu = hardwareMap.get(IMU.class, "imu");
+        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 PARAMS.logoFacingDirection, PARAMS.usbFacingDirection));
+        imu.initialize(parameters);
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
 

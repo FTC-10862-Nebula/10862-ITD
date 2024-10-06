@@ -2,9 +2,13 @@ package org.firstinspires.ftc.teamcode.opmode.auto.league;
 
 
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
+import com.acmerobotics.roadrunner.ftc.Actions;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.subsystems.drive.MecDrive;
@@ -14,8 +18,8 @@ import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
 @Autonomous(preselectTeleOp = "TeleOpMain")
 public class NewAuto extends MatchOpMode {
     // Subsystems
-    private MecDrive drive;
-    private TrajectoryActionBuilder builder = new TrajectoryActionBuilder();
+    private MecDrive drive = new MecDrive();
+//    private TrajectoryActionBuilder builder = new TrajectoryActionBuilder();
 
     Action pathOne = drive.drivetrain.actionBuilder(drive.getPose())
             .lineToX(10)
@@ -28,7 +32,7 @@ public class NewAuto extends MatchOpMode {
             .build();
     @Override
     public void robotInit() {
-        drive = new MecDrive();
+
     }
 
     @Override
@@ -38,28 +42,16 @@ public class NewAuto extends MatchOpMode {
 
     public void matchStart() {
         schedule(
-
-//                builder
-//                        .lineToX(-12)
-//                        .afterDisp(5, dispMarker)
-//                        .splineTo(Vector2d(-24, -12), -Math.PI / 2)
-//                        .turn(Math.PI / 2)
-//                        .afterTime(0.5, tempMarker)
-//                        .turn(Math.PI / 2)
-//                        .setReversed(true)
-//                        .splineTo(Vector2d(-36, 0), Math.PI)
-
-//            new SequentialCommandGroup(
-//                new TrajectorySequenceContainerFollowCommand(drivetrain,
-//                        new TrajectorySequenceContainer(Speed::getBaseConstraints,
-//                                new Back(27))),
-//                new SequentialCommandGroup(
-//                ),
-//                /* Save Pose and end opmode*/
-//                run(() -> PoseStorage.currentPose = drivetrain.getPose()),
-//                run(this::stop)
-//            )
+            new InstantCommand(
+                ()-> Actions.runBlocking(
+                    new SequentialAction(
+                        pathOne, // Example of a drive action
+                        new ParallelAction( // several actions being run in parallel
+                            pathTwo
+                        )
+                    )
+                )
+            )
         );
-
     }
 }

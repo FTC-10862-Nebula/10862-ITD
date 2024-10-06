@@ -5,14 +5,27 @@ import static org.firstinspires.ftc.teamcode.util.NebulaConstants.squareInput;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.geometry.Vector2d;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
 
 
 public class MecDrive extends SubsystemBase {
     public final RoadrunnerMecanumDrive drivetrain =
             new RoadrunnerMecanumDrive(hardwareMap, new Pose2d(0,0,0));
     public MecDrive(){
+//        MecanumDrive mecanumDrive = new MecanumDrive((Motor) drivetrain.leftFront,
+//                (Motor) drivetrain.leftFront,
+//                (Motor) drivetrain.leftFront,
+//                (Motor) drivetrain.leftFront);
+        //TODO: Test ^^
     }
+
+    @Override
+    public void periodic() {
+        drivetrain.localizer.update();
+    }
+
 
     /**
      * Drives the robot from the perspective of the robot itself rather than that
