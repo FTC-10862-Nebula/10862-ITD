@@ -14,6 +14,7 @@ import com.acmerobotics.roadrunner.ftc.ForwardPushTest;
 import com.acmerobotics.roadrunner.ftc.ForwardRampLogger;
 import com.acmerobotics.roadrunner.ftc.LateralPushTest;
 import com.acmerobotics.roadrunner.ftc.LateralRampLogger;
+import com.acmerobotics.roadrunner.ftc.LazyImu;
 import com.acmerobotics.roadrunner.ftc.ManualFeedforwardTuner;
 import com.acmerobotics.roadrunner.ftc.MecanumMotorDirectionDebugger;
 import com.qualcomm.hardware.lynx.LynxModule;
@@ -84,7 +85,7 @@ public final class TuningOpModes {
                         rightEncs,
                         parEncs,
                         perpEncs,
-                        md.lazyImu,
+                        md.lazyIMU,
                         md.voltageSensor,
                         () -> new MotorFeedforward(RoadrunnerMecanumDrive.PARAMS.kS,
                                 RoadrunnerMecanumDrive.PARAMS.kV / RoadrunnerMecanumDrive.PARAMS.inPerTick,

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.commands.drive.teleop;
+package org.firstinspires.ftc.teamcode.commands.manual;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;

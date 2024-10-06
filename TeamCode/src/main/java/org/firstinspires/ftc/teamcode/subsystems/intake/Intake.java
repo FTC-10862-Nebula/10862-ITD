@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems.intake;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
+import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -46,6 +47,9 @@ public class Intake {
                         new InstantCommand(()-> powerIntake.setSetPoint(value.intakePower))
                 );
         }
+    }
+    public Action setPositionAction(Value value){
+        return (Action) setPosition(value);
     }
 
     public Command intakePeriodic(){
