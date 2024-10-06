@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.util.nebulaHardware;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -29,7 +31,7 @@ public class NebulaI2CMonitor {
             double startTime = System.currentTimeMillis();
             double temp = getDistance(DistanceUnit.INCH);
             if(System.currentTimeMillis()-startTime > cutOff){
-                if(brokeCount++ > 5) ;  on = false;
+                if(brokeCount++ > 5)   on = false;
             }else{
                 readValue = temp;
             }
@@ -43,6 +45,7 @@ public class NebulaI2CMonitor {
 
     public boolean working(){ return on; }
 
+    @NonNull
     public String toString(){ return sensor.toString(); }
     public void close(){ sensor.close(); }
 }

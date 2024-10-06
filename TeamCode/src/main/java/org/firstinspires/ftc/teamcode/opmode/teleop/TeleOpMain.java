@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.climber.Climber;
+import org.firstinspires.ftc.teamcode.subsystems.drive.MecDrive;
 import org.firstinspires.ftc.teamcode.subsystems.intake.PowerIntake;
 import org.firstinspires.ftc.teamcode.subsystems.intake.HorizontalSlide;
 import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
@@ -16,6 +17,7 @@ import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
 public class TeleOpMain extends MatchOpMode {
     //TODO: Add a on/off switch for drivetrain
     private GamepadEx driverGamepad, operatorGamepad;
+    private MecDrive drive;
     private HorizontalSlide horizontalSlide;
     private PowerIntake intake;
     private Arm arm;
@@ -27,6 +29,7 @@ public class TeleOpMain extends MatchOpMode {
     public void robotInit() {
         driverGamepad = new GamepadEx(gamepad1);
         operatorGamepad = new GamepadEx(gamepad2);
+        drive.
 
         claw = new Claw(telemetry, hardwareMap, true);
         intake = new PowerIntake(telemetry, hardwareMap, true);

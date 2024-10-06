@@ -50,7 +50,9 @@ public class NewAuto extends MatchOpMode {
                         )
                     )
                 )
-            )
+            ),
+            run(() -> MecDrive.currentPose = drive.getPose()),
+            run(this::stop)
         );
     }
 }

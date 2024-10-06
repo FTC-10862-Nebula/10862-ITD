@@ -11,6 +11,13 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 
 
 public class MecDrive extends SubsystemBase {
+    /**
+     * Simple static field serving as a storage medium for the bot's pose.
+     * This allows different classes/opmodes to set and read from a central source of truth.
+     * A static field allows data to persist between opmodes.
+     */
+    public static Pose2d currentPose = new Pose2d(0,0,0);
+
     public final RoadrunnerMecanumDrive drivetrain =
             new RoadrunnerMecanumDrive(hardwareMap, new Pose2d(0,0,0));
     public MecDrive(){
