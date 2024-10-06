@@ -1,8 +1,6 @@
-package org.firstinspires.ftc.teamcode.opmode.auto.league;
+package org.firstinspires.ftc.teamcode.opmode.auto;
 
-import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
