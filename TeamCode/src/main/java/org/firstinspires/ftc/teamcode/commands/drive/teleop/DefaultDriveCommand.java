@@ -3,24 +3,22 @@ package org.firstinspires.ftc.teamcode.commands.drive.teleop;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.firstinspires.ftc.teamcode.subsystems.drive.mec.Drivetrain;
+import org.firstinspires.ftc.teamcode.subsystems.drive.MecDrive;
+
 public class DefaultDriveCommand extends CommandBase {
-    private Drivetrain drive;
-    private GamepadEx driverGamepad;
+    private final MecDrive drive;
+    private final GamepadEx driverGamepad;
 
     protected double multiplier;
     boolean isFieldCentric;
-    double offset = 0;
 
-    public DefaultDriveCommand(Drivetrain drive,
+    public DefaultDriveCommand(MecDrive drive,
                                GamepadEx driverGamepad,
                                boolean isFieldCentric) {
 
         this.drive = drive;
         this.driverGamepad = driverGamepad;
-        this.multiplier = 1.0;
         addRequirements(this.drive);
 
         this.isFieldCentric = isFieldCentric;
@@ -31,28 +29,28 @@ public class DefaultDriveCommand extends CommandBase {
         if(driverGamepad.getButton(GamepadKeys.Button.RIGHT_BUMPER)) {
             multiplier = 0.55;
         } else {
-            multiplier = 10;//5.5
+            multiplier = 10;
         }
+
         if(driverGamepad.getButton(GamepadKeys.Button.A)) {
-            drive.reInitializeIMU();
-            offset = 0;
+            drive.drivetrain.resetIMU();
         }
+
         if(isFieldCentric) {
-            drive.fieldCentric(
-                    driverGamepad.getLeftY(),// * multiplier,
-                    driverGamepad.getLeftX(),// * multiplier,
-                    -driverGamepad.getRightX(),// * multiplier,
-                    multiplier,
-                    offset
+            drive.driveFieldCentric(
+                    driverGamepad.getLeftX() * multiplier,
+                    driverGamepad.getLeftY() * multiplier,
+                    -driverGamepad.getRightX() * multiplier,
+                    drive.drivetrain.getYaw(),
+                    true
             );
         }
-//        else {
-//            drive.mecDrive(
-//                    driverGamepad.getLeftY() * multiplier,
-//                    driverGamepad.getLeftX() * multiplier,
-//                    driverGamepad.getRightX() * multiplier
-//            );
-//        }
+        else {
+            drive.driveRobotCentric(driverGamepad.getLeftX() * multiplier,
+                    driverGamepad.getLeftY() * multiplier,
+                    -driverGamepad.getRightX() * multiplier,
+                    true);
+        }
     }
 
 

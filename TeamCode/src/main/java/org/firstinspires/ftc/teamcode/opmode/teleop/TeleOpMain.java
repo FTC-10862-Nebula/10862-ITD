@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.commands.drive.teleop.DefaultDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.climber.Climber;
@@ -29,7 +30,7 @@ public class TeleOpMain extends MatchOpMode {
     public void robotInit() {
         driverGamepad = new GamepadEx(gamepad1);
         operatorGamepad = new GamepadEx(gamepad2);
-        drive.
+        drive = new MecDrive();
 
         claw = new Claw(telemetry, hardwareMap, true);
         intake = new PowerIntake(telemetry, hardwareMap, true);
@@ -41,6 +42,7 @@ public class TeleOpMain extends MatchOpMode {
 
     @Override
     public void configureButtons() {
+        drive.setDefaultCommand(new DefaultDriveCommand(drive,driverGamepad,true));
 //        Trigger OUTTAKE = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER)
 //            .whenPressed(new InstantCommand(intake::setDown))
 //            .whileHeld(intake.setSetPointCommand(PowerIntake.IntakePower.OUTTAKE)))
@@ -51,7 +53,6 @@ public class TeleOpMain extends MatchOpMode {
 ////        Button climbDown  = (new GamepadButton(operatorGamepad, GamepadKeys.Button.DPAD_DOWN))
 ////                .whileHeld(climb.setSetPointCommand(Climber.ClimbEnum.REST));
 //        climb.setDefaultCommand(new ClimberMoveManual(climb, operatorGamepad::getLeftY));
-////        drivetrain.setDefaultCommand(new DefaultDriveCommand(drivetrain, driverGamepad, true);
 
         //y - up/dowm
         //x- right left

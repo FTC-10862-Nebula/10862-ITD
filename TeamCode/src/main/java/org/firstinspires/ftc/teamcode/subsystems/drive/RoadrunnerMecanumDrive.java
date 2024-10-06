@@ -486,4 +486,11 @@ public final class RoadrunnerMecanumDrive {
                 defaultVelConstraint, defaultAccelConstraint
         );
     }
+
+    public void resetIMU(){
+        imu.resetYaw();
+    }
+    public double getYaw(){
+        return  imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+    }
 }
