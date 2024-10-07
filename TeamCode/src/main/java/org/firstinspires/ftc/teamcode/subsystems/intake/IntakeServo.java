@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.NebulaConstants;
+import org.firstinspires.ftc.teamcode.util.nebulaHardware.NebulaMotor;
 import org.firstinspires.ftc.teamcode.util.nebulaHardware.NebulaServo;
 
 @Config
@@ -16,10 +17,10 @@ public class IntakeServo extends SubsystemBase {
 
     public IntakeServo(Telemetry tl, HardwareMap hw, Boolean isEnabled) {
         intakeServo = new NebulaServo(hw,
-            NebulaConstants.Intake.intakeRName,
-            NebulaConstants.Intake.intakeRDirection,
-            NebulaConstants.Intake.minAngle,
-            NebulaConstants.Intake.maxAngle,
+            "intakeS",
+            NebulaServo.Direction.Forward,
+            0,
+            360,
             isEnabled);
         this.telemetry = tl;
     }

@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.util.nebulaHardware.NebulaServo;
 //This will be used to store all Initialization Values for Subsystems, etc.
 //Positions will
 @Config
+@Deprecated
 public class NebulaConstants {
     //TODO: make some things final
     // TODO: servos = have set angles

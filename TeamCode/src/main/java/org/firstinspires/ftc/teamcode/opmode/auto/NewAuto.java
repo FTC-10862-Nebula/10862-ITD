@@ -23,11 +23,11 @@ import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
 public class NewAuto extends MatchOpMode {
     // Subsystems
     private final MecDrive drive = new MecDrive();
-    private final Intake intake = new Intake(
-            new HorizontalSlide(telemetry, hardwareMap,true),
-            new IntakeServo(telemetry, hardwareMap,true),
-            new PowerIntake(telemetry, hardwareMap,true)
-    );
+//    private final Intake intake = new Intake(
+//            new HorizontalSlide(telemetry, hardwareMap,true),
+//            new IntakeServo(telemetry, hardwareMap,true),
+//            new PowerIntake(telemetry, hardwareMap,true)
+//    );
 //    private TrajectoryActionBuilder builder = new TrajectoryActionBuilder();
 
     Action pathOne = drive.drivetrain.actionBuilder(drive.getPose())
@@ -61,8 +61,8 @@ public class NewAuto extends MatchOpMode {
 //                            intake.setPositionAction(Intake.Value.INTAKE)//TODO: Does this work
                         )
                     )
-                )),
-                intake.setPosition(Intake.Value.INTAKE)//TODO: Or This
+                ))
+//                intake.setPosition(Intake.Value.INTAKE)//TODO: Or This
             ),
             run(() -> MecDrive.currentPose = drive.getPose()),
             run(this::stop)

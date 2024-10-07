@@ -22,7 +22,7 @@ public class Test extends LinearOpMode {
 
         MecDrive drive = new MecDrive();
 
-        DcMotor motor1 = hardwareMap.get(DcMotor.class,  "motor");
+//        DcMotor motor1 = hardwareMap.get(DcMotor.class,  "motor");
 
         // Delcare Trajectory as such
         Action pathOne = drive.drivetrain.actionBuilder(drive.getPose())
@@ -50,7 +50,7 @@ public class Test extends LinearOpMode {
                         new ParallelAction( // several actions being run in parallel
                                 pathTwo, // Run second trajectory
                                 (telemetryPacket) -> { // Run some action
-                                    motor1.setPower(1);
+//                                    motor1.setPower(1);
                                     return false;
                                 }
                         )

@@ -13,62 +13,28 @@ import org.firstinspires.ftc.teamcode.util.nebulaHardware.NebulaMotor;
 @Config
 public class HorizontalSlide extends SubsystemBase {
     protected Telemetry telemetry;
-    protected NebulaMotor slideR, slideL;
+    protected NebulaMotor hSlide;
     
     protected PIDFController slideController;
     protected double output = 0, multiplier =1;
 
-    public enum SlideEnum {
-        TRANSFER(-5),
-
-        AUTO_LOW(800),
-        AUTO_CLOSE(850),
-        LOW(1200),
-        MID(1900),
-        HIGH(2300),
-
-        MANUAL(0.5);
-        public final double slidePos;
-        SlideEnum(double slidePos) {
-            this.slidePos = slidePos;
-        }
-    }
-
-
-    protected static SlideEnum slidePos;
-
     public HorizontalSlide(Telemetry tl, HardwareMap hw, boolean isEnabled) {
-        slideR = new NebulaMotor(hw,
-            NebulaConstants.Slide.slideRName,
-            NebulaConstants.Slide.slideType,
-            NebulaConstants.Slide.slideRDirection,
-            NebulaConstants.Slide.slideIdleMode,
+        hSlide = new NebulaMotor(hw,
+            "hSlide",
+            NebulaMotor.MotorType.RPM_435,
+            NebulaMotor.Direction.Forward,
+            NebulaMotor.IdleMode.Coast,
             isEnabled);
-        slideL = new NebulaMotor(hw,
-            NebulaConstants.Slide.slideLName,
-            NebulaConstants.Slide.slideType,
-            NebulaConstants.Slide.slideLDirection,
-            NebulaConstants.Slide.slideIdleMode,
-            isEnabled);
-        slideL.getEncoder().setDirection(Motor.Direction.FORWARD);
-        slideR.getEncoder().setDirection(Motor.Direction.FORWARD);
+        hSlide.getEncoder().setDirection(Motor.Direction.FORWARD);
 //        motorGroup = new NebulaMotorGroup(slideR, slideL);
-        slideR.setDistancePerPulse(NebulaConstants.Slide.slideDistancePerPulse);
+        hSlide.setDistancePerPulse(NebulaConstants.Slide.slideDistancePerPulse);
 
-        slideController = new PIDFController(
-                NebulaConstants.Slide.slidePID.p,
-            NebulaConstants.Slide.slidePID.i,
-            NebulaConstants.Slide.slidePID.d,
-            NebulaConstants.Slide.slidePID.f,
-            getEncoderDistance(),
-            getEncoderDistance());
-        slideController.setTolerance(NebulaConstants.Slide.slideTolerance);
+        slideController = new PIDFController(0,0,0,0, getEncoderDistance(), getEncoderDistance());
+        slideController.setTolerance(1);
         resetEncoder();
         setSetPoint(0);
 
         this.telemetry = tl;
-        slidePos = SlideEnum.TRANSFER;
-        
     }
 
     @Override
@@ -76,32 +42,29 @@ public class HorizontalSlide extends SubsystemBase {
         slideController.setF(NebulaConstants.Slide.slidePID.f *
             Math.cos(Math.toRadians(slideController.getSetPoint())));
         output = slideController.calculate(getEncoderDistance());
-        setPower(output* multiplier);
+        hSlide.setPower(output* multiplier);
     
         telemetry.addData("Slide SetPoint:" + getSetPoint() + "; ", slidePos.name());
         telemetry.addData("Slide Motor Output:", output* multiplier);
-        telemetry.addData("EncoderR: " + slideR.getPosition() + "EncoderL:", slideL.getPosition());
+        telemetry.addData("EncoderR: " + hSlide.getPosition() + "EncoderL:", slideL.getPosition());
     }
 
     public double getEncoderDistance() {
-        return slideL.getPosition();
-//        return slideR.getPosition();
+        return hSlide.getPosition();
     }
     public void setPower(double power) {
-        slideR.setPower(power);
-        slideL.setPower(power);
+        hSlide.setPower(power);
     }
     public void resetEncoder() {
-        slideR.resetEncoder();
-        slideL.resetEncoder();
+        hSlide.resetEncoder();
     }
     public void setSetPoint(double setPoint) {
         if (getEncoderDistance()>setPoint){
             multiplier =0.8;
-            slideController.setP(NebulaConstants.Slide.slidePID.p*0.6);
+            slideController.setP(slideController.getP()*0.6);
         } else {
             multiplier = 1;
-            slideController.setP(NebulaConstants.Slide.slidePID.p * 1);
+            slideController.setP(slideController.getP() * 1);
         }
         slideController.setSetPoint(setPoint);
     }

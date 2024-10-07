@@ -13,20 +13,18 @@ import org.firstinspires.ftc.teamcode.util.nebulaHardware.NebulaMotor;
 @Config
 public class VerticalSlide extends SubsystemBase {
     protected Telemetry telemetry;
-    protected NebulaMotor slide;
+    protected NebulaMotor vertSlide;
 
     protected PIDFController slideController;
     protected double output = 0, multiplier =1;
 
     public VerticalSlide(Telemetry tl, HardwareMap hw, boolean isEnabled) {
-        slide = new NebulaMotor(hw,
-            "hSlide",
-            NebulaMotor.MotorType.RPM_435,
-            NebulaMotor.Direction.Forward,
-            NebulaMotor.IdleMode.Coast,
-            isEnabled);
-        slide.getEncoder().setDirection(Motor.Direction.FORWARD);
-        slide.setDistancePerPulse(1);
+        vertSlide = new NebulaMotor(hw,
+            "vSlide",
+            NebulaMotor.MotorType.RPM_435, NebulaMotor.Direction.Forward,
+            NebulaMotor.IdleMode.Coast, isEnabled);
+        vertSlide.getEncoder().setDirection(Motor.Direction.FORWARD);
+        vertSlide.setDistancePerPulse(1);
 
         slideController = new PIDFController(
             0.005,0,0,0,
@@ -49,18 +47,18 @@ public class VerticalSlide extends SubsystemBase {
         telemetry.addData("Slide SetPoint:", getSetPoint());
 //        telemetry.addData("Slide Position Word:", slidePos.name());
         telemetry.addData("Slide Motor Output:", output* multiplier);
-        telemetry.addData("SlideR Encoder: ", slide.getPosition());
+        telemetry.addData("SlideR Encoder: ", vertSlide.getPosition());
         
     }
 
     public double getEncoderDistance() {
-        return slide.getPosition();
+        return vertSlide.getPosition();
     }
     public void setPower(double power) {
-        slide.setPower(power);
+        vertSlide.setPower(power);
     }
     public void resetEncoder() {
-        slide.resetEncoder();
+        vertSlide.resetEncoder();
     }
     public void setSetPoint(double setPoint) {
         if (getEncoderDistance()>setPoint){

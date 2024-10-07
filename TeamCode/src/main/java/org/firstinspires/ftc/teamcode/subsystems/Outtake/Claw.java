@@ -19,16 +19,16 @@ public class Claw extends SubsystemBase
 
     public Claw(Telemetry tl, HardwareMap hw, boolean isEnabled) {
         turnServo = new NebulaServo(hw,
-            NebulaConstants.Claw.clawFName,
-            NebulaConstants.Claw.clawFDirection,
-            NebulaConstants.Claw.minAngle,
-            NebulaConstants.Claw.maxAngle,
+            "turnS",
+            NebulaServo.Direction.Forward,
+            0,
+            360,
             isEnabled);
         clawServo = new NebulaServo(hw,
-            NebulaConstants.Claw.clawBName,
-            NebulaConstants.Claw.clawBDirection,
-            NebulaConstants.Claw.minAngle,
-            NebulaConstants.Claw.maxAngle,
+            "clawS",
+            NebulaServo.Direction.Forward,
+            0,
+            360,
             isEnabled);
         this.telemetry = tl;
     }

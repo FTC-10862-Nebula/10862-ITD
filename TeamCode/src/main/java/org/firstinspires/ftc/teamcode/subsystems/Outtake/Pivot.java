@@ -17,11 +17,11 @@ public class Pivot extends SubsystemBase
 
     public Pivot(Telemetry tl, HardwareMap hw, boolean isEnabled) {
         pivot = new NebulaServo(hw,
-                NebulaConstants.Arm.armRName,
-                NebulaConstants.Arm.armRDirection,
-                NebulaConstants.Arm.minAngle,
-                NebulaConstants.Arm.maxAngle,
-                isEnabled);
+            NebulaConstants.Arm.armRName,
+            NebulaServo.Direction.Forward,
+            0,
+            360,
+            isEnabled);
         this.telemetry = tl;
     }
 

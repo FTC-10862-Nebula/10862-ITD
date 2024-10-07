@@ -19,18 +19,17 @@ public class Arm extends SubsystemBase
 
     public Arm(Telemetry tl, HardwareMap hw, boolean isEnabled) {
         armR = new NebulaServo(hw,
-                NebulaConstants.Arm.armRName,
-                NebulaConstants.Arm.armRDirection,
-                NebulaConstants.Arm.minAngle,
-                NebulaConstants.Arm.maxAngle,
+            "armR",
+            NebulaServo.Direction.Forward,
+            0,
+            360,
                 isEnabled);
         armL = new NebulaServo(hw,
-                NebulaConstants.Arm.armLName,
-                NebulaConstants.Arm.armLDirection,
-                NebulaConstants.Arm.minAngle,
-                NebulaConstants.Arm.maxAngle,
-                isEnabled);
-//        setSetPoint(Outtake.Value.);
+            "armR",
+            NebulaServo.Direction.Forward,
+            0,
+            360,
+            isEnabled);
         this.telemetry = tl;
     }
 

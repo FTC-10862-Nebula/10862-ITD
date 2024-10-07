@@ -30,10 +30,10 @@ public class PowerClimber extends SubsystemBase {
 
     public PowerClimber(Telemetry tl, HardwareMap hw, boolean isEnabled) {
         climber = new NebulaMotor(hw,
-            NebulaConstants.Climber.climberName,
-            NebulaConstants.Climber.climberType,
-            NebulaConstants.Climber.climberDirection,
-            NebulaConstants.Climber.climberIdleMode,
+            "climb",
+            NebulaMotor.MotorType.RPM_117,
+            NebulaMotor.Direction.Forward,
+            NebulaMotor.IdleMode.Brake,
             isEnabled);
 
         climber.setDistancePerPulse(NebulaConstants.Climber.climberDistancePerPulse);
