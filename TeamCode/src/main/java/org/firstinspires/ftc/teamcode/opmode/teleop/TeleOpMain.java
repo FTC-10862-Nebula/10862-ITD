@@ -5,8 +5,8 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.manual.DefaultDriveCommand;
-import org.firstinspires.ftc.teamcode.subsystems.Outtake.Claw;
-import org.firstinspires.ftc.teamcode.subsystems.Outtake.Arm;
+import org.firstinspires.ftc.teamcode.subsystems.outtake.Claw;
+import org.firstinspires.ftc.teamcode.subsystems.outtake.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.climber.Climber;
 import org.firstinspires.ftc.teamcode.subsystems.drive.MecDrive;
 import org.firstinspires.ftc.teamcode.subsystems.intake.PowerIntake;

@@ -43,10 +43,10 @@ public class HorizontalSlide extends SubsystemBase {
             Math.cos(Math.toRadians(slideController.getSetPoint())));
         output = slideController.calculate(getEncoderDistance());
         hSlide.setPower(output* multiplier);
-    
-        telemetry.addData("Slide SetPoint:" + getSetPoint() + "; ", slidePos.name());
+
+        telemetry.addData("Slide SetPoint:" + getSetPoint() + "; ", hSlide.toString());
         telemetry.addData("Slide Motor Output:", output* multiplier);
-        telemetry.addData("EncoderR: " + hSlide.getPosition() + "EncoderL:", slideL.getPosition());
+        telemetry.addData("EncoderR: " + hSlide.getPosition() + "EncoderL:", hSlide.getPosition());
     }
 
     public double getEncoderDistance() {

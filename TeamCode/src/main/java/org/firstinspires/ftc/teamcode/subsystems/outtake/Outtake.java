@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems.Outtake;
+package org.firstinspires.ftc.teamcode.subsystems.outtake;
 
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;

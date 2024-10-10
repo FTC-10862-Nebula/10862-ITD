@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems.Outtake;
+package org.firstinspires.ftc.teamcode.subsystems.outtake;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
