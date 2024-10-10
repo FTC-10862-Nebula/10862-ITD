@@ -36,7 +36,7 @@ public class PowerClimber extends SubsystemBase {
             NebulaMotor.IdleMode.Brake,
             isEnabled);
 
-        climber.setDistancePerPulse(NebulaConstants.Climber.climberDistancePerPulse);
+        climber.setDistancePerPulse(1);
 
         this.telemetry = tl;
     }
