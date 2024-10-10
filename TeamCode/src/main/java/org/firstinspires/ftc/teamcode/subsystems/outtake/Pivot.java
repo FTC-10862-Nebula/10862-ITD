@@ -17,7 +17,7 @@ public class Pivot extends SubsystemBase
 
     public Pivot(Telemetry tl, HardwareMap hw, boolean isEnabled) {
         pivot = new NebulaServo(hw,
-            NebulaConstants.Arm.armRName,
+            "pivot",
             NebulaServo.Direction.Forward,
             0,
             360,
@@ -26,13 +26,11 @@ public class Pivot extends SubsystemBase
     }
 
     @Override
-    public void periodic() {
-        telemetry.addData("Pivot Pos: ", pivot.getPosition());
+    public void periodic() {}
+    public void setSetPoint(double num) {
+        pivot.setPosition(num);
     }
-    public void setSetPoint(double rNum, double lNum) {
-        pivot.setPosition(rNum);
-    }
-    public double getRPosition(){
+    public double getPosition(){
         return pivot.getPosition();
     }
 

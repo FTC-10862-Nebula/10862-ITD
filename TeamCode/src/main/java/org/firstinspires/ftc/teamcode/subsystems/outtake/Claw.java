@@ -32,10 +32,16 @@ public class Claw extends SubsystemBase
 
     @Override
     public void periodic() {
-        telemetry.addData("Turn Servo: " + turnServo.getPosition() + "; Claw: ", clawServo.getPosition());
     }
     public void setSetPoint(double turnPos, double clawPos){
         turnServo.setPosition(turnPos);
         clawServo.setPosition(clawPos);
+    }
+
+    public double getTurnPos(){
+        return turnServo.getPosition();
+    }
+    public double getClawPos(){
+        return  clawServo.getPosition();
     }
 }

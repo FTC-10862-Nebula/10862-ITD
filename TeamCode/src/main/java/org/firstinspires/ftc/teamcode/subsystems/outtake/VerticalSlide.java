@@ -13,24 +13,28 @@ import org.firstinspires.ftc.teamcode.util.nebulaHardware.NebulaMotor;
 @Config
 public class VerticalSlide extends SubsystemBase {
     protected Telemetry telemetry;
-    protected NebulaMotor vertSlide;
+    protected NebulaMotor vRSlide,vLSlide;
 
     protected PIDFController slideController;
     protected double output = 0, multiplier =1;
 
     public VerticalSlide(Telemetry tl, HardwareMap hw, boolean isEnabled) {
-        vertSlide = new NebulaMotor(hw,
-            "vSlide",
+        vRSlide = new NebulaMotor(hw,
+            "vRSlide",
             NebulaMotor.MotorType.RPM_435, NebulaMotor.Direction.Forward,
             NebulaMotor.IdleMode.Coast, isEnabled);
-        vertSlide.getEncoder().setDirection(Motor.Direction.FORWARD);
-        vertSlide.setDistancePerPulse(1);
+        vLSlide = new NebulaMotor(hw,
+                "vLSlide",
+                NebulaMotor.MotorType.RPM_435, NebulaMotor.Direction.Reverse,
+                NebulaMotor.IdleMode.Coast, isEnabled);
+        vRSlide.setDistancePerPulse(1);
+        vLSlide.setDistancePerPulse(1);
 
         slideController = new PIDFController(
             0.005,0,0,0,
             getEncoderDistance(),
             getEncoderDistance());
-        slideController.setTolerance(NebulaConstants.Slide.slideTolerance);
+        slideController.setTolerance(10);
         resetEncoder();
         setSetPoint(0);
 
@@ -39,41 +43,32 @@ public class VerticalSlide extends SubsystemBase {
 
     @Override
     public void periodic() {
-        slideController.setF(NebulaConstants.Slide.slidePID.f *
-            Math.cos(Math.toRadians(slideController.getSetPoint())));
         output = slideController.calculate(getEncoderDistance());
         setPower(output* multiplier);
-    
-        telemetry.addData("Slide SetPoint:", getSetPoint());
-//        telemetry.addData("Slide Position Word:", slidePos.name());
-        telemetry.addData("Slide Motor Output:", output* multiplier);
-        telemetry.addData("SlideR Encoder: ", vertSlide.getPosition());
-        
     }
 
     public double getEncoderDistance() {
-        return vertSlide.getPosition();
+        return vRSlide.getPosition();
+//        return vLSlide.getPosition();
     }
     public void setPower(double power) {
-        vertSlide.setPower(power);
+        vRSlide.setPower(power);
+        vLSlide.resetEncoder();
     }
     public void resetEncoder() {
-        vertSlide.resetEncoder();
+        vRSlide.resetEncoder();
+        vLSlide.resetEncoder();
     }
     public void setSetPoint(double setPoint) {
         if (getEncoderDistance()>setPoint){
             multiplier =0.8;
-            slideController.setP(NebulaConstants.Slide.slidePID.p*0.6);
+            slideController.setP(slideController.getP()*0.6);
         } else {
             multiplier = 1;
-            slideController.setP(NebulaConstants.Slide.slidePID.p * 1);
+            slideController.setP(slideController.getP()*1);
         }
         slideController.setSetPoint(setPoint);
     }
-//    public Command setSetPointCommand(SlideEnum pos) {
-//        slidePos = pos;
-//        return  new InstantCommand(()->setSetPoint(pos.slidePos));
-//    }
     public double getSetPoint() {
         return slideController.getSetPoint();
     }

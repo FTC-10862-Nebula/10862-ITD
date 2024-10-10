@@ -20,9 +20,9 @@ public class Arm extends SubsystemBase
             NebulaServo.Direction.Forward,
             0,
             360,
-                isEnabled);
+            isEnabled);
         armL = new NebulaServo(hw,
-            "armR",
+            "armL",
             NebulaServo.Direction.Forward,
             0,
             360,
@@ -32,7 +32,6 @@ public class Arm extends SubsystemBase
 
     @Override
     public void periodic() {
-        telemetry.addData("ArmR Pos: " + armR.getPosition() +"; ArmLPos: ", armL.getPosition());
     }
     public void setSetPoint(double rNum, double lNum) {
         armR.setPosition(rNum);

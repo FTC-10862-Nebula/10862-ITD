@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems.outtake;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -25,15 +27,17 @@ public class Outtake {
         }
     }
 
+    public Value value = Value.START;
     public VerticalSlide verticalSlide;
     public Arm arm;
     public Claw claw;
+    public Pivot pivot;
 
-    public Outtake(VerticalSlide verticalSlide, Arm arm, Claw claw){
+    public Outtake(VerticalSlide verticalSlide, Arm arm, Claw claw, Pivot pivot){
         this.verticalSlide = verticalSlide;
         this.arm = arm;
         this.claw = claw;
-
+        this.pivot=pivot;
     }
 
     public Command setPosition(Value value){
@@ -49,5 +53,13 @@ public class Outtake {
                     new InstantCommand(()-> claw.setSetPoint(value.turnPos, value.clawPos))
                 );
         }
+    }
+
+    public void periodic(){
+        telemetry.addData("Outtake Position:", value);
+        telemetry.addData("SlideSetPoint:"+ verticalSlide.getSetPoint()+ "; SlideR Encoder: ", verticalSlide.getEncoderDistance());
+//        telemetry.addData("Slide Motor Output:", verticalSlide.output* verticalSlide.multiplier);
+        telemetry.addData("ArmR Pos: " + arm.getRPosition() +"; ArmLPos: "+ arm.getLPosition()+"; PivotPos:",pivot.getPosition());
+        telemetry.addData("Turn Servo: " + claw.getTurnPos() + "; Claw: ", claw.getClawPos());
     }
 }
