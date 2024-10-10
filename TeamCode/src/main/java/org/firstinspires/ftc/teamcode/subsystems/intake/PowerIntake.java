@@ -40,6 +40,9 @@ public class PowerIntake extends SubsystemBase {
         motor.setPower(power);
     }
 
+    //red (255,0,0)
+    //blue (0,0,255)
+    //yellow (0,255, 255)
     public int red(){
         return colorSensor.red();
     }

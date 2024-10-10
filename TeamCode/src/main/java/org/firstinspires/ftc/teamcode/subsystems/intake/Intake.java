@@ -9,6 +9,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 public class Intake {
     public enum Value {
+        START (0,0,0),
         OUTTAKE (0,0,0),
         INTAKE  (0,0,0),
         STOP    (0,0,0),
@@ -22,6 +23,7 @@ public class Intake {
             this.intakePower = intakePower;
         }
     }
+    public Value value = Value.START;
 
     public HorizontalSlide horizontalSlide;
     public IntakeServo intakeServo;
@@ -31,7 +33,6 @@ public class Intake {
         this.horizontalSlide = horizontalSlide;
         this.intakeServo = intakeServo;
         this.powerIntake = powerIntake;
-
     }
 
     public Command setPosition(Value value){
@@ -54,11 +55,21 @@ public class Intake {
 
     public Command intakePeriodic(){
         //TODO: Get the color of the colorSensor
-        if(powerIntake.green()<45){
-            //do this
-            telemetry.speak("Got it!"); //TODO: Works?
-
+        if(powerIntake.red()>255){
+            telemetry.speak("Got it, RED!"); //TODO: Works?
+        } else if(powerIntake.green()>255&&powerIntake.blue()>255){
+            telemetry.speak("Got it, YELLOW!"); //TODO: Works?
+        } else if(powerIntake.blue()>255){
+            telemetry.speak("Got it, BLUE!"); //TODO: Works?
         }
         return new InstantCommand();
+    }
+
+    public void periodic(){
+        telemetry.addData("Intake Position:", value);
+        telemetry.addData("Slide SetPoint:" + horizontalSlide.getSetPoint()+"; Encoder: ", horizontalSlide.hSlide.getPosition());
+        telemetry.addData("Slide Motor Output:", horizontalSlide.output* horizontalSlide.multiplier);
+        telemetry.addData("Red:" + powerIntake.red() + "; Green:" + powerIntake.green() + "Blue:", powerIntake.blue());
+        telemetry.addData("IntakeServoPos: ", intakeServo.getPos());
     }
 }

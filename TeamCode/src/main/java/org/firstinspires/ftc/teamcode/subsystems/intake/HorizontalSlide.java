@@ -26,8 +26,7 @@ public class HorizontalSlide extends SubsystemBase {
             NebulaMotor.IdleMode.Coast,
             isEnabled);
         hSlide.getEncoder().setDirection(Motor.Direction.FORWARD);
-//        motorGroup = new NebulaMotorGroup(slideR, slideL);
-        hSlide.setDistancePerPulse(NebulaConstants.Slide.slideDistancePerPulse);
+        hSlide.setDistancePerPulse(1);
 
         slideController = new PIDFController(0,0,0,0, getEncoderDistance(), getEncoderDistance());
         slideController.setTolerance(1);
@@ -39,14 +38,8 @@ public class HorizontalSlide extends SubsystemBase {
 
     @Override
     public void periodic() {
-        slideController.setF(NebulaConstants.Slide.slidePID.f *
-            Math.cos(Math.toRadians(slideController.getSetPoint())));
         output = slideController.calculate(getEncoderDistance());
         hSlide.setPower(output* multiplier);
-
-        telemetry.addData("Slide SetPoint:" + getSetPoint() + "; ", hSlide.toString());
-        telemetry.addData("Slide Motor Output:", output* multiplier);
-        telemetry.addData("EncoderR: " + hSlide.getPosition() + "EncoderL:", hSlide.getPosition());
     }
 
     public double getEncoderDistance() {

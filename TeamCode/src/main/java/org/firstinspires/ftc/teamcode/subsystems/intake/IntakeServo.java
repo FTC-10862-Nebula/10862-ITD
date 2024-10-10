@@ -26,11 +26,12 @@ public class IntakeServo extends SubsystemBase {
     }
 
     @Override
-    public void periodic() {
-        telemetry.addData("IntakeServoPos: ", intakeServo.getPosition());
-    }
+    public void periodic() {}
 
     public void setSetPoint(double pos){
         intakeServo.setPosition(pos);
+    }
+    public double getPos(){
+        return intakeServo.getPosition();
     }
 }
