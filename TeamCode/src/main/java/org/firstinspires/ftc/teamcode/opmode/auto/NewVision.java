@@ -1,32 +1,23 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
 
-import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.ParallelAction;
-import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.Vector2d;
-import com.acmerobotics.roadrunner.ftc.Actions;
-import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.subsystems.drive.MecDrive;
-import org.firstinspires.ftc.teamcode.subsystems.vision.SampleDetectionPipeline;
+import org.firstinspires.ftc.teamcode.subsystems.vision.Vision;
 import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
 
 //@Disabled
 @Autonomous(preselectTeleOp = "TeleOpMain")
 public class NewVision extends MatchOpMode {
-    SampleDetectionPipeline pipeline = new SampleDetectionPipeline();
+    private Vision vision = new Vision(hardwareMap, telemetry);
     @Override
     public void robotInit() {
+        vision.init();
 
     }
 
     @Override
     public void disabledPeriodic() {
-//        pipeline.init();
 
     }
 
