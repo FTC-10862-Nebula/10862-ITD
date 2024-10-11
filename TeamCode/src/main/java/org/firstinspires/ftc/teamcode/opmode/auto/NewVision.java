@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
 //@Disabled
 @Autonomous(preselectTeleOp = "TeleOpMain")
 public class NewVision extends MatchOpMode {
-    private Vision vision = new Vision(hardwareMap, telemetry);
+    private final Vision vision = new Vision(hardwareMap, telemetry);
     @Override
     public void robotInit() {
         vision.init();

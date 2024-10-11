@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.subsystems.intake;
 
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
@@ -51,6 +53,16 @@ public class PowerIntake extends SubsystemBase {
     }
     public int green(){
         return colorSensor.green();
+    }
+
+    public Intake.Sample getSampleColors(){
+        if(colorSensor.red()>255){
+            return Intake.Sample.RED; //TODO: Works?
+        } else if(colorSensor.green()>255&&colorSensor.blue()>255){
+            return Intake.Sample.YELLOW; //TODO: Works?
+        } else if(colorSensor.blue()>255){
+            return Intake.Sample.BLUE; //TODO: Works?
+        } else return  Intake.Sample.NONE;
     }
 
 }

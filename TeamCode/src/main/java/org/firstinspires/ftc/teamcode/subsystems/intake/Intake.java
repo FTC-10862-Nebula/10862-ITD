@@ -4,14 +4,24 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.tel
 
 import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
+import kotlin.contracts.ConditionalEffect;
+
 public class Intake {
+    public enum Sample{
+        RED,
+        BLUE,
+        YELLOW,
+        NONE;
+    }
     public enum Value {
         START (0,0,0),
         OUTTAKE (0,0,0),
         INTAKE  (0,0,0),
+        POOP  (0,0,0),
         STOP    (0,0,0),
         HOLD    (0,0,0);
 
@@ -51,18 +61,6 @@ public class Intake {
     }
     public Action setPositionAction(Value value){
         return (Action) setPosition(value);
-    }
-
-    public Command intakePeriodic(){
-        //TODO: Get the color of the colorSensor
-        if(powerIntake.red()>255){
-            telemetry.speak("Got it, RED!"); //TODO: Works?
-        } else if(powerIntake.green()>255&&powerIntake.blue()>255){
-            telemetry.speak("Got it, YELLOW!"); //TODO: Works?
-        } else if(powerIntake.blue()>255){
-            telemetry.speak("Got it, BLUE!"); //TODO: Works?
-        }
-        return new InstantCommand();
     }
 
     public void periodic(){
