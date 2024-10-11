@@ -38,7 +38,7 @@ public class Claw extends SubsystemBase
         telemetry.addData("Turn Servo: " + turnServo.getPosition() + "; Claw: ", clawServo.getPosition());
     }
     public void setSetPoint(double turnPos, double clawPos){
-        turnServo.setPosition(turnPos);
-        clawServo.setPosition(clawPos);
+        turnServo.setPosition(0);
+        clawServo.setPosition(0);
     }
 }
