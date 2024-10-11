@@ -1,13 +1,10 @@
-10862 Center Stage Code
-2023-2024
-Robin
-    Subsystems:
+10862 Into The Deep Code
+2024-2025
+Timmy (Thomas)
+    Subsystems: Mec Drive, Intake with extension, and Outtake with slides and arm
     Main Features:
 
 ToDo:
-Figure out Positions for the Vision Boxes
-What color should the Team Prop be?
-Make the Nebula Motor be able to flip the ENcoder Direction; motor.encoder.setDirection();
 Checking if sensors work
     public double check(){
         readValue = defaultOutput;
@@ -22,9 +19,8 @@ Checking if sensors work
         }
         return readValue;
     }
-
      for(String s : bot.claw.brokenSensors()){
             telemetry.addData("Broken: ", s);
-Commit Test
 
-Ideas:
+
+

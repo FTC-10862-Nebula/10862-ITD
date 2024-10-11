@@ -5,7 +5,6 @@ import com.acmerobotics.dashboard.config.Config;
 @Config
 @Deprecated
 public class NebulaConstants {
-    // TODO: servos = have set angles
     //Arm Distance Per Pulse
     //Math.PI/2
     //(Counts per revolution*Gear ratio(5:1=5 / 1:5))/(Turns per revolution * 2π)
