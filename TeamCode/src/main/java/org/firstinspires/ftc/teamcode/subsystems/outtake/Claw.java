@@ -34,8 +34,8 @@ public class Claw extends SubsystemBase
     public void periodic() {
     }
     public void setSetPoint(double turnPos, double clawPos){
-        turnServo.setPosition(turnPos);
-        clawServo.setPosition(clawPos);
+        turnServo.setPosition(0);
+        clawServo.setPosition(0);
     }
 
     public double getTurnPos(){
