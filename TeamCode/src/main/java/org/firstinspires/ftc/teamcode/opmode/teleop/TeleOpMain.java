@@ -11,16 +11,16 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.commands.manual.DefaultDriveCommand;
-import org.firstinspires.ftc.teamcode.subsystems.Outtake.Arm;
-import org.firstinspires.ftc.teamcode.subsystems.Outtake.Claw;
-import org.firstinspires.ftc.teamcode.subsystems.Outtake.Outtake;
-import org.firstinspires.ftc.teamcode.subsystems.Outtake.VerticalSlide;
 import org.firstinspires.ftc.teamcode.subsystems.climber.Climber;
 import org.firstinspires.ftc.teamcode.subsystems.drive.MecDrive;
 import org.firstinspires.ftc.teamcode.subsystems.intake.HorizontalSlide;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.intake.IntakeServo;
 import org.firstinspires.ftc.teamcode.subsystems.intake.PowerIntake;
+import org.firstinspires.ftc.teamcode.subsystems.outtake.Arm;
+import org.firstinspires.ftc.teamcode.subsystems.outtake.Claw;
+import org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake;
+import org.firstinspires.ftc.teamcode.subsystems.outtake.VerticalSlide;
 import org.firstinspires.ftc.teamcode.util.teleop.GamepadTrigger;
 import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
 
@@ -73,14 +73,14 @@ public class TeleOpMain extends MatchOpMode {
         //claw
         outtake = new Outtake(
                 new VerticalSlide(telemetry, hardwareMap, false),
-                new Arm(telemetry, hardwareMap,false),
+                new Arm(telemetry, hardwareMap, false),
                 new Claw(telemetry, hardwareMap, false)
         );
         Trigger OUTTAKE = (new GamepadTrigger(operatorGamepad,GamepadKeys.Trigger.LEFT_TRIGGER)
-                .whenPressed(outtake.setPosition(Outtake.Value.START))
-                .whenHeld(outtake.setPosition(Outtake.Value.HOLD))
-                .whenReleased(outtake.setPosition(Outtake.Value.OUTTAKE))
-                );
+                .whenPressed(outtake.setPosition(Outtake.Value.START)));
+
+
+
 
         intake = new PowerIntake(
                 new HorizontalSlide(telemetry, hardwareMap, false),
@@ -88,9 +88,9 @@ public class TeleOpMain extends MatchOpMode {
                 new PowerIntake(telemetry, hardwareMap, false)
                 );
 
-//        Trigger INTAKE = (new GamepadTrigger(operatorGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER)
-//                .whenPressed(intake.;)
-//        );
+        Trigger INTAKE = (new GamepadTrigger(operatorGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER)
+                .whenPressed(intake.getCurrentCommand())
+        );
 
 
 

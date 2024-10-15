@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems.intake;
 
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -14,8 +12,8 @@ import org.firstinspires.ftc.teamcode.util.nebulaHardware.NebulaMotor;
 @Config
 public class PowerIntake extends SubsystemBase {
     private Telemetry telemetry;
-    public final NebulaMotor motor;
-    private final ColorSensor colorSensor;
+    public NebulaMotor motor;
+    private ColorSensor colorSensor;
     
 
     public PowerIntake(Telemetry tl, HardwareMap hw, boolean isEnabled) {
@@ -24,6 +22,9 @@ public class PowerIntake extends SubsystemBase {
             NebulaMotor.IdleMode.Coast, isEnabled);
         this.colorSensor = hw.get(ColorSensor.class, "colorS");
         this.telemetry = tl;
+    }
+
+    public PowerIntake(HorizontalSlide tl, IntakeServo intakeServo, PowerIntake powerIntake) {
     }
 
     @Override
