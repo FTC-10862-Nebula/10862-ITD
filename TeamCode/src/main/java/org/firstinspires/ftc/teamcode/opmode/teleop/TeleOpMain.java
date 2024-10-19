@@ -61,7 +61,7 @@ public class TeleOpMain extends MatchOpMode {
 
     @Override
     public void configureButtons() {
-//        drive.setDefaultCommand(new DefaultDriveCommand(drive, driverGamepad, true));
+      drive.setDefaultCommand(new DefaultDriveCommand(drive, driverGamepad, true));
 //        Trigger OUTTAKE = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER)
 //            .whenPressed(new InstantCommand(intake::setDown))
 //            .whileHeld(intake.setSetPointCommand(PowerIntake.IntakePower.OUTTAKE)))

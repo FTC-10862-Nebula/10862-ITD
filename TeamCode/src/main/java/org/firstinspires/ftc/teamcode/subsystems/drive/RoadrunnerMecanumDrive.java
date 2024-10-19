@@ -97,6 +97,7 @@ public final class RoadrunnerMecanumDrive {
     public static Params PARAMS = new Params();
     private HardwareMap hardwareMap;
 
+
     public final MecanumKinematics kinematics = new MecanumKinematics(
             PARAMS.inPerTick * PARAMS.trackWidthTicks, PARAMS.inPerTick / PARAMS.lateralInPerTick);
 
@@ -132,6 +133,7 @@ public final class RoadrunnerMecanumDrive {
 
     public RoadrunnerMecanumDrive(HardwareMap hardwareMap, Pose2d pose) {
         this.pose = pose;
+        this.hardwareMap = hardwareMap;
 
 //        LynxFirmware.throwIfModulesAreOutdated(hardwareMap);
 
@@ -176,14 +178,11 @@ public final class RoadrunnerMecanumDrive {
             rightBack = new OverflowEncoder(new RawEncoder(RoadrunnerMecanumDrive.this.rightBack));
             rightFront = new OverflowEncoder(new RawEncoder(RoadrunnerMecanumDrive.this.rightFront));
 
-            lazyIMU = hardwareMap.get(LazyImu.class, "imu");
-            lazyIMU = new LazyImu(hardwareMap, "imu", new RevHubOrientationOnRobot(
+
+            imu = hardwareMap.get(IMU.class, "imu");
+            IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                     PARAMS.logoFacingDirection, PARAMS.usbFacingDirection));
-            imu = lazyIMU.get();
-//            imu = hardwareMap.get(IMU.class, "imu");
-//            IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-//                    PARAMS.logoFacingDirection, PARAMS.usbFacingDirection));
-//            imu.initialize(parameters);
+            imu.initialize(parameters);
 
             //   leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         }
