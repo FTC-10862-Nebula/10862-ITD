@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
 @Autonomous(preselectTeleOp = "TeleOpMain")
 public class NewAuto extends MatchOpMode {
     // Subsystems
-    private final MecDrive drive = new MecDrive();
+    private final MecDrive drive = new MecDrive(hardwareMap);
 //    private final Intake intake = new Intake(
 //            new HorizontalSlide(telemetry, hardwareMap,true),
 //            new IntakeServo(telemetry, hardwareMap,true),

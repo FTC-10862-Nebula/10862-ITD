@@ -1,13 +1,11 @@
 package org.firstinspires.ftc.teamcode.subsystems.drive;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 import static org.firstinspires.ftc.teamcode.util.NebulaConstants.squareInput;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.geometry.Vector2d;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
 public class MecDrive extends SubsystemBase {
@@ -18,9 +16,10 @@ public class MecDrive extends SubsystemBase {
      */
     public static Pose2d currentPose = new Pose2d(0,0,0);
 
-    public final RoadrunnerMecanumDrive drivetrain =
-            new RoadrunnerMecanumDrive(hardwareMap, new Pose2d(0,0,0));
-    public MecDrive(){
+    public final RoadrunnerMecanumDrive drivetrain;
+    public MecDrive(HardwareMap hardwareMap){
+        drivetrain =
+                new RoadrunnerMecanumDrive(hardwareMap, new Pose2d(0,0,0));
 //        MecanumDrive mecanumDrive = new MecanumDrive((Motor) drivetrain.leftFront,
 //                (Motor) drivetrain.leftFront,
 //                (Motor) drivetrain.leftFront,
