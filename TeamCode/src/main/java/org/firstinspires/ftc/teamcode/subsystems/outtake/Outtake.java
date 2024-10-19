@@ -12,8 +12,6 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 public class Outtake {
     private static final double OPEN =0.1, CLOSE =0;
 
-    public Outtake(VerticalSlide verticalSlide, Arm arm, Claw claw) {
-    }
 
     public enum Value{
         START   (0,0,0,0,CLOSE),

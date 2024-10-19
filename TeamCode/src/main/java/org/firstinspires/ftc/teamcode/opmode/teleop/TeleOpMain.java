@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop;
 
-import android.widget.Button;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.button.Button;
+import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.commands.manual.DefaultDriveCommand;
+import org.firstinspires.ftc.teamcode.commands.manual.SlideHorizontalManual;
 import org.firstinspires.ftc.teamcode.subsystems.climber.Climber;
 import org.firstinspires.ftc.teamcode.subsystems.drive.MecDrive;
 import org.firstinspires.ftc.teamcode.subsystems.intake.HorizontalSlide;
@@ -20,6 +21,7 @@ import org.firstinspires.ftc.teamcode.subsystems.intake.PowerIntake;
 import org.firstinspires.ftc.teamcode.subsystems.outtake.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.outtake.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake;
+import org.firstinspires.ftc.teamcode.subsystems.outtake.Pivot;
 import org.firstinspires.ftc.teamcode.subsystems.outtake.VerticalSlide;
 import org.firstinspires.ftc.teamcode.util.teleop.GamepadTrigger;
 import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
@@ -36,6 +38,7 @@ public class TeleOpMain extends MatchOpMode {
     private IntakeServo intakeServo;
     private PowerIntake intake;
     private Arm arm;
+    private Pivot pivot;
     private Claw claw;
     private Climber climb;
     public TeleOpMain() {}
@@ -45,12 +48,16 @@ public class TeleOpMain extends MatchOpMode {
         driverGamepad = new GamepadEx(gamepad1);
         operatorGamepad = new GamepadEx(gamepad2);
         drive = new MecDrive();
-
+        intakeServo = new IntakeServo(telemetry, hardwareMap, true);
+        verticalSlide = new VerticalSlide(telemetry, hardwareMap, true);
+        horizontalSlide = new HorizontalSlide(telemetry, hardwareMap, true);
         claw = new Claw(telemetry, hardwareMap, true);
         intake = new PowerIntake(telemetry, hardwareMap, true);
+        outtake = new Outtake (verticalSlide, arm, claw, pivot);
+        pivot = new Pivot(telemetry, hardwareMap, true);
         climb = new Climber(telemetry,hardwareMap, true);
         arm = new Arm(telemetry, hardwareMap, true);
-        horizontalSlide = new HorizontalSlide(telemetry, hardwareMap, true);
+
     }
 
 
@@ -71,22 +78,20 @@ public class TeleOpMain extends MatchOpMode {
         //y - up/down
         //x- right left
         //claw
-        outtake = new Outtake(
-                new VerticalSlide(telemetry, hardwareMap, false),
-                new Arm(telemetry, hardwareMap, false),
-                new Claw(telemetry, hardwareMap, false)
-        );
+
         Trigger OUTTAKE = (new GamepadTrigger(operatorGamepad,GamepadKeys.Trigger.LEFT_TRIGGER)
                 .whenPressed(outtake.setPosition(Outtake.Value.START)));
 
+        Button slideRest  = (new GamepadButton(operatorGamepad, GamepadKeys.Button.A))
+                .whenPressed(new (horizontalSlide, arm, claw));
+
+        Button slideLow  = (new GamepadButton(operatorGamepad, GamepadKeys.Button.X))
+                .whenPressed(new (horizontalSlide,arm,claw, horizontalSlide.LOW));
+
+        Button slideMid  = (new GamepadButton(operatorGamepad, GamepadKeys.Button.B))
 
 
-
-        intake = new PowerIntake(
-                new HorizontalSlide(telemetry, hardwareMap, false),
-                new IntakeServo(telemetry, hardwareMap, false),
-                new PowerIntake(telemetry, hardwareMap, false)
-                );
+        Button CLAW = (new Button(operatorGamepad, GamepadKeys.Button.B)
 
         Trigger INTAKE = (new GamepadTrigger(operatorGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER)
                 .whenPressed(intake.getCurrentCommand())
@@ -100,4 +105,5 @@ public class TeleOpMain extends MatchOpMode {
 
     @Override
     public void matchStart() {}
+
 }
