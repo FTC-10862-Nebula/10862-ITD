@@ -62,6 +62,8 @@ public class Intake {
 
     public Command setPosition(Value value){
         switch(value) {
+//            case INTAKE:
+
             case OUTTAKE:
                 return new InstantCommand();
             case HOLD:
