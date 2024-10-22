@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems.drive;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 
 import androidx.annotation.NonNull;
 
@@ -58,6 +57,9 @@ import java.util.List;
 
 @Config
 public final class RoadrunnerMecanumDrive {
+    public void setDrivePowers(double v, double v1, double v2, double v3) {
+    }
+
     public static class Params {
         // IMU orientation
         // see https://ftc-docs.firstinspires.org/en/latest/programming_resources/imu/imu.html?highlight=imu#physical-hub-mounting
@@ -96,6 +98,8 @@ public final class RoadrunnerMecanumDrive {
     }
 
     public static Params PARAMS = new Params();
+    private HardwareMap hardwareMap;
+
 
     public final MecanumKinematics kinematics = new MecanumKinematics(
             PARAMS.inPerTick * PARAMS.trackWidthTicks, PARAMS.inPerTick / PARAMS.lateralInPerTick);
@@ -111,8 +115,12 @@ public final class RoadrunnerMecanumDrive {
             new ProfileAccelConstraint(PARAMS.minProfileAccel, PARAMS.maxProfileAccel);
 
     public DcMotorEx leftFront, leftBack, rightBack, rightFront;
-    public final DcMotorEx[] motors = new DcMotorEx[]{leftFront, leftBack, rightBack, rightFront};
-    public static final int lFNum =0, lRNum =1,rRNum =2, rFNum =3;
+    public final DcMotorEx[] motors;
+    public static final int lFNum =0,
+            lRNum =1,
+            rRNum =2,
+            rFNum =3;
+    double[] powers = new double[4];
 
     public final VoltageSensor voltageSensor;
 
@@ -129,6 +137,42 @@ public final class RoadrunnerMecanumDrive {
     private final DownsampledWriter driveCommandWriter = new DownsampledWriter("DRIVE_COMMAND", 50_000_000);
     private final DownsampledWriter mecanumCommandWriter = new DownsampledWriter("MECANUM_COMMAND", 50_000_000);
 
+
+    public RoadrunnerMecanumDrive(HardwareMap hardwareMap, Pose2d pose) {
+        this.pose = pose;
+        this.hardwareMap = hardwareMap;
+
+//        LynxFirmware.throwIfModulesAreOutdated(hardwareMap);
+
+        for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
+            module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
+        }
+
+        //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
+        leftFront = hardwareMap.get(DcMotorEx.class, "lf");
+        leftBack = hardwareMap.get(DcMotorEx.class, "lb");
+        rightBack = hardwareMap.get(DcMotorEx.class, "rb");
+        rightFront = hardwareMap.get(DcMotorEx.class, "rf");
+
+        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftBack.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
+
+        voltageSensor = hardwareMap.voltageSensor.iterator().next();
+
+        localizer = new DriveLocalizer();
+
+        FlightRecorder.write("MECANUM_PARAMS", PARAMS);
+        motors = new DcMotorEx[]{leftFront, leftBack, rightBack, rightFront};
+    }
     public class DriveLocalizer implements Localizer {
         public final Encoder leftFront, leftBack, rightBack, rightFront;
 
@@ -142,14 +186,11 @@ public final class RoadrunnerMecanumDrive {
             rightBack = new OverflowEncoder(new RawEncoder(RoadrunnerMecanumDrive.this.rightBack));
             rightFront = new OverflowEncoder(new RawEncoder(RoadrunnerMecanumDrive.this.rightFront));
 
-            lazyIMU = hardwareMap.get(LazyImu.class, "imu");
-            lazyIMU = new LazyImu(hardwareMap, "imu", new RevHubOrientationOnRobot(
+
+            imu = hardwareMap.get(IMU.class, "imu");
+            IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                     PARAMS.logoFacingDirection, PARAMS.usbFacingDirection));
-            imu = lazyIMU.get();
-//            imu = hardwareMap.get(IMU.class, "imu");
-//            IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-//                    PARAMS.logoFacingDirection, PARAMS.usbFacingDirection));
-//            imu.initialize(parameters);
+            imu.initialize(parameters);
 
             //   leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         }
@@ -216,40 +257,6 @@ public final class RoadrunnerMecanumDrive {
                     DualNum.cons(headingDelta, twist.angle.drop(1))
             );
         }
-    }
-
-    public RoadrunnerMecanumDrive(HardwareMap hardwareMap, Pose2d pose) {
-        this.pose = pose;
-
-        LynxFirmware.throwIfModulesAreOutdated(hardwareMap);
-
-        for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
-            module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
-        }
-
-        //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
-        leftFront = hardwareMap.get(DcMotorEx.class, "lf");
-        leftBack = hardwareMap.get(DcMotorEx.class, "lr");
-        rightBack = hardwareMap.get(DcMotorEx.class, "rr");
-        rightFront = hardwareMap.get(DcMotorEx.class, "rf");
-
-        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
-        leftBack.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
-
-        voltageSensor = hardwareMap.voltageSensor.iterator().next();
-
-        localizer = new DriveLocalizer();
-
-        FlightRecorder.write("MECANUM_PARAMS", PARAMS);
     }
 
     public void setDrivePowers(PoseVelocity2d powers) {

@@ -20,7 +20,7 @@ public class Test extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        MecDrive drive = new MecDrive();
+        MecDrive drive = new MecDrive(hardwareMap);
 
 //        DcMotor motor1 = hardwareMap.get(DcMotor.class,  "motor");
 
