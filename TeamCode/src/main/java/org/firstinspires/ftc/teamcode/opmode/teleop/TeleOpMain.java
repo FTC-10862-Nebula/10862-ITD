@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.commands.manual.DefaultDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.manual.SlideHorizontalManual;
 import org.firstinspires.ftc.teamcode.subsystems.climber.Climber;
 import org.firstinspires.ftc.teamcode.subsystems.drive.MecDrive;
+import org.firstinspires.ftc.teamcode.subsystems.drive.RoadrunnerMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.intake.HorizontalSlide;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.intake.IntakeServo;
@@ -53,20 +54,20 @@ public class TeleOpMain extends MatchOpMode {
 
     @Override
     public void robotInit() {
+        drive = new MecDrive(hardwareMap);
         driverGamepad = new GamepadEx(gamepad1);
         operatorGamepad = new GamepadEx(gamepad2);
-        drive = new MecDrive();
-        intake = new Intake(
-                new HorizontalSlide(telemetry, hardwareMap, true),
-                new IntakeServo(telemetry, hardwareMap, true),
-                new PowerIntake(telemetry, hardwareMap, true)
-        );
-        outtake = new Outtake(
-                new VerticalSlide(telemetry, hardwareMap, true),
-                new Arm(telemetry, hardwareMap, true),
-                new Claw(telemetry, hardwareMap, true),
-                new Pivot(telemetry, hardwareMap, true)
-        );
+//        intake = new Intake(
+//                new HorizontalSlide(telemetry, hardwareMap, true),
+//                new IntakeServo(telemetry, hardwareMap, true),
+//                new PowerIntake(telemetry, hardwareMap, true)
+//        );
+//        outtake = new Outtake(
+//                new VerticalSlide(telemetry, hardwareMap, true),
+//                new Arm(telemetry, hardwareMap, true),
+//                new Claw(telemetry, hardwareMap, true),
+//                new Pivot(telemetry, hardwareMap, true)
+//        );
 
 
 //        intakeServo = new IntakeServo(telemetry, hardwareMap, true);
@@ -100,28 +101,28 @@ public class TeleOpMain extends MatchOpMode {
         //y - up/down
         //x- right left
         //claw
-
-        Trigger OuttakeBucket = (new GamepadTrigger(operatorGamepad,GamepadKeys.Trigger.LEFT_TRIGGER)
-                .whenPressed(outtake.setPosition(Outtake.Value.OUTTAKE_BUCKET)));
-
-        
-
-        Button OuttakeLowBucket = (new GamepadButton(operatorGamepad, GamepadKeys.Button.A)
-                .whenPressed(outtake.setPosition(Outtake.Value.LOW_BUCKET)));
-
-        Button OuttakeHighBucket = (new GamepadButton(operatorGamepad, GamepadKeys.Button.B)
-                .whenPressed(outtake.setPosition(Outtake.Value.HIGH_BUCKET)));
-
-        Button OuttakeFirstRung = (new GamepadButton(operatorGamepad, GamepadKeys.Button.X)
-                .whenPressed(outtake.setPosition(Outtake.Value.LOW_RUNG)));
-
-        Button OuttakeSecondRung = (new GamepadButton(operatorGamepad, GamepadKeys.Button.Y)
-                .whenPressed(outtake.setPosition(Outtake.Value.HIGH_RUNG)));
-
-
-
-        Trigger IntakeIntake = (new GamepadTrigger(operatorGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER))
-                .whenPressed(intake.setPosition(Intake.Value.START));
+//ALEX BUTTONS NEW
+//        Trigger OuttakeBucket = (new GamepadTrigger(operatorGamepad,GamepadKeys.Trigger.LEFT_TRIGGER)
+//                .whenPressed(outtake.setPosition(Outtake.Value.OUTTAKE_BUCKET)));
+//
+//
+//
+//        Button OuttakeLowBucket = (new GamepadButton(operatorGamepad, GamepadKeys.Button.A)
+//                .whenPressed(outtake.setPosition(Outtake.Value.LOW_BUCKET)));
+//
+//        Button OuttakeHighBucket = (new GamepadButton(operatorGamepad, GamepadKeys.Button.B)
+//                .whenPressed(outtake.setPosition(Outtake.Value.HIGH_BUCKET)));
+//
+//        Button OuttakeFirstRung = (new GamepadButton(operatorGamepad, GamepadKeys.Button.X)
+//                .whenPressed(outtake.setPosition(Outtake.Value.LOW_RUNG)));
+//
+//        Button OuttakeSecondRung = (new GamepadButton(operatorGamepad, GamepadKeys.Button.Y)
+//                .whenPressed(outtake.setPosition(Outtake.Value.HIGH_RUNG)));
+//
+//
+//
+//        Trigger IntakeIntake = (new GamepadTrigger(operatorGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER))
+//                .whenPressed(intake.setPosition(Intake.Value.START));
 
 //        Button slideLow  = (new GamepadButton(operatorGamepad, GamepadKeys.Button.X))
 //                .whenPressed(new HorizontalSlide (horizontalSlide,arm,claw, horizontalSlide.);

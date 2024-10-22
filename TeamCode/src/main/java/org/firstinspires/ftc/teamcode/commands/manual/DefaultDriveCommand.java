@@ -36,15 +36,14 @@ public class DefaultDriveCommand extends CommandBase {
             drive.drivetrain.resetIMU();
         }
 
-        if(isFieldCentric) {
-            drive.driveFieldCentric(0,0,0,0
-//                    driverGamepad.getLeftX() * multiplier,
-//                    driverGamepad.getLeftY() * multiplier,
-//                    -driverGamepad.getRightX() * multiplier,
-//                    drive.drivetrain.getYaw()
+            drive.driveFieldCentric(
+//            0,0,0,0
+                    driverGamepad.getLeftX() * multiplier,
+                    driverGamepad.getLeftY() * multiplier,
+                    -driverGamepad.getRightX() * multiplier,
+                    multiplier
 
             );
-        }
 //        else {
 //            drive.driveRobotCentric(
 //                    driverGamepad.getLeftX() * multiplier,
