@@ -57,6 +57,9 @@ import java.util.List;
 
 @Config
 public final class RoadrunnerMecanumDrive {
+    public void setDrivePowers(double v, double v1, double v2, double v3) {
+    }
+
     public static class Params {
         // IMU orientation
         // see https://ftc-docs.firstinspires.org/en/latest/programming_resources/imu/imu.html?highlight=imu#physical-hub-mounting
@@ -112,8 +115,12 @@ public final class RoadrunnerMecanumDrive {
             new ProfileAccelConstraint(PARAMS.minProfileAccel, PARAMS.maxProfileAccel);
 
     public DcMotorEx leftFront, leftBack, rightBack, rightFront;
-    public final DcMotorEx[] motors = new DcMotorEx[]{leftFront, leftBack, rightBack, rightFront};
-    public static final int lFNum =0, lRNum =1,rRNum =2, rFNum =3;
+    public final DcMotorEx[] motors;
+    public static final int lFNum =0,
+            lRNum =1,
+            rRNum =2,
+            rFNum =3;
+    double[] powers = new double[4];
 
     public final VoltageSensor voltageSensor;
 
@@ -164,6 +171,7 @@ public final class RoadrunnerMecanumDrive {
         localizer = new DriveLocalizer();
 
         FlightRecorder.write("MECANUM_PARAMS", PARAMS);
+        motors = new DcMotorEx[]{leftFront, leftBack, rightBack, rightFront};
     }
     public class DriveLocalizer implements Localizer {
         public final Encoder leftFront, leftBack, rightBack, rightFront;
