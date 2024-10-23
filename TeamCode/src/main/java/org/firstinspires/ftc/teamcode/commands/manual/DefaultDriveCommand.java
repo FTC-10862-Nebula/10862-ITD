@@ -11,17 +11,13 @@ public class DefaultDriveCommand extends CommandBase {
     private final GamepadEx driverGamepad;
 
     protected double multiplier;
-    boolean isFieldCentric;
 
     public DefaultDriveCommand(MecDrive drive,
-                               GamepadEx driverGamepad,
-                               boolean isFieldCentric) {
+                               GamepadEx driverGamepad) {
 
         this.drive = drive;
         this.driverGamepad = driverGamepad;
         addRequirements(this.drive);
-
-        this.isFieldCentric = isFieldCentric;
     }
 
     @Override
@@ -38,10 +34,10 @@ public class DefaultDriveCommand extends CommandBase {
 
             drive.driveFieldCentric(
 //            0,0,0,0
-                    driverGamepad.getLeftX() * multiplier,
-                    driverGamepad.getLeftY() * multiplier,
-                    -driverGamepad.getRightX() * multiplier,
-                    multiplier
+                    driverGamepad.getLeftX(),
+                    driverGamepad.getLeftY(),
+                    driverGamepad.getRightX(),//-
+                   multiplier
 
             );
 //        else {

@@ -57,8 +57,6 @@ import java.util.List;
 
 @Config
 public final class RoadrunnerMecanumDrive {
-    public void setDrivePowers(double v, double v1, double v2, double v3) {
-    }
 
     public static class Params {
         // IMU orientation
@@ -159,10 +157,10 @@ public final class RoadrunnerMecanumDrive {
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
         leftBack.setDirection(DcMotorSimple.Direction.FORWARD);
         rightBack.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
 
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
 
@@ -272,6 +270,12 @@ public final class RoadrunnerMecanumDrive {
         leftBack.setPower(wheelVels.leftBack.get(0) / maxPowerMag);
         rightBack.setPower(wheelVels.rightBack.get(0) / maxPowerMag);
         rightFront.setPower(wheelVels.rightFront.get(0) / maxPowerMag);
+    }
+    public void setDrivePowers(double lF, double lR, double rF, double rR) {
+        leftFront.setPower(lF);
+        leftBack.setPower(lR);
+        rightFront.setPower(rF);
+        rightBack.setPower(rR);
     }
 
     public final class FollowTrajectoryAction implements Action {
@@ -508,6 +512,6 @@ public final class RoadrunnerMecanumDrive {
         imu.resetYaw();
     }
     public double getYaw(){
-        return  imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+        return  imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
     }
 }

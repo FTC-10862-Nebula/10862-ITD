@@ -1,33 +1,13 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.button.Button;
-import com.arcrobotics.ftclib.command.button.GamepadButton;
-import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.manual.DefaultDriveCommand;
-import org.firstinspires.ftc.teamcode.commands.manual.SlideHorizontalManual;
-import org.firstinspires.ftc.teamcode.opmode.DriveCommand;
-import org.firstinspires.ftc.teamcode.subsystems.climber.Climber;
 import org.firstinspires.ftc.teamcode.subsystems.drive.MecDrive;
-import org.firstinspires.ftc.teamcode.subsystems.drive.OldDrive;
-import org.firstinspires.ftc.teamcode.subsystems.drive.RoadrunnerMecanumDrive;
-import org.firstinspires.ftc.teamcode.subsystems.intake.HorizontalSlide;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.intake.IntakeServo;
-import org.firstinspires.ftc.teamcode.subsystems.intake.PowerIntake;
-import org.firstinspires.ftc.teamcode.subsystems.outtake.Arm;
-import org.firstinspires.ftc.teamcode.subsystems.outtake.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake;
-import org.firstinspires.ftc.teamcode.subsystems.outtake.Pivot;
-import org.firstinspires.ftc.teamcode.subsystems.outtake.VerticalSlide;
-import org.firstinspires.ftc.teamcode.util.teleop.GamepadTrigger;
 import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
 
 @Config
@@ -41,7 +21,8 @@ public class TeleOpMain extends MatchOpMode {
 
 
 //    private Outtake outtake;
-    private OldDrive drive;
+    private MecDrive drive;
+//    private OldDrive drive;
 //    private HorizontalSlide horizontalSlide;
 //    private VerticalSlide verticalSlide;
 //    private IntakeServo intakeServo;
@@ -56,7 +37,7 @@ public class TeleOpMain extends MatchOpMode {
 
     @Override
     public void robotInit() {
-        drive = new OldDrive(hardwareMap, telemetry);
+        drive = new MecDrive(hardwareMap);
         driverGamepad = new GamepadEx(gamepad1);
         operatorGamepad = new GamepadEx(gamepad2);
 //        intake = new Intake(
@@ -88,7 +69,7 @@ public class TeleOpMain extends MatchOpMode {
 
     @Override
     public void configureButtons() {
-        drive.setDefaultCommand(new DriveCommand(drive,driverGamepad,true));
+        drive.setDefaultCommand(new DefaultDriveCommand(drive,driverGamepad));
 //        Trigger OUTTAKE = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER)
 //            .whenPressed(new InstantCommand(intake::setDown))
 //            .whileHeld(intake.setSetPointCommand(PowerIntake.IntakePower.OUTTAKE)))
