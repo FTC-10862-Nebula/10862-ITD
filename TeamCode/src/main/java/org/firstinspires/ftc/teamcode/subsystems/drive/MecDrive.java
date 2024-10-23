@@ -52,11 +52,15 @@ public class MecDrive extends SubsystemBase {
         // This ensures all the powers maintain the same ratio, but only when
         // at least one is out of the range [-1, 1]
 
-        powers [lFNum] = (rotY - rotX - rx) / denominator;
-        powers [lRNum] = (rotY + rotX - rx) / denominator;
-        powers [rFNum] = (rotY + rotX + rx) / denominator;
-        powers [rRNum] = (rotY - rotX + rx) / denominator;
+//        powers [lFNum] = (rotY - rotX - rx) / denominator;
+//        powers [lRNum] = (rotY + rotX + rx) / denominator;
+//        powers [rFNum] = (rotY + rotX - rx) / denominator;
+//        powers [rRNum] = (rotY - rotX + rx) / denominator;
 
+        powers [lFNum] = (rotY + rotX - rx) / denominator;
+        powers [lRNum] = (rotY - rotX - rx) / denominator;
+        powers [rFNum] = (rotY - rotX + rx) / denominator;
+        powers [rRNum] = (rotY + rotX + rx) / denominator;
 
 //        if(Math.abs(powers[lFNum])<0.5&
 //                Math.abs(powers[lRNum])<0.5&
