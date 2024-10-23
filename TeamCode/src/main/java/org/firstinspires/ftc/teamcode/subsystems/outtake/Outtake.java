@@ -29,7 +29,7 @@ public class Outtake {
         LOW_BUCKET(0,0,0,0,OPEN),
         HIGH_BUCKET(0,0,0,0,OPEN),
         OUTTAKE_BUCKET(0,0,0,0,OPEN),
-        OUTTAKE_SPECIMEN_BAR(0,0,0,0,OPEN)
+        OUTTAKE_SPECIMEN_BAR(0,0,0,0,OPEN),
 
 
 
@@ -72,8 +72,8 @@ public class Outtake {
 
     public Command setPosition(Value value){
         switch(value) {
-            case DROP_LOW_CHAMBER:
-            case DROP_HIGH_CHAMBER:
+            case SPECIMEN_LOW_BAR:
+            case SPECIMEN_HIGH_BAR:
                 return new SequentialCommandGroup(
                     new InstantCommand(()-> verticalSlide.setSetPoint(value.slidePos)),
                     new WaitCommand(100),

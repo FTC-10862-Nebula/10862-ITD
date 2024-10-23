@@ -27,6 +27,9 @@ import org.firstinspires.ftc.teamcode.subsystems.outtake.VerticalSlide;
 import org.firstinspires.ftc.teamcode.util.teleop.GamepadTrigger;
 import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
 
+import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
+
 @Config
 @TeleOp
 public class TeleOpMain extends MatchOpMode {
@@ -36,10 +39,9 @@ public class TeleOpMain extends MatchOpMode {
 
 
 
-
 //    private Outtake outtake;
     private MecDrive drive;
-//    private HorizontalSlide horizontalSlide;
+    private HorizontalSlide horizontalSlide;
 //    private VerticalSlide verticalSlide;
 //    private IntakeServo intakeServo;
 //    private PowerIntake powerIntake;
@@ -49,13 +51,15 @@ public class TeleOpMain extends MatchOpMode {
 //    private Climber climb;
     private Intake intake;
     private Outtake outtake;
+    private Supplier<Double> DoubleSupplier;
+
     public TeleOpMain() {}
 
     @Override
     public void robotInit() {
         driverGamepad = new GamepadEx(gamepad1);
         operatorGamepad = new GamepadEx(gamepad2);
-        drive = new MecDrive();
+        drive = new MecDrive(hardwareMap);
         intake = new Intake(
                 new HorizontalSlide(telemetry, hardwareMap, true),
                 new IntakeServo(telemetry, hardwareMap, true),
@@ -71,7 +75,7 @@ public class TeleOpMain extends MatchOpMode {
 
 //        intakeServo = new IntakeServo(telemetry, hardwareMap, true);
 //        verticalSlide = new VerticalSlide(telemetry, hardwareMap, true);
-//        horizontalSlide = new HorizontalSlide(telemetry, hardwareMap, true);
+        horizontalSlide = new HorizontalSlide(telemetry, hardwareMap, true);
 //        claw = new Claw(telemetry, hardwareMap, true);
 //        powerIntake = new PowerIntake(telemetry, hardwareMap, true);
 //        outtake = new Outtake (verticalSlide, arm, claw, pivot);
@@ -104,7 +108,8 @@ public class TeleOpMain extends MatchOpMode {
         Trigger OuttakeBucket = (new GamepadTrigger(operatorGamepad,GamepadKeys.Trigger.LEFT_TRIGGER)
                 .whenPressed(outtake.setPosition(Outtake.Value.OUTTAKE_BUCKET)));
 
-        
+        Trigger OuttakeSpecimenBar = (new GamepadTrigger(operatorGamepad,GamepadKeys.Trigger.RIGHT_TRIGGER)
+                .whenPressed(outtake.setPosition(Outtake.Value.OUTTAKE_SPECIMEN_BAR)));
 
         Button OuttakeLowBucket = (new GamepadButton(operatorGamepad, GamepadKeys.Button.A)
                 .whenPressed(outtake.setPosition(Outtake.Value.LOW_BUCKET)));
@@ -112,20 +117,28 @@ public class TeleOpMain extends MatchOpMode {
         Button OuttakeHighBucket = (new GamepadButton(operatorGamepad, GamepadKeys.Button.B)
                 .whenPressed(outtake.setPosition(Outtake.Value.HIGH_BUCKET)));
 
-        Button OuttakeFirstRung = (new GamepadButton(operatorGamepad, GamepadKeys.Button.X)
+        Button OuttakeFirstBar = (new GamepadButton(operatorGamepad, GamepadKeys.Button.X)
                 .whenPressed(outtake.setPosition(Outtake.Value.LOW_RUNG)));
 
-        Button OuttakeSecondRung = (new GamepadButton(operatorGamepad, GamepadKeys.Button.Y)
+        Button OuttakeSecondBar = (new GamepadButton(operatorGamepad, GamepadKeys.Button.Y)
                 .whenPressed(outtake.setPosition(Outtake.Value.HIGH_RUNG)));
 
 
 
-        Trigger IntakeIntake = (new GamepadTrigger(operatorGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER))
+        Trigger IntakeIntake = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER))
                 .whenPressed(intake.setPosition(Intake.Value.START));
+
+        Trigger IntakePoop = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER))
+                .whenPressed(intake.setPosition(Intake.Value.START));;
+
+    intake.horizontalSlide.setDefaultCommand(new SlideHorizontalManual(horizontalSlide,
+            ()->operatorGamepad.getRightX()));
+
+
 
 //        Button slideLow  = (new GamepadButton(operatorGamepad, GamepadKeys.Button.X))
 //                .whenPressed(new HorizontalSlide (horizontalSlide,arm,claw, horizontalSlide.);
-//
+
 //        Button slideMid  = (new GamepadButton(operatorGamepad, GamepadKeys.Button.B))
 //
 //        Button CLAW;
