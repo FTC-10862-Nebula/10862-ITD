@@ -29,12 +29,12 @@ public class Outtake {
         LOW_BUCKET(0,0,0,0,OPEN),
         HIGH_BUCKET(0,0,0,0,OPEN),
         OUTTAKE_BUCKET(0,0,0,0,OPEN),
-        OUTTAKE_SPECIMEN_BAR(0,0,0,0,OPEN);
+        OUTTAKE_SPECIMEN_BAR(0,0,0,0,OPEN),
 
 
 
-      //  CLIMB_LOW_RUNG(0,0,0,0,CLOSE),
-   //     CLIMB(0,0,0,0, CLOSE);
+        CLIMB_LOW_RUNG(0,0,0,0,CLOSE),
+        CLIMB(0,0,0,0, CLOSE);
 
 
 
@@ -72,14 +72,14 @@ public class Outtake {
 
     public Command setPosition(Value value){
         switch(value) {
-     //       case DROP_LOW_CHAMBER:
-//            case DROP_HIGH_CHAMBER:
-//                return new SequentialCommandGroup(
-//                    new InstantCommand(()-> verticalSlide.setSetPoint(value.slidePos)),
-//                    new WaitCommand(100),
-//                    new InstantCommand(()-> arm.setSetPoint(value.armRPos,value.armLPos)),
-//                    new InstantCommand(()-> claw.setSetPoint(value.turnPos, value.clawPos))
-//                );
+            case SPECIMEN_LOW_BAR:
+            case SPECIMEN_HIGH_BAR:
+                return new SequentialCommandGroup(
+                    new InstantCommand(()-> verticalSlide.setSetPoint(value.slidePos)),
+                    new WaitCommand(100),
+                    new InstantCommand(()-> arm.setSetPoint(value.armRPos,value.armLPos)),
+                    new InstantCommand(()-> claw.setSetPoint(value.turnPos, value.clawPos))
+                );
             default:
                 return new ParallelCommandGroup(
                     new InstantCommand(()-> verticalSlide.setSetPoint(value.slidePos)),
