@@ -41,7 +41,7 @@ public class MecDrive extends SubsystemBase {
     public void  driveFieldCentric(double y, double x, double rx, double multiplier){
 //        double theta = -imu.getAngularOrientation().firstAngle;
 //       double theta = -drivetrain.getYaw();//Ok?
-        double theta = -drivetrain.getYaw();//Ok?
+        double theta = (0);//Ok?
 
 
         double rotX = x * Math.cos(theta) - y * Math.sin(theta);
@@ -52,8 +52,8 @@ public class MecDrive extends SubsystemBase {
         // This ensures all the powers maintain the same ratio, but only when
         // at least one is out of the range [-1, 1]
 
-        powers [lFNum] = (rotY + rotX - rx) / denominator;
-        powers [lRNum] = (rotY - rotX - rx) / denominator;
+        powers [lFNum] = (rotY - rotX - rx) / denominator;
+        powers [lRNum] = (rotY + rotX - rx) / denominator;
         powers [rFNum] = (rotY + rotX + rx) / denominator;
         powers [rRNum] = (rotY - rotX + rx) / denominator;
 
