@@ -189,9 +189,9 @@ public class MecDrive extends SubsystemBase {
     public void driveWithMotorPowers(double frontLeftSpeed, double frontRightSpeed,
                                      double backLeftSpeed, double backRightSpeed) {
         drivetrain.motors[lFNum].setPower(frontLeftSpeed);
-        drivetrain.motors[lRNum].setPower(frontRightSpeed);
-        drivetrain.motors[rRNum].setPower(backLeftSpeed);
-        drivetrain.motors[rFNum].setPower(backRightSpeed);
+        drivetrain.motors[lRNum].setPower(backLeftSpeed);
+        drivetrain.motors[rRNum].setPower(backRightSpeed);
+        drivetrain.motors[rFNum].setPower(frontRightSpeed);
     }
 
     public void stop() {

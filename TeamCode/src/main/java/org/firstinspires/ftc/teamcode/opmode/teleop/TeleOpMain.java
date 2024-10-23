@@ -13,8 +13,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.manual.DefaultDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.manual.SlideHorizontalManual;
+import org.firstinspires.ftc.teamcode.opmode.DriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.climber.Climber;
 import org.firstinspires.ftc.teamcode.subsystems.drive.MecDrive;
+import org.firstinspires.ftc.teamcode.subsystems.drive.OldDrive;
 import org.firstinspires.ftc.teamcode.subsystems.drive.RoadrunnerMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.intake.HorizontalSlide;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
@@ -39,7 +41,7 @@ public class TeleOpMain extends MatchOpMode {
 
 
 //    private Outtake outtake;
-    private MecDrive drive;
+    private OldDrive drive;
 //    private HorizontalSlide horizontalSlide;
 //    private VerticalSlide verticalSlide;
 //    private IntakeServo intakeServo;
@@ -54,7 +56,7 @@ public class TeleOpMain extends MatchOpMode {
 
     @Override
     public void robotInit() {
-        drive = new MecDrive(hardwareMap);
+        drive = new OldDrive(hardwareMap, telemetry);
         driverGamepad = new GamepadEx(gamepad1);
         operatorGamepad = new GamepadEx(gamepad2);
 //        intake = new Intake(
@@ -86,7 +88,7 @@ public class TeleOpMain extends MatchOpMode {
 
     @Override
     public void configureButtons() {
-        drive.setDefaultCommand(new DefaultDriveCommand(drive,driverGamepad,true));
+        drive.setDefaultCommand(new DriveCommand(drive,driverGamepad,true));
 //        Trigger OUTTAKE = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER)
 //            .whenPressed(new InstantCommand(intake::setDown))
 //            .whileHeld(intake.setSetPointCommand(PowerIntake.IntakePower.OUTTAKE)))
