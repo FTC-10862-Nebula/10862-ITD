@@ -19,10 +19,7 @@ public class MecDrive extends SubsystemBase {
      * A static field allows data to persist between opmodes.
      */
     public static Pose2d currentPose = new Pose2d(0,0,0);
-//    private final int LFVal = 0,
-//            LRVal = 1,
-//            RFVal = 2,
-//            RRVal = 3;
+
     double[] powers = new double[4];
     public final RoadrunnerMecanumDrive drivetrain;
     public MecDrive(HardwareMap hardwareMap){

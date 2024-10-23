@@ -22,7 +22,6 @@ public class TeleOpMain extends MatchOpMode {
 
 //    private Outtake outtake;
     private MecDrive drive;
-//    private OldDrive drive;
 //    private HorizontalSlide horizontalSlide;
 //    private VerticalSlide verticalSlide;
 //    private IntakeServo intakeServo;
@@ -70,20 +69,7 @@ public class TeleOpMain extends MatchOpMode {
     @Override
     public void configureButtons() {
         drive.setDefaultCommand(new DefaultDriveCommand(drive,driverGamepad));
-//        Trigger OUTTAKE = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER)
-//            .whenPressed(new InstantCommand(intake::setDown))
-//            .whileHeld(intake.setSetPointCommand(PowerIntake.IntakePower.OUTTAKE)))
-////                .whenPressed(cycleTracker.trackCycle())
-//            .whenReleased(intake.setSetPointCommand(PowerIntake.IntakePower.STOP))
-//            .whenReleased(new InstantCommand(intake::setUp));
-//
-////        Button climbDown  = (new GamepadButton(operatorGamepad, GamepadKeys.Button.DPAD_DOWN))
-////                .whileHeld(climb.setSetPointCommand(Climber.ClimbEnum.REST));
-//        climb.setDefaultCommand(new ClimberMoveManual(climb, operatorGamepad::getLeftY));
 
-        //y - up/down
-        //x- right left
-        //claw
 //ALEX BUTTONS NEW
 //        Trigger OuttakeBucket = (new GamepadTrigger(operatorGamepad,GamepadKeys.Trigger.LEFT_TRIGGER)
 //                .whenPressed(outtake.setPosition(Outtake.Value.OUTTAKE_BUCKET)));
