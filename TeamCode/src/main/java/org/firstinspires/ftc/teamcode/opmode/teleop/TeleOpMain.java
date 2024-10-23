@@ -1,30 +1,13 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.button.Button;
-import com.arcrobotics.ftclib.command.button.GamepadButton;
-import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.manual.DefaultDriveCommand;
-import org.firstinspires.ftc.teamcode.commands.manual.SlideHorizontalManual;
-import org.firstinspires.ftc.teamcode.subsystems.climber.Climber;
 import org.firstinspires.ftc.teamcode.subsystems.drive.MecDrive;
-import org.firstinspires.ftc.teamcode.subsystems.intake.HorizontalSlide;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.intake.IntakeServo;
-import org.firstinspires.ftc.teamcode.subsystems.intake.PowerIntake;
-import org.firstinspires.ftc.teamcode.subsystems.outtake.Arm;
-import org.firstinspires.ftc.teamcode.subsystems.outtake.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake;
-import org.firstinspires.ftc.teamcode.subsystems.outtake.Pivot;
-import org.firstinspires.ftc.teamcode.subsystems.outtake.VerticalSlide;
-import org.firstinspires.ftc.teamcode.util.teleop.GamepadTrigger;
 import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
 
 import java.util.function.DoubleSupplier;
@@ -57,6 +40,7 @@ public class TeleOpMain extends MatchOpMode {
 
     @Override
     public void robotInit() {
+        drive = new MecDrive(hardwareMap);
         driverGamepad = new GamepadEx(gamepad1);
         operatorGamepad = new GamepadEx(gamepad2);
         drive = new MecDrive(hardwareMap);
@@ -71,6 +55,17 @@ public class TeleOpMain extends MatchOpMode {
                 new Claw(telemetry, hardwareMap, true),
                 new Pivot(telemetry, hardwareMap, true)
         );
+//        intake = new Intake(
+//                new HorizontalSlide(telemetry, hardwareMap, true),
+//                new IntakeServo(telemetry, hardwareMap, true),
+//                new PowerIntake(telemetry, hardwareMap, true)
+//        );
+//        outtake = new Outtake(
+//                new VerticalSlide(telemetry, hardwareMap, true),
+//                new Arm(telemetry, hardwareMap, true),
+//                new Claw(telemetry, hardwareMap, true),
+//                new Pivot(telemetry, hardwareMap, true)
+//        );
 
 
 //        intakeServo = new IntakeServo(telemetry, hardwareMap, true);
@@ -123,10 +118,33 @@ public class TeleOpMain extends MatchOpMode {
         Button OuttakeSecondBar = (new GamepadButton(operatorGamepad, GamepadKeys.Button.Y)
                 .whenPressed(outtake.setPosition(Outtake.Value.HIGH_RUNG)));
 
+        drive.setDefaultCommand(new DefaultDriveCommand(drive,driverGamepad));
 
 
         Trigger IntakeIntake = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER))
                 .whenPressed(intake.setPosition(Intake.Value.START));
+//ALEX BUTTONS NEW
+//        Trigger OuttakeBucket = (new GamepadTrigger(operatorGamepad,GamepadKeys.Trigger.LEFT_TRIGGER)
+//                .whenPressed(outtake.setPosition(Outtake.Value.OUTTAKE_BUCKET)));
+//
+//
+//
+//        Button OuttakeLowBucket = (new GamepadButton(operatorGamepad, GamepadKeys.Button.A)
+//                .whenPressed(outtake.setPosition(Outtake.Value.LOW_BUCKET)));
+//
+//        Button OuttakeHighBucket = (new GamepadButton(operatorGamepad, GamepadKeys.Button.B)
+//                .whenPressed(outtake.setPosition(Outtake.Value.HIGH_BUCKET)));
+//
+//        Button OuttakeFirstRung = (new GamepadButton(operatorGamepad, GamepadKeys.Button.X)
+//                .whenPressed(outtake.setPosition(Outtake.Value.LOW_RUNG)));
+//
+//        Button OuttakeSecondRung = (new GamepadButton(operatorGamepad, GamepadKeys.Button.Y)
+//                .whenPressed(outtake.setPosition(Outtake.Value.HIGH_RUNG)));
+//
+//
+//
+//        Trigger IntakeIntake = (new GamepadTrigger(operatorGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER))
+//                .whenPressed(intake.setPosition(Intake.Value.START));
 
         Trigger IntakePoop = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER))
                 .whenPressed(intake.setPosition(Intake.Value.START));;

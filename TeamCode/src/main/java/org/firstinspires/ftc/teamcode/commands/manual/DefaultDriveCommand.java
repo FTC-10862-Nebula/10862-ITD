@@ -11,17 +11,13 @@ public class DefaultDriveCommand extends CommandBase {
     private final GamepadEx driverGamepad;
 
     protected double multiplier;
-    boolean isFieldCentric;
 
     public DefaultDriveCommand(MecDrive drive,
-                               GamepadEx driverGamepad,
-                               boolean isFieldCentric) {
+                               GamepadEx driverGamepad) {
 
         this.drive = drive;
         this.driverGamepad = driverGamepad;
         addRequirements(this.drive);
-
-        this.isFieldCentric = isFieldCentric;
     }
 
     @Override
@@ -29,22 +25,21 @@ public class DefaultDriveCommand extends CommandBase {
         if(driverGamepad.getButton(GamepadKeys.Button.RIGHT_BUMPER)) {
             multiplier = 0.55;
         } else {
-            multiplier = 10;
+            multiplier = .4;//10
         }
 
         if(driverGamepad.getButton(GamepadKeys.Button.A)) {
             drive.drivetrain.resetIMU();
         }
 
-        if(isFieldCentric) {
-            drive.driveFieldCentric(0,0,0,0
-//                    driverGamepad.getLeftX() * multiplier,
-//                    driverGamepad.getLeftY() * multiplier,
-//                    -driverGamepad.getRightX() * multiplier,
-//                    drive.drivetrain.getYaw()
+            drive.driveFieldCentric(
+//            0,0,0,0
+                    driverGamepad.getLeftX(),
+                    driverGamepad.getLeftY(),
+                    driverGamepad.getRightX(),//-
+                   multiplier
 
             );
-        }
 //        else {
 //            drive.driveRobotCentric(
 //                    driverGamepad.getLeftX() * multiplier,

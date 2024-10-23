@@ -57,8 +57,6 @@ import java.util.List;
 
 @Config
 public final class RoadrunnerMecanumDrive {
-    public void setDrivePowers(double v, double v1, double v2, double v3) {
-    }
 
     public static class Params {
         // IMU orientation
@@ -66,7 +64,7 @@ public final class RoadrunnerMecanumDrive {
         public RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
                 RevHubOrientationOnRobot.LogoFacingDirection.UP;
         public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+                RevHubOrientationOnRobot.UsbFacingDirection.LEFT;
 
         // drive model parameters
         public double inPerTick = 1;
@@ -149,10 +147,10 @@ public final class RoadrunnerMecanumDrive {
         }
 
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
-        leftFront = hardwareMap.get(DcMotorEx.class, "lf");
-        leftBack = hardwareMap.get(DcMotorEx.class, "lb");
-        rightBack = hardwareMap.get(DcMotorEx.class, "rb");
-        rightFront = hardwareMap.get(DcMotorEx.class, "rf");
+        leftFront = hardwareMap.get(DcMotorEx.class, "FL");
+        leftBack = hardwareMap.get(DcMotorEx.class, "BL");
+        rightBack = hardwareMap.get(DcMotorEx.class, "BR");
+        rightFront = hardwareMap.get(DcMotorEx.class, "FR");
 
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -160,8 +158,8 @@ public final class RoadrunnerMecanumDrive {
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
-        leftBack.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightBack.setDirection(DcMotorSimple.Direction.FORWARD);
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
@@ -272,6 +270,12 @@ public final class RoadrunnerMecanumDrive {
         leftBack.setPower(wheelVels.leftBack.get(0) / maxPowerMag);
         rightBack.setPower(wheelVels.rightBack.get(0) / maxPowerMag);
         rightFront.setPower(wheelVels.rightFront.get(0) / maxPowerMag);
+    }
+    public void setDrivePowers(double lF, double lR, double rF, double rR) {
+        leftFront.setPower(lF);
+        leftBack.setPower(lR);
+        rightFront.setPower(rF);
+        rightBack.setPower(rR);
     }
 
     public final class FollowTrajectoryAction implements Action {
@@ -508,6 +512,6 @@ public final class RoadrunnerMecanumDrive {
         imu.resetYaw();
     }
     public double getYaw(){
-        return  imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+        return  imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
     }
 }
