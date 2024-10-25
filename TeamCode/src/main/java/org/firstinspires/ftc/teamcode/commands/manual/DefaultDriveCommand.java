@@ -25,7 +25,7 @@ public class DefaultDriveCommand extends CommandBase {
         if(driverGamepad.getButton(GamepadKeys.Button.RIGHT_BUMPER)) {
             multiplier = 0.55;
         } else {
-            multiplier = .4;//10
+            multiplier = 1;//10
         }
 
         if(driverGamepad.getButton(GamepadKeys.Button.A)) {

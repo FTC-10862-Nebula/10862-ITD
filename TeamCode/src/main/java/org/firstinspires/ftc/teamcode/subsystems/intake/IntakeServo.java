@@ -12,26 +12,35 @@ import org.firstinspires.ftc.teamcode.util.nebulaHardware.NebulaServo;
 
 @Config
 public class IntakeServo extends SubsystemBase {
-    private final NebulaServo intakeServo;
+    private final NebulaServo intakeR;
+    private final NebulaServo intakeL;
     private final Telemetry telemetry;
 
     public IntakeServo(Telemetry tl, HardwareMap hw, Boolean isEnabled) {
-        intakeServo = new NebulaServo(hw,
-            "intakeS",
+        Telemetry telemetry1;
+        intakeR = new NebulaServo(hw,
+            "intakeR",
             NebulaServo.Direction.Forward,
             0,
             360,
             isEnabled);
-        this.telemetry = tl;
+        intakeL = new NebulaServo(hw,
+                "intakeL",
+                NebulaServo.Direction.Reverse,
+                0,
+                360,
+                isEnabled);
+        this.telemetry =tl;
     }
 
     @Override
     public void periodic() {}
 
-    public void setSetPoint(double pos){
-        intakeServo.setPosition(pos);
+    public void setSetPoint(double posR, double posL){
+        intakeR.setPosition(posR);
+        intakeL.setPosition(posL);
     }
     public double getPos(){
-        return intakeServo.getPosition();
+        return intakeR.getPosition();
     }
 }

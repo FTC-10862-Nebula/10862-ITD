@@ -5,8 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 //@Disabled
 @TeleOp
-public class ServoTest extends OpMode {
+public class    ServoTest extends OpMode {
     Servo servo1;
+    Servo servo2;
     /**
      * User defined init method
      * <p>
@@ -14,11 +15,17 @@ public class ServoTest extends OpMode {
      */
     @Override
     public void init() {
-        servo1 = hardwareMap.get(Servo.class, "intakeL");
- //         servo1.setDirection(Servo.Direction.REVERSE);
+        servo1 = hardwareMap.get(Servo.class, "intakeR");
+        //  servo1.setDirection(Servo.Direction.REVERSE);
       servo1.setDirection(Servo.Direction.FORWARD);
 
         servo1.setPosition(0);
+        servo2 =hardwareMap.get(Servo.class, "intakeL");
+        servo2.setDirection(Servo.Direction.REVERSE);
+        servo2.setPosition(0);
+
+        servo2 =hardwareMap.get(Servo.class, "intakeL");
+        servo2.setDirection(Servo.Direction.REVERSE);
     }
 
     /**
@@ -30,13 +37,16 @@ public class ServoTest extends OpMode {
     public void loop() {
         if(gamepad1.dpad_down){
             servo1.setPosition(servo1.getPosition()+ 0.001);
+           servo2.setPosition(servo2.getPosition()+0.001);
         }
         else if(gamepad1.dpad_up){
             servo1.setPosition(servo1.getPosition()- 0.001);
+            servo2.setPosition(servo2.getPosition()-0.001);
         }
 
         //DO NOT CHANGE THIS PLEASE
-        telemetry.addData("Servo",servo1.getPosition());
+        telemetry.addData("Servo1",servo1.getPosition());
+       telemetry.addData("Servo2",servo2.getPosition());
         telemetry.update();
     }
 }
