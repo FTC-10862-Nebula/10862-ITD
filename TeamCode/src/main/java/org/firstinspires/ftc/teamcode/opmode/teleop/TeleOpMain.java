@@ -9,16 +9,16 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.manual.DefaultDriveCommand;
-import org.firstinspires.ftc.teamcode.commands.manual.SlideHorizontalManual;
 import org.firstinspires.ftc.teamcode.subsystems.drive.MecDrive;
-import org.firstinspires.ftc.teamcode.subsystems.intake.HorizontalSlide;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.intake.IntakeServo;
+import org.firstinspires.ftc.teamcode.subsystems.intake.IntakeWOSlides;
 import org.firstinspires.ftc.teamcode.subsystems.intake.PowerIntake;
 import org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake;
 import org.firstinspires.ftc.teamcode.util.teleop.GamepadTrigger;
 import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
 
+import java.text.FieldPosition;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
@@ -33,7 +33,7 @@ public class TeleOpMain extends MatchOpMode {
 
 //    private Outtake outtake;
     private MecDrive drive;
-     private HorizontalSlide horizontalSlide;
+  //   private HorizontalSlide horizontalSlide;
 //    private VerticalSlide verticalSlide;
 //    private IntakeServo intakeServo;
     private PowerIntake powerIntake;
@@ -41,7 +41,7 @@ public class TeleOpMain extends MatchOpMode {
 //    private Pivot pivot;
 //    private Claw claw;
 //    private Climber climb;
-    private Intake intake;
+    private IntakeWOSlides intake;
     private Outtake outtake;
     private Supplier<Double> DoubleSupplier;
 
@@ -53,11 +53,10 @@ public class TeleOpMain extends MatchOpMode {
         driverGamepad = new GamepadEx(gamepad1);
         operatorGamepad = new GamepadEx(gamepad2);
         drive = new MecDrive(hardwareMap);
-//        intake = new Intake(
-//                new HorizontalSlide(telemetry, hardwareMap, true),
-//                new IntakeServo(telemetry, hardwareMap, true),
-//                new PowerIntake(telemetry, hardwareMap, true)
-//        );
+        intake = new IntakeWOSlides(
+                new IntakeServo(telemetry, hardwareMap, true),
+                new PowerIntake(telemetry, hardwareMap, true)
+        );
 //        outtake = new Outtake(
 //                new VerticalSlide(telemetry, hardwareMap, true),
 //                new Arm(telemetry, hardwareMap, true),
@@ -104,18 +103,19 @@ public class TeleOpMain extends MatchOpMode {
 //                .whenPressed(outtake.setPosition(Outtake.Value.HIGH_RUNG)));
 
 //INTAKE
-//       Trigger IntakeIntake = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER))
-//               .whenPressed(intake.setPosition(Intake.Value.INTAKE))
-//               .whenHeld(intake.setPosition(Intake.Value.INTAKE))
-//               .whenReleased(intake.setPosition(Intake.Value.STOP));
-//       Button IntakeOuttake = (new GamepadButton(driverGamepad,GamepadKeys.Button.DPAD_DOWN))
-//                .whenPressed(intake.setPosition(Intake.Value.OUTTAKE));
+        Trigger IntakeIntake = (new GamepadTrigger(operatorGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER))
+                .whenPressed(intake.setPosition(IntakeWOSlides.Value.INTAKE))
+                .whenHeld(intake.setPosition(IntakeWOSlides.Value.INTAKE))
+                .whenReleased(intake.setPosition(IntakeWOSlides.Value.HOLD));
+        Trigger IntakeOuttake = (new GamepadTrigger(operatorGamepad, GamepadKeys.Trigger.LEFT_TRIGGER))
+                .whenPressed(intake.setPosition(IntakeWOSlides.Value.OUTTAKE))
+                .whenReleased(intake.setPosition(IntakeWOSlides.Value.STOP));
 //
 //    intake.horizontalSlide.setDefaultCommand(new SlideHorizontalManual(horizontalSlide,
 //            ()->operatorGamepad.getRightX()));
 //    }
-    }
 
+    }
 
     @Override
     public void matchStart() {}

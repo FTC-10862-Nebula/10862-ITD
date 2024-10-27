@@ -1,10 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems.intake;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.command.Command;
-import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.Subsystem;
@@ -13,9 +10,7 @@ import org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion;
 
 import java.util.Set;
 
-import kotlin.contracts.ConditionalEffect;
-
-public class Intake {
+public class IntakeWOSlides {
     public enum Sample{
         RED,
         BLUE,
@@ -23,23 +18,23 @@ public class Intake {
         NONE;
     }
     public enum Value implements Command {
-        START (0,0.70,0.70,0),
-        OUTTAKE (0,0,0,-0.2),
-        INTAKE  (0,0,0,0.6),
-        POOP  (0,0.70,0.70,0),
-        STOP    (0,0.70,0.70,0),
-        HOLD    (0,0.70,0.70,0);
+        START (0.90,0.90,0),
+        OUTTAKE (0,0,-0.8),
+        INTAKE  (0,0,0.9),
+        POOP  (0.90,0.90,0),
+        STOP    (0.90,0.90,0),
+        HOLD    (0.90,0.90,0);
 
 
-        public final double slidePos, rPos, lPos, intakePower;
-        Value(double slidePos, double rPos, double lPos, double intakePower) {
-            this.slidePos = slidePos;
+        public final double  rPos, lPos, intakePower;
+        Value(double rPos, double lPos, double intakePower) {
+
             this.rPos = rPos;
             this.lPos=lPos;
             this.intakePower = intakePower;
         }
-        Value(double slidePos, Value value) {
-            this.slidePos = value.slidePos;
+        Value(Value value) {
+
             this.rPos = value.rPos;
             this.lPos=value.lPos;
             this.intakePower = value.intakePower;
@@ -52,12 +47,10 @@ public class Intake {
     }
     public Value value = Value.START;
 
-    public HorizontalSlide horizontalSlide;
     public IntakeServo intakeServo;
     public PowerIntake powerIntake;
 
-    public Intake(HorizontalSlide horizontalSlide, IntakeServo intakeServo, PowerIntake powerIntake){
-        this.horizontalSlide = horizontalSlide;
+    public IntakeWOSlides(IntakeServo intakeServo, PowerIntake powerIntake){
         this.intakeServo = intakeServo;
         this.powerIntake = powerIntake;
     }
@@ -68,11 +61,8 @@ public class Intake {
 
 //            case OUTTAKE:
 //                return new InstantCommand();
-//            case HOLD:
-//                return new SequentialCommandGroup();
             default:
                 return new SequentialCommandGroup(
-                        new InstantCommand(()-> horizontalSlide.setSetPoint(value.slidePos)),
                         new InstantCommand(()-> intakeServo.setSetPoint(value.rPos,value.lPos)),
                         new InstantCommand(()-> powerIntake.setSetPoint(value.intakePower))
                 );

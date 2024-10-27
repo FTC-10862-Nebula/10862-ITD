@@ -18,7 +18,7 @@ public class PowerIntake extends SubsystemBase {
 
     public PowerIntake(Telemetry tl, HardwareMap hw, boolean isEnabled) {
         motor = new NebulaMotor(hw, "intakeM",
-            NebulaMotor.MotorType.RPM_435, NebulaMotor.Direction.Forward,
+            NebulaMotor.MotorType.RPM_435, NebulaMotor.Direction.Reverse,
             NebulaMotor.IdleMode.Coast, isEnabled);
         this.colorSensor = hw.get(ColorSensor.class, "colorS");
         this.telemetry = tl;
