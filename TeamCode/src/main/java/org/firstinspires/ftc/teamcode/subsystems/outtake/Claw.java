@@ -36,6 +36,7 @@ public class Claw extends SubsystemBase
     public void setSetPoint(double turnPos, double clawPos){
         turnServo.setPosition(0);
         clawServo.setPosition(0);
+        //Claw close: 0.72   Claw open:0.20
     }
 
     public double getTurnPos(){

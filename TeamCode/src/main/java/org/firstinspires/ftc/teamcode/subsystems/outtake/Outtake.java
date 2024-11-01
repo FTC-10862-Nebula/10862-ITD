@@ -10,7 +10,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 
 
 public class Outtake {
-    private static final double OPEN =0.1, CLOSE =0;
+    private static final double OPEN =0.20, CLOSE =0.72;
 
 
     public enum Value{

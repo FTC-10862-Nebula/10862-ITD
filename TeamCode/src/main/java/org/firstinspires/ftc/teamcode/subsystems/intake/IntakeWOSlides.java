@@ -18,12 +18,13 @@ public class IntakeWOSlides {
         NONE;
     }
     public enum Value implements Command {
+        //361-658-6263
         START (0.90,0.90,0),
-        OUTTAKE (0,0,-0.8),
-        INTAKE  (0,0,0.9),
+        OUTTAKE (0,0,-0.5),
+        INTAKE  (0,0,0.5),
         POOP  (0.90,0.90,0),
         STOP    (0.90,0.90,0),
-        HOLD    (0.90,0.90,0);
+        HOLD    (0.5,0.5,0);
 
 
         public final double  rPos, lPos, intakePower;
