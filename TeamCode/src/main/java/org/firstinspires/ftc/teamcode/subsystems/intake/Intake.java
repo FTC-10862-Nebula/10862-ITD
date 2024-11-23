@@ -16,6 +16,11 @@ import java.util.Set;
 import kotlin.contracts.ConditionalEffect;
 
 public class Intake {
+
+    public static double
+    DOWN = 0.2;
+    public static double UP = 0.73;
+
     public enum Sample{
         RED,
         BLUE,
@@ -23,12 +28,13 @@ public class Intake {
         NONE;
     }
     public enum Value implements Command {
-        START (0,0.70,0.70,0),
-        OUTTAKE (0,0,0,-0.2),
-        INTAKE  (0,0,0,0.6),
-        POOP  (0,0.70,0.70,0),
-        STOP    (0,0.70,0.70,0),
-        HOLD    (0,0.70,0.70,0);
+        START (0,UP,UP,0),
+        OUTTAKE (0,DOWN,DOWN,-0.6),
+        INTAKE  (0,DOWN,DOWN,0.6),
+        POOP  (0,UP,UP,0),
+        STOP    (0,UP,UP,0),
+        HOLD    (0,UP,UP,0),
+        TRANSFER(0,UP,UP,0);
 
 
         public final double slidePos, rPos, lPos, intakePower;
@@ -64,10 +70,6 @@ public class Intake {
 
     public Command setPosition(Value value){
         switch(value) {
-//            case INTAKE:
-
-//            case OUTTAKE:
-//                return new InstantCommand();
 //            case HOLD:
 //                return new SequentialCommandGroup();
             default:
@@ -83,10 +85,17 @@ public class Intake {
     }
 
     public void periodic(){
+
         BlocksOpModeCompanion.telemetry.addData("Intake Position:", value);
 //        telemetry.addData("Slide SetPoint:" + horizontalSlide.getSetPoint()+"; Encoder: ", horizontalSlide.hSlide.getPosition());
 //        telemetry.addData("Slide Motor Output:", horizontalSlide.output* horizontalSlide.multiplier);
 //        telemetry.addData("Red:" + powerIntake.red() + "; Green:" + powerIntake.green() + "Blue:", powerIntake.blue());
 //        telemetry.addData("IntakeServoPos: ", intakeServo.getPos());
     }
+    public void init(){
+        horizontalSlide.setSetPoint(0);
+        intakeServo.setSetPoint(0.73,0.73);
+        powerIntake.setSetPoint(0);
+    }
+
 }

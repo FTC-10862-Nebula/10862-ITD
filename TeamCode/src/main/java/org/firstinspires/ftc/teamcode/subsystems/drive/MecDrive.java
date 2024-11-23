@@ -6,7 +6,9 @@ import static org.firstinspires.ftc.teamcode.subsystems.drive.RoadrunnerMecanumD
 import static org.firstinspires.ftc.teamcode.subsystems.drive.RoadrunnerMecanumDrive.rRNum;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.geometry.Vector2d;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -25,11 +27,6 @@ public class MecDrive extends SubsystemBase {
     public MecDrive(HardwareMap hardwareMap){
         drivetrain =
                 new RoadrunnerMecanumDrive(hardwareMap, new Pose2d(0,0,0));
-//        MecanumDrive mecanumDrive = new MecanumDrive((Motor) drivetrain.leftFront,
-//                (Motor) drivetrain.leftFront,
-//                (Motor) drivetrain.leftFront,
-//                (Motor) drivetrain.leftFront);
-        //TODO: Test ^^
     }
 
     @Override

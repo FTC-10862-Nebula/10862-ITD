@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.manual.DefaultDriveCommand;
@@ -14,6 +15,7 @@ import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
 
     @Config
     @TeleOp
+    @Disabled
     public class TeleOpTest extends MatchOpMode {
         //TODO: Add a on/off switch for drivetrain
         private GamepadEx driverGamepad, operatorGamepad;

@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.subsystems.climber.Climber;
 
 import java.util.function.Supplier;
 
+@Deprecated
 public class ClimberManual extends CommandBase {
         private final Climber climber;
     private final Supplier<Double> doubleSupplier;

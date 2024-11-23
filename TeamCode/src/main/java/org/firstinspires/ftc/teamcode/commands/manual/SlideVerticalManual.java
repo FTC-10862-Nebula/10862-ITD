@@ -17,8 +17,8 @@ public class SlideVerticalManual extends CommandBase {
     @Override
     public void execute() {
         double position = doubleSupplier.get();
-        if (Math.abs(position) > 0.05) {
-            verticalSlide.setSetPoint(verticalSlide.getSetPoint() + position * -20);
+        if (Math.abs(position) >= 1) {
+            verticalSlide.setSetPoint(verticalSlide.getSetPoint() + (position * -20));
         }
     }
 }

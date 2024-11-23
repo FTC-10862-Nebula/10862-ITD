@@ -44,11 +44,6 @@ public class NewAuto extends MatchOpMode {
 
     }
 
-    @Override
-    public void disabledPeriodic() {
-
-    }
-
     public void matchStart() {
         schedule(
             new ParallelCommandGroup(

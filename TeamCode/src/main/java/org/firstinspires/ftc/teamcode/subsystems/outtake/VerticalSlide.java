@@ -21,17 +21,17 @@ public class VerticalSlide extends SubsystemBase {
     public VerticalSlide(Telemetry tl, HardwareMap hw, boolean isEnabled) {
         vRSlide = new NebulaMotor(hw,
             "vRSlide",
-            NebulaMotor.MotorType.RPM_435, NebulaMotor.Direction.Forward,
+            NebulaMotor.MotorType.RPM_435, NebulaMotor.Direction.Reverse,
             NebulaMotor.IdleMode.Coast, isEnabled);
         vLSlide = new NebulaMotor(hw,
                 "vLSlide",
-                NebulaMotor.MotorType.RPM_435, NebulaMotor.Direction.Reverse,
+                NebulaMotor.MotorType.RPM_435, NebulaMotor.Direction.Forward,
                 NebulaMotor.IdleMode.Coast, isEnabled);
-        vRSlide.setDistancePerPulse(1);
-        vLSlide.setDistancePerPulse(1);
+        vRSlide.setDistancePerPulse(80);
+        vLSlide.setDistancePerPulse(80);
 
         slideController = new PIDFController(
-            0.005,0,0,0,
+            0.07,0,0,0,
             getEncoderDistance(),
             getEncoderDistance());
         slideController.setTolerance(10);
@@ -43,6 +43,9 @@ public class VerticalSlide extends SubsystemBase {
 
     @Override
     public void periodic() {
+        telemetry.addData("Slide SetPoint:", getSetPoint());
+        telemetry.addData("Encoder: ", getEncoderDistance());
+        telemetry.addData("Slide Motor Output:", output* multiplier);
         output = slideController.calculate(getEncoderDistance());
         setPower(output* multiplier);
     }

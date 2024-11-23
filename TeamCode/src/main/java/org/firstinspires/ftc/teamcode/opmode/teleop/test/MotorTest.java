@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @TeleOp
 public class MotorTest extends OpMode {
-    private DcMotorEx motor;
+    private DcMotorEx motor1;
     /**
      * User defined init method
      * <p>
@@ -15,8 +15,9 @@ public class MotorTest extends OpMode {
      */
     @Override
     public void init() {
-        motor = hardwareMap.get(DcMotorEx.class, "intakeM");
-        motor.setDirection(DcMotorSimple.Direction.FORWARD);
+        motor1 = hardwareMap.get(DcMotorEx.class, "intakeM");
+        motor1.setDirection(DcMotorSimple.Direction.FORWARD);
+
 
     }
 
@@ -28,15 +29,15 @@ public class MotorTest extends OpMode {
     @Override
     public void loop() {
         if(gamepad1.dpad_down){
-            motor.setPower(-0.4);
+            motor1.setPower(-0.4);
         }
         else if(gamepad1.dpad_up){
-            motor.setPower(0.4);
+            motor1.setPower(0.4);
         }
         else{
-            motor.setPower(0);
+            motor1.setPower(0);
         }
-        telemetry.addData("Motor: ", motor.getCurrentPosition());
+        telemetry.addData("Motor1: ", motor1.getCurrentPosition());
         telemetry.update();
 
     }

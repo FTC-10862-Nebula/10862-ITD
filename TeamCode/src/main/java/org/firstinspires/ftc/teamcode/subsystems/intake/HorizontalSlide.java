@@ -44,7 +44,7 @@ public class HorizontalSlide extends SubsystemBase implements Telemetry {
     }
 
     public double getEncoderDistance() {
-        return hSlide.getPosition();
+        return hSlide.getPosition();//
     }
     public void setPower(double power) {
         hSlide.setPower(power);
