@@ -29,7 +29,7 @@ public class HorizontalSlide extends SubsystemBase implements Telemetry {
         hSlide.getEncoder().setDirection(Motor.Direction.FORWARD);
         hSlide.setDistancePerPulse(1);
 
-        slideController = new PIDFController(0,0,0,0, getEncoderDistance(), getEncoderDistance());
+        slideController = new PIDFController(0.05,0,0,0, getEncoderDistance(), getEncoderDistance());
         slideController.setTolerance(1);
         resetEncoder();
         setSetPoint(0);
@@ -39,8 +39,14 @@ public class HorizontalSlide extends SubsystemBase implements Telemetry {
 
     @Override
     public void periodic() {
+
         output = slideController.calculate(getEncoderDistance());
         hSlide.setPower(output* multiplier);
+
+        telemetry.addData("Slide SetPoint:" ,getSetPoint());
+        telemetry.addData("; Encoder: ", hSlide.getPosition());
+        telemetry.addData("Slide Motor Output:", output* multiplier);
+
     }
 
     public double getEncoderDistance() {
@@ -53,13 +59,13 @@ public class HorizontalSlide extends SubsystemBase implements Telemetry {
         hSlide.resetEncoder();
     }
     public void setSetPoint(double setPoint) {
-        if (getEncoderDistance()>setPoint){
-            multiplier =0.8;
-            slideController.setP(slideController.getP()*0.6);
-        } else {
-            multiplier = 1;
-            slideController.setP(slideController.getP() * 1);
-        }
+//        if (getEncoderDistance()>setPoint){
+//            multiplier =0.8;
+//            slideController.setP(slideController.getP()*0.6);
+//        } else {
+//            multiplier = 1;
+//            slideController.setP(slideController.getP() * 1);
+//        }
         slideController.setSetPoint(setPoint);
     }
     public double getSetPoint() {

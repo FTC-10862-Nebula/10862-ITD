@@ -26,7 +26,10 @@ public class Pivot extends SubsystemBase
     }
 
     @Override
-    public void periodic() {}
+    public void periodic() {
+        telemetry.addData("PivotPos:", getPosition());
+
+    }
     public void setSetPoint(double num) {
         pivot.setPosition(num);
     }

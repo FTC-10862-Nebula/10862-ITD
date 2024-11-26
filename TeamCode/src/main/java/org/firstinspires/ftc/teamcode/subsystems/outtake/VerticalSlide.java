@@ -16,7 +16,7 @@ public class VerticalSlide extends SubsystemBase {
     protected NebulaMotor vRSlide,vLSlide;
 
     protected PIDFController slideController;
-    protected double output = 0, multiplier =1;
+    protected double output = 0, multiplier =1.5;
 
     public VerticalSlide(Telemetry tl, HardwareMap hw, boolean isEnabled) {
         vRSlide = new NebulaMotor(hw,
@@ -27,11 +27,11 @@ public class VerticalSlide extends SubsystemBase {
                 "vLSlide",
                 NebulaMotor.MotorType.RPM_435, NebulaMotor.Direction.Forward,
                 NebulaMotor.IdleMode.Coast, isEnabled);
-        vRSlide.setDistancePerPulse(80);
-        vLSlide.setDistancePerPulse(80);
+//        vRSlide.setDistancePerPulse(80);
+//        vLSlide.setDistancePerPulse(80);
 
         slideController = new PIDFController(
-            0.07,0,0,0,
+            0.005,0,0,0,
             getEncoderDistance(),
             getEncoderDistance());
         slideController.setTolerance(10);
@@ -63,13 +63,13 @@ public class VerticalSlide extends SubsystemBase {
         vLSlide.resetEncoder();
     }
     public void setSetPoint(double setPoint) {
-        if (getEncoderDistance()>setPoint){
-            multiplier =0.8;
-            slideController.setP(slideController.getP()*0.6);
-        } else {
-            multiplier = 1;
-            slideController.setP(slideController.getP()*1);
-        }
+//        if (getEncoderDistance()>setPoint){
+//            multiplier =0.8;
+//            slideController.setP(slideController.getP()*0.6);
+//        } else {
+//            multiplier = 1;
+//            slideController.setP(slideController.getP()*1);
+//        }
         slideController.setSetPoint(setPoint);
     }
     public double getSetPoint() {

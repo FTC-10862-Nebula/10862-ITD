@@ -10,12 +10,15 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.Subsystem;
 
 import org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.Set;
 
 import kotlin.contracts.ConditionalEffect;
 
 public class Intake {
+
+    private final Telemetry telemetry;
 
     public static double
     DOWN = 0.2;
@@ -62,10 +65,11 @@ public class Intake {
     public IntakeServo intakeServo;
     public PowerIntake powerIntake;
 
-    public Intake(HorizontalSlide horizontalSlide, IntakeServo intakeServo, PowerIntake powerIntake){
+    public Intake(HorizontalSlide horizontalSlide, IntakeServo intakeServo, PowerIntake powerIntake, Telemetry telemetry){
         this.horizontalSlide = horizontalSlide;
         this.intakeServo = intakeServo;
         this.powerIntake = powerIntake;
+        this.telemetry = telemetry;
     }
 
     public Command setPosition(Value value){
@@ -85,12 +89,8 @@ public class Intake {
     }
 
     public void periodic(){
+        telemetry.addData("Red:" + powerIntake.red() + "; Green:" + powerIntake.green() + "Blue:", powerIntake.blue());
 
-        BlocksOpModeCompanion.telemetry.addData("Intake Position:", value);
-//        telemetry.addData("Slide SetPoint:" + horizontalSlide.getSetPoint()+"; Encoder: ", horizontalSlide.hSlide.getPosition());
-//        telemetry.addData("Slide Motor Output:", horizontalSlide.output* horizontalSlide.multiplier);
-//        telemetry.addData("Red:" + powerIntake.red() + "; Green:" + powerIntake.green() + "Blue:", powerIntake.blue());
-//        telemetry.addData("IntakeServoPos: ", intakeServo.getPos());
     }
     public void init(){
         horizontalSlide.setSetPoint(0);

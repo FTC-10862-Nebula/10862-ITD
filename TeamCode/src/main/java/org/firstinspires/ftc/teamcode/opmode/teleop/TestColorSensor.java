@@ -30,7 +30,8 @@ public class TestColorSensor extends MatchOpMode {
         intake = new Intake(
                 new HorizontalSlide(telemetry, hardwareMap,false),
                 new IntakeServo(telemetry, hardwareMap,false),
-                new PowerIntake(telemetry, hardwareMap,false)
+                new PowerIntake(telemetry, hardwareMap,false),
+                telemetry
         );
 
     }

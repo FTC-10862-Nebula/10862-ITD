@@ -32,6 +32,9 @@ public class Arm extends SubsystemBase
 
     @Override
     public void periodic() {
+        telemetry.addData("ArmR Pos: " , getRPosition());
+        telemetry.addData("ArmLPos: ", getLPosition());
+
     }
     public void setSetPoint(double rNum, double lNum) {
         armR.setPosition(rNum);

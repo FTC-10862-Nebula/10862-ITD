@@ -37,9 +37,9 @@ public class MecDrive extends SubsystemBase {
 
     public void  driveFieldCentric(double y, double x, double rx, double multiplier){
 //        double theta = -imu.getAngularOrientation().firstAngle;
-//       double theta = -drivetrain.getYaw();//Ok?
-        double theta = (0);//Ok?
-
+       double theta = -drivetrain.getYaw();//Ok?
+//        double theta = (0);//Ok?
+//FIX
 
         double rotX = x * Math.cos(theta) - y * Math.sin(theta);
         double rotY = x * Math.sin(theta) + y * Math.cos(theta);

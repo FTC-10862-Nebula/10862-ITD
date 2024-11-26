@@ -6,6 +6,8 @@ import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.RE
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.ConditionalCommand;
+import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.button.Button;
@@ -59,14 +61,16 @@ public class TeleOpMain extends MatchOpMode {
         intake = new Intake(
                 new HorizontalSlide(telemetry, hardwareMap, false),
                 new IntakeServo(telemetry, hardwareMap, false),
-                new PowerIntake(telemetry, hardwareMap, false)
+                new PowerIntake(telemetry, hardwareMap, false),
+                telemetry
         );
 
         outtake = new Outtake(
                 new VerticalSlide(telemetry, hardwareMap, true),
                 new Arm(telemetry, hardwareMap, true),
                 new Claw(telemetry, hardwareMap, true),
-                new Pivot(telemetry, hardwareMap, true)
+                new Pivot(telemetry, hardwareMap, true),
+                telemetry
         );
 
         intake.init();
@@ -83,34 +87,34 @@ public class TeleOpMain extends MatchOpMode {
     public void configureButtons() {
         drive.setDefaultCommand(new DefaultDriveCommand(drive, driverGamepad));
 //INTAKE
-        Trigger IntakeIntake = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER))
-                .whenPressed(intake.setPosition(Intake.Value.INTAKE))
-                .whenHeld(intake.setPosition(Intake.Value.INTAKE))
-                .whenReleased(intake.setPosition(Intake.Value.HOLD));
-        Trigger IntakeOuttake = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER))
-                .whenPressed(intake.setPosition(OUTTAKE))
-                .whenReleased(intake.setPosition(Intake.Value.STOP));
+//        Trigger IntakeIntake = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER))
+//                .whenPressed(intake.setPosition(Intake.Value.INTAKE))
+//                .whenHeld(intake.setPosition(Intake.Value.INTAKE))
+//                .whenReleased(intake.setPosition(Intake.Value.HOLD));
+//        Trigger IntakeOuttake = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER))
+//                .whenPressed(intake.setPosition(OUTTAKE))
+//                .whenReleased(intake.setPosition(Intake.Value.STOP));
         //y - up/down
         //x- right left
 
         //OUTTAKE
         outtake.verticalSlide.setDefaultCommand(new SlideVerticalManual(
                 outtake.verticalSlide, operatorGamepad::getRightY));
-        Trigger OuttakeBucket = (new GamepadTrigger(operatorGamepad,GamepadKeys.Trigger.LEFT_TRIGGER)
-                .whenPressed(outtake.setPosition(Outtake.Value.OUTTAKE_BUCKET)));
-        Button lowBucket = (new GamepadButton(operatorGamepad, GamepadKeys.Button.A)
-                .whenPressed(outtake.setPosition(Outtake.Value.LOW_BUCKET)));
-        Button highBucket = (new GamepadButton(operatorGamepad, GamepadKeys.Button.B)
-                .whenPressed(outtake.setPosition(Outtake.Value.HIGH_BUCKET)));
-        Button transfer = (new GamepadButton(operatorGamepad, GamepadKeys.Button.X)
-                .whenPressed(new SequentialCommandGroup(
-                        intake.setPosition(Intake.Value.TRANSFER),
-                        outtake.setPosition(Outtake.Value.READY_TO_INTAKE_SAMPLE),
-                        new WaitCommand(300),
-                        outtake.setPosition(Outtake.Value.INTAKE_SAMPLE))));
+//        Trigger OuttakeBucket = (new GamepadTrigger(operatorGamepad,GamepadKeys.Trigger.LEFT_TRIGGER)
+//                .whenPressed(outtake.setPosition(Outtake.Value.OUTTAKE_BUCKET)));
+//        Button lowBucket = (new GamepadButton(operatorGamepad, GamepadKeys.Button.A)
+//                .whenPressed(outtake.setPosition(Outtake.Value.LOW_BUCKET)));
+//        Button highBucket = (new GamepadButton(operatorGamepad, GamepadKeys.Button.B)
+//                .whenPressed(outtake.setPosition(Outtake.Value.HIGH_BUCKET)));
+//        Button transfer = (new GamepadButton(operatorGamepad, GamepadKeys.Button.X)
+//                .whenPressed(new SequentialCommandGroup(
+//                        intake.setPosition(Intake.Value.TRANSFER),
+//                        outtake.setPosition(Outtake.Value.READY_TO_INTAKE_SAMPLE),
+//                        new WaitCommand(300),
+//                        outtake.setPosition(Outtake.Value.INTAKE_SAMPLE))));
         Button readySpecimen = (new GamepadButton(operatorGamepad,GamepadKeys.Button.DPAD_UP)
-                        .whenPressed(outtake.setPosition(READY_TO_INTAKE_SPECIMEN))
-                );
+                        .whenPressed(outtake.setPosition(READY_TO_INTAKE_SPECIMEN)));
+
         Button intakeSpecimen = (new GamepadButton(operatorGamepad,GamepadKeys.Button.DPAD_DOWN))
                 .whenPressed(outtake.setPosition(INTAKE_SPECIMEN));
     //    Button outtakeSpecimen
@@ -121,14 +125,19 @@ public class TeleOpMain extends MatchOpMode {
 
         Button OuttakeFirstBar = (new GamepadButton(operatorGamepad, GamepadKeys.Button.X)
                 .whenPressed(outtake.setPosition(Outtake.Value.LOW_RUNG)));
-
         Button OuttakeSecondBar = (new GamepadButton(operatorGamepad, GamepadKeys.Button.Y)
                 .whenPressed(outtake.setPosition(Outtake.Value.HIGH_RUNG)));
+//        Trigger OuttakeSpecimenBar = (new GamepadTrigger(operatorGamepad,GamepadKeys.Trigger.RIGHT_TRIGGER)
+//                .whenPressed(outtake.setPosition(Outtake.Value.OUTTAKE_SPECIMEN_BAR)));
+        Trigger OuttakeSpecimenBasr = (new GamepadTrigger(operatorGamepad,GamepadKeys.Trigger.RIGHT_TRIGGER)
+                .whenPressed(new ConditionalCommand(
+                        outtake.setPosition(Outtake.Value.SPECIMEN_HIGH_BAR),
+                        outtake.setPosition(Outtake.Value.SPECIMEN_LOW_BAR),
+                        ()->outtake.getIfHigh())));
+        //()->(outtake.value==Outtake.Value.HIGH_RUNG)
 
-        Trigger OuttakeSpecimenBar = (new GamepadTrigger(operatorGamepad,GamepadKeys.Trigger.RIGHT_TRIGGER)
-                .whenPressed(outtake.setPosition(Outtake.Value.OUTTAKE_SPECIMEN_BAR)));
-        intake.horizontalSlide.setDefaultCommand(new SlideHorizontalManual(intake.horizontalSlide,
-            ()->operatorGamepad.getRightX()));
+//        intake.horizontalSlide.setDefaultCommand(new SlideHorizontalManual(intake.horizontalSlide,
+//            operatorGamepad::getLeftX));
     }
 
 
