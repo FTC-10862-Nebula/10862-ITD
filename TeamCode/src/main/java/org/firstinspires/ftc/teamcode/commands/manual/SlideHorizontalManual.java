@@ -5,6 +5,7 @@ import org.firstinspires.ftc.teamcode.subsystems.intake.HorizontalSlide;
 import java.util.function.Supplier;
 
 public class SlideHorizontalManual extends CommandBase {
+
     private final HorizontalSlide horizontalSlide;
     private final Supplier<Double> doubleSupplier;
     public SlideHorizontalManual(HorizontalSlide horizontalSlide, Supplier<Double> doubleSupplier) {
@@ -15,8 +16,8 @@ public class SlideHorizontalManual extends CommandBase {
     @Override
     public void execute() {
         double position = doubleSupplier.get();
-        if (Math.abs(position) > 0.05) {
-            horizontalSlide.setSetPoint(horizontalSlide.getSetPoint() + position * -20);
+        if (Math.abs(position) > 0.2) {
+            horizontalSlide.setSetPoint(horizontalSlide.getSetPoint() + position * -120);
         }
     }
 }

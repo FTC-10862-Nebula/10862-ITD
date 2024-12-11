@@ -1,8 +1,21 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop;
 
+import static org.firstinspires.ftc.teamcode.subsystems.intake.Intake.Value.INTAKE;
 import static org.firstinspires.ftc.teamcode.subsystems.intake.Intake.Value.OUTTAKE;
-import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.INTAKE_SPECIMEN;
-import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.READY_TO_INTAKE_SPECIMEN;
+import static org.firstinspires.ftc.teamcode.subsystems.intake.Intake.Value.STOP;
+import static org.firstinspires.ftc.teamcode.subsystems.intake.Intake.Value.SUBINT;
+import static org.firstinspires.ftc.teamcode.subsystems.intake.Intake.Value.SUBOUT;
+import static org.firstinspires.ftc.teamcode.subsystems.outtake.Claw.Value.CLOSE;
+import static org.firstinspires.ftc.teamcode.subsystems.outtake.Claw.Value.OPEN;
+import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.CLIMB;
+import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.HIGH_BUCKET;
+import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.HIGH_RUNG;
+import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.LOW_BUCKET;
+import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.LOW_RUNG;
+import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.SPECIMEN_HIGH_BAR;
+import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.SPECIMEN_LOW_BAR;
+import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.SPECIMEN_WALL;
+import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.START;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.Command;
@@ -42,9 +55,6 @@ public class TeleOpMain extends MatchOpMode {
     //TODO: Add a on/off switch for drivetrain
     private GamepadEx driverGamepad, operatorGamepad;
 
-
-
-
     private Outtake outtake;
     private MecDrive drive;
 //    private Climber climb;
@@ -60,8 +70,8 @@ public class TeleOpMain extends MatchOpMode {
 
         intake = new Intake(
                 new HorizontalSlide(telemetry, hardwareMap, false),
-                new IntakeServo(telemetry, hardwareMap, false),
-                new PowerIntake(telemetry, hardwareMap, false),
+                new IntakeServo(telemetry, hardwareMap, true),
+                new PowerIntake(telemetry, hardwareMap, true),
                 telemetry
         );
 
@@ -77,71 +87,70 @@ public class TeleOpMain extends MatchOpMode {
         outtake.init();
     }
 
-
     @Override
     public void robotPeriodic(){
         outtake.periodic();
         intake.periodic();
     }
+
     @Override
     public void configureButtons() {
         drive.setDefaultCommand(new DefaultDriveCommand(drive, driverGamepad));
 //INTAKE
-//        Trigger IntakeIntake = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER))
-//                .whenPressed(intake.setPosition(Intake.Value.INTAKE))
-//                .whenHeld(intake.setPosition(Intake.Value.INTAKE))
-//                .whenReleased(intake.setPosition(Intake.Value.HOLD));
-//        Trigger IntakeOuttake = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER))
-//                .whenPressed(intake.setPosition(OUTTAKE))
-//                .whenReleased(intake.setPosition(Intake.Value.STOP));
-        //y - up/down
-        //x- right left
+        Trigger IntakeOuttake = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER))
+                .whenPressed(intake.setPosition(INTAKE))
+                .whenReleased(intake.setPosition(STOP));
+        Trigger IntakeIntake = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER))
+                .whenPressed(intake.setPosition(OUTTAKE))
+                .whenHeld(intake.setPosition(OUTTAKE))
+                .whenReleased(intake.setPosition(STOP));
+        Button Subint =(new GamepadButton(driverGamepad, GamepadKeys.Button.LEFT_BUMPER)
+                .whenPressed(intake.setPosition(SUBINT))
+                .whenReleased(intake.setPosition(STOP)));
+        Button Subout = (new GamepadButton(driverGamepad,GamepadKeys.Button.RIGHT_BUMPER)
+                .whenPressed(intake.setPosition(SUBOUT))
+                .whenReleased(intake.setPosition(STOP)));
 
         //OUTTAKE
+
+        //SLIDE MANUALS
         outtake.verticalSlide.setDefaultCommand(new SlideVerticalManual(
                 outtake.verticalSlide, operatorGamepad::getRightY));
-//        Trigger OuttakeBucket = (new GamepadTrigger(operatorGamepad,GamepadKeys.Trigger.LEFT_TRIGGER)
-//                .whenPressed(outtake.setPosition(Outtake.Value.OUTTAKE_BUCKET)));
-//        Button lowBucket = (new GamepadButton(operatorGamepad, GamepadKeys.Button.A)
-//                .whenPressed(outtake.setPosition(Outtake.Value.LOW_BUCKET)));
-//        Button highBucket = (new GamepadButton(operatorGamepad, GamepadKeys.Button.B)
-//                .whenPressed(outtake.setPosition(Outtake.Value.HIGH_BUCKET)));
-//        Button transfer = (new GamepadButton(operatorGamepad, GamepadKeys.Button.X)
-//                .whenPressed(new SequentialCommandGroup(
-//                        intake.setPosition(Intake.Value.TRANSFER),
-//                        outtake.setPosition(Outtake.Value.READY_TO_INTAKE_SAMPLE),
-//                        new WaitCommand(300),
-//                        outtake.setPosition(Outtake.Value.INTAKE_SAMPLE))));
-        Button readySpecimen = (new GamepadButton(operatorGamepad,GamepadKeys.Button.DPAD_UP)
-                        .whenPressed(outtake.setPosition(READY_TO_INTAKE_SPECIMEN)));
+        intake.horizontalSlide.setDefaultCommand(new SlideHorizontalManual(intake.horizontalSlide,
+                operatorGamepad::getLeftX));
 
-        Button intakeSpecimen = (new GamepadButton(operatorGamepad,GamepadKeys.Button.DPAD_DOWN))
-                .whenPressed(outtake.setPosition(INTAKE_SPECIMEN));
-    //    Button outtakeSpecimen
+        //BUCKET
+        Button LowBucket = (new GamepadButton(operatorGamepad, GamepadKeys.Button.X)
+                .whenPressed(outtake.setPosition(LOW_BUCKET)));
+        Button HighBucket = (new GamepadButton(operatorGamepad, GamepadKeys.Button.Y)
+                .whenPressed(outtake.setPosition(HIGH_BUCKET)));
 
-        Button climb = (new GamepadButton(driverGamepad, GamepadKeys.Button.X)
-                .whileHeld(outtake.setPosition(Outtake.Value.CLIMB_LOW_RUNG))
-                .whenReleased(outtake.setPosition(Outtake.Value.CLIMB_UP)));
+        //SPECIMEN
+         Button IntakeSpecimen = (new GamepadButton(operatorGamepad,GamepadKeys.Button.LEFT_BUMPER)
+                .whenPressed(outtake.setPosition(SPECIMEN_WALL)));
+        Button lowRung = (new GamepadButton(operatorGamepad,GamepadKeys.Button.DPAD_LEFT)
+                .whenPressed(outtake.setPosition(LOW_RUNG)));
+        Button HighRung = (new GamepadButton(operatorGamepad, GamepadKeys.Button.DPAD_UP)
+                .whenPressed(outtake.setPosition(HIGH_RUNG)));
+        Button SpecimenLow = (new GamepadButton(operatorGamepad,GamepadKeys.Button.DPAD_RIGHT)
+                .whenPressed(outtake.setPosition(SPECIMEN_LOW_BAR)));
+        Button SpecimenHigh = (new GamepadButton(operatorGamepad,GamepadKeys.Button.DPAD_DOWN)
+                .whenPressed(outtake.setPosition(SPECIMEN_HIGH_BAR)));
 
-        Button OuttakeFirstBar = (new GamepadButton(operatorGamepad, GamepadKeys.Button.X)
-                .whenPressed(outtake.setPosition(Outtake.Value.LOW_RUNG)));
-        Button OuttakeSecondBar = (new GamepadButton(operatorGamepad, GamepadKeys.Button.Y)
-                .whenPressed(outtake.setPosition(Outtake.Value.HIGH_RUNG)));
-//        Trigger OuttakeSpecimenBar = (new GamepadTrigger(operatorGamepad,GamepadKeys.Trigger.RIGHT_TRIGGER)
-//                .whenPressed(outtake.setPosition(Outtake.Value.OUTTAKE_SPECIMEN_BAR)));
-        Trigger OuttakeSpecimenBasr = (new GamepadTrigger(operatorGamepad,GamepadKeys.Trigger.RIGHT_TRIGGER)
-                .whenPressed(new ConditionalCommand(
-                        outtake.setPosition(Outtake.Value.SPECIMEN_HIGH_BAR),
-                        outtake.setPosition(Outtake.Value.SPECIMEN_LOW_BAR),
-                        ()->outtake.getIfHigh())));
-        //()->(outtake.value==Outtake.Value.HIGH_RUNG)
+        //CLIMB
+        Trigger Climb =(new GamepadButton(operatorGamepad,GamepadKeys.Button.RIGHT_BUMPER)
+                .whenHeld(outtake.setPosition(CLIMB))
+                .whenReleased(outtake.setPosition(START)));
 
-//        intake.horizontalSlide.setDefaultCommand(new SlideHorizontalManual(intake.horizontalSlide,
-//            operatorGamepad::getLeftX));
+        //CLAW
+        Trigger ClawOpen = (new GamepadTrigger(operatorGamepad,GamepadKeys.Trigger.LEFT_TRIGGER)
+                .whenPressed(outtake.setClawSetPoint(OPEN)));
+        Trigger ClawClose = (new GamepadTrigger(operatorGamepad,GamepadKeys.Trigger.RIGHT_TRIGGER)
+                .whenPressed(outtake.setClawSetPoint(CLOSE)));
     }
 
 
     @Override
     public void matchStart() {}
 
-}
+ }

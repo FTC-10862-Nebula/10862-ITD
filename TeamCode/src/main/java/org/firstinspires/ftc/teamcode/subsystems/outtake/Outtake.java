@@ -1,8 +1,4 @@
 package org.firstinspires.ftc.teamcode.subsystems.outtake;
-
-import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.BACK;
-import static org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection.FRONT;
-
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
@@ -11,59 +7,36 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+
 public class Outtake {
     private final Telemetry telemetry;
     //Arm
-    private static final double INTAKE =0.05,
-        SCORE_SAMPLE = 1,
-        SPECIMEN = 1;
-
-    //Turn
-    private static final double INTAKET =0.635,
-        OUTTAKET = 0.285,
-        FLIP_POS = 0.635;//Similar to FLIP
+//    private static final double INTAKE =0.05,
+//        SCORE_SAMPLE = 1,
+//        SPECIMEN = 1;
 
     public enum Value{
-        START   (0,0.05,INTAKET,0.1),
-
-        INTAKE_SAMPLE(0,0.05,INTAKET,0),
-//        STOP    (0,0,0,0,CLOSE),
-//        HOLD    (0,0,0,0,CLOSE),
-        READY_TO_INTAKE_SAMPLE(0,0.05,FLIP_POS,0.1),
-        LOW_BUCKET(1500,1, OUTTAKET,0.17),
-        HIGH_BUCKET(3600,1, OUTTAKET,0.17),
-//        OUTTAKE_BUCKET(0,1,OUTTAKE_POS,0.17),
-
-
-
-        READY_TO_INTAKE_SPECIMEN(500,1, OUTTAKET,0.26),
-        INTAKE_SPECIMEN(500,1, OUTTAKET,0.26),
-        LOW_RUNG(1200,1, OUTTAKET,0),
-        HIGH_RUNG(2500,1, OUTTAKET,0),
-        SPECIMEN_LOW_BAR(LOW_RUNG.slidePos-10, LOW_RUNG),
-        SPECIMEN_HIGH_BAR(HIGH_RUNG.slidePos-10, HIGH_RUNG),
-
-//        OUTTAKE_SPECIMEN_BAR(0,1,INTAKE_SPECIMEN_POS,0.26),
+        START   (0,1,0.1),
+        LOW_BUCKET(1500,0,0.17),
+        HIGH_BUCKET(3550,0,0),
+        SPECIMEN_WALL(120,0,0.2),
+        LOW_RUNG(1000,0,0.2),
+        HIGH_RUNG(1900,0,0.2),
+        SPECIMEN_LOW_BAR(LOW_RUNG.slidePos-400, LOW_RUNG),
+        SPECIMEN_HIGH_BAR(HIGH_RUNG.slidePos-400, HIGH_RUNG),
+        CLIMB(1500,0,0);
 
 
 
-        CLIMB_LOW_RUNG(0,0,1,0),
-        CLIMB_UP(0,0,1,0.9);
-
-
-
-
-        public final double slidePos, armPos, turnPos, pivotPos;
-        Value(double slidePos, double armPos, double turnPos, double pivotPos) {
+        public final double slidePos, armPos, pivotPos;
+        Value(double slidePos, double armPos, double pivotPos) {
             this.slidePos = slidePos;
             this.pivotPos = pivotPos;
             this.armPos = armPos;
-            this.turnPos = turnPos;
         }
         Value(double slidePos, Value value){
             this.slidePos = slidePos;
             this.armPos = value.armPos;
-            this.turnPos = value.turnPos;
             this.pivotPos = value.pivotPos;
 
         }
@@ -79,28 +52,39 @@ public class Outtake {
         this.verticalSlide = verticalSlide;
         this.arm = arm;
         this.claw = claw;
-        this.pivot=pivot;
+        this.pivot = pivot;
         this.telemetry = telemetry;
     }
 
     public Command setPosition(Value value){
         this.value=value;
         switch(value) {
-            case SPECIMEN_LOW_BAR:
-            case SPECIMEN_HIGH_BAR:
+            case LOW_RUNG:
+            case HIGH_RUNG:
+            case HIGH_BUCKET:
+            case LOW_BUCKET:
                 return new SequentialCommandGroup(
                     new InstantCommand(()-> verticalSlide.setSetPoint(value.slidePos)),
-                    new WaitCommand(100),
+                    new WaitCommand(300),
                     new InstantCommand(()-> arm.setSetPoint(value.armPos,value.armPos)),
-                    new InstantCommand(()-> pivot.setSetPoint(value.pivotPos)),
-                    new InstantCommand(()-> claw.setTurnSetPoint(value.turnPos))
+                    new InstantCommand(()-> pivot.setSetPoint(value.pivotPos))
                 );
+            case SPECIMEN_WALL:
+                return new SequentialCommandGroup(
+                        new InstantCommand(()->verticalSlide.setSetPoint(500)),
+                        new WaitCommand(700),
+                        new InstantCommand(()-> arm.setSetPoint(value.armPos,value.armPos)),
+                        new InstantCommand(()-> pivot.setSetPoint(value.pivotPos)),
+                        new WaitCommand(500),
+                        new InstantCommand(()->verticalSlide.setSetPoint(value.slidePos))
+                );
+            case SPECIMEN_LOW_BAR:
+            case SPECIMEN_HIGH_BAR:
             default:
                 return new ParallelCommandGroup(
                     new InstantCommand(()-> verticalSlide.setSetPoint(value.slidePos)),
                     new InstantCommand(()-> arm.setSetPoint(value.armPos,value.armPos)),
-                    new InstantCommand(()-> pivot.setSetPoint(value.pivotPos)),
-                    new InstantCommand(()-> claw.setTurnSetPoint(value.turnPos))
+                    new InstantCommand(()-> pivot.setSetPoint(value.pivotPos))
                 );
         }
     }
@@ -116,14 +100,18 @@ public class Outtake {
 
     public void init(){
         verticalSlide.setSetPoint(0);
-        claw.setTurnSetPoint(0.635);
-        claw.setClawSetPoint(Claw.Value.CLOSE_SAMPLE);
+        claw.setClawSetPoint(Claw.Value.CLOSE);
         arm.setSetPoint(0.05,0.05);
-        pivot.setSetPoint(0.1);
+        pivot.setSetPoint(0);
         value= Value.START;
     }
 
-    public boolean getIfHigh(){
-        return (value==Outtake.Value.HIGH_RUNG);
+//    public boolean getIfHigh(){return (value==Outtake.Value.HIGH_RUNG);
+//    }
+
+    public Command setClawSetPoint(Claw.Value value) {
+        return new InstantCommand(()->claw.setClawSetPoint(value));
     }
 }
+
+

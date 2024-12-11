@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.commands;
 
+import static org.firstinspires.ftc.teamcode.subsystems.outtake.Claw.Value.CLOSE;
+import static org.firstinspires.ftc.teamcode.subsystems.outtake.Claw.Value.OPEN;
+
 import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
@@ -7,6 +10,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.outtake.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake;
 
 public class IntakeDefaultCommand extends SequentialCommandGroup {
@@ -22,14 +26,15 @@ public class IntakeDefaultCommand extends SequentialCommandGroup {
             new ConditionalCommand(
                 new SequentialCommandGroup(
                     new ParallelCommandGroup(
-                        intake.setPosition(Intake.Value.HOLD),
-                        outtake.setPosition(Outtake.Value.READY_TO_INTAKE_SAMPLE)
+                        intake.setPosition(Intake.Value.STOP),
+                            outtake.setClawSetPoint(OPEN)
                     ),
                     new WaitCommand(500),
-                    outtake.setPosition(Outtake.Value.INTAKE_SAMPLE)
+                    outtake.setPosition(Outtake.Value.START),
+                        outtake.setClawSetPoint(CLOSE)
                 ),
                 new ConditionalCommand(
-                    intake.setPosition(Intake.Value.POOP), //Bot Pooper
+                    intake.setPosition(Intake.Value.STOP), //Bot Pooper//POOP
                     new InstantCommand(), //Nothing
                     ()-> (noLookFor == intake.powerIntake.getSampleColors())
                 ),

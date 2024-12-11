@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems.intake;
 
+import static android.transition.Fade.IN;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 import com.acmerobotics.roadrunner.Action;
@@ -8,6 +9,7 @@ import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.Subsystem;
+import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -20,9 +22,8 @@ public class Intake {
 
     private final Telemetry telemetry;
 
-    public static double
-    DOWN = 0.2;
-    public static double UP = 0.73;
+    public static double DOWN = 0;
+    public static double UP = 0.6;
 
     public enum Sample{
         RED,
@@ -32,12 +33,11 @@ public class Intake {
     }
     public enum Value implements Command {
         START (0,UP,UP,0),
-        OUTTAKE (0,DOWN,DOWN,-0.6),
-        INTAKE  (0,DOWN,DOWN,0.6),
-        POOP  (0,UP,UP,0),
-        STOP    (0,UP,UP,0),
-        HOLD    (0,UP,UP,0),
-        TRANSFER(0,UP,UP,0);
+        OUTTAKE (500,DOWN,DOWN,-0.5),
+        INTAKE  (500,DOWN,DOWN,0.5),
+        SUBINT (2500,DOWN,DOWN,0.5),
+        SUBOUT(2500,DOWN,DOWN,0.5),
+        STOP    (0,UP,UP,0);
 
 
         public final double slidePos, rPos, lPos, intakePower;
@@ -74,12 +74,18 @@ public class Intake {
 
     public Command setPosition(Value value){
         switch(value) {
-//            case HOLD:
 //                return new SequentialCommandGroup();
             default:
                 return new SequentialCommandGroup(
                         new InstantCommand(()-> horizontalSlide.setSetPoint(value.slidePos)),
                         new InstantCommand(()-> intakeServo.setSetPoint(value.rPos,value.lPos)),
+                        new InstantCommand(()-> powerIntake.setSetPoint(value.intakePower))
+                );
+            case OUTTAKE:
+                return new SequentialCommandGroup(
+                        new InstantCommand(()-> horizontalSlide.setSetPoint(value.slidePos)),
+                        new InstantCommand(()-> intakeServo.setSetPoint(value.rPos,value.lPos)),
+                        new WaitCommand(500),
                         new InstantCommand(()-> powerIntake.setSetPoint(value.intakePower))
                 );
         }
@@ -94,7 +100,7 @@ public class Intake {
     }
     public void init(){
         horizontalSlide.setSetPoint(0);
-        intakeServo.setSetPoint(0.73,0.73);
+        intakeServo.setSetPoint(UP,UP);
         powerIntake.setSetPoint(0);
     }
 

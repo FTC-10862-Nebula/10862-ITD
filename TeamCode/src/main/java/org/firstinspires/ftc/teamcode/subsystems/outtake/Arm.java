@@ -23,7 +23,7 @@ public class Arm extends SubsystemBase
             isEnabled);
         armL = new NebulaServo(hw,
             "armL",
-            NebulaServo.Direction.Forward,
+            NebulaServo.Direction.Reverse,
             0,
             360,
             isEnabled);

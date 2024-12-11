@@ -27,8 +27,7 @@ public class VerticalSlide extends SubsystemBase {
                 "vLSlide",
                 NebulaMotor.MotorType.RPM_435, NebulaMotor.Direction.Forward,
                 NebulaMotor.IdleMode.Coast, isEnabled);
-//        vRSlide.setDistancePerPulse(80);
-//        vLSlide.setDistancePerPulse(80);
+
 
         slideController = new PIDFController(
             0.005,0,0,0,
@@ -74,5 +73,7 @@ public class VerticalSlide extends SubsystemBase {
     }
     public double getSetPoint() {
         return slideController.getSetPoint();
+
     }
+
 }
