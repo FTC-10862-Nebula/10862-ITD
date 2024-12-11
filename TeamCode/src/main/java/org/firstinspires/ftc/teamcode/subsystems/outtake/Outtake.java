@@ -17,13 +17,13 @@ public class Outtake {
 
     public enum Value{
         START   (0,1,0.1),
-        LOW_BUCKET(1500,0,0.17),
+        LOW_BUCKET(1500,0,0.1),
         HIGH_BUCKET(3550,0,0),
-        SPECIMEN_WALL(120,0,0.2),
-        LOW_RUNG(1000,0,0.2),
-        HIGH_RUNG(1900,0,0.2),
-        SPECIMEN_LOW_BAR(LOW_RUNG.slidePos-400, LOW_RUNG),
-        SPECIMEN_HIGH_BAR(HIGH_RUNG.slidePos-400, HIGH_RUNG),
+        SPECIMEN_WALL(100,0,0.3),
+        LOW_RUNG(1000,0,0.3),
+        HIGH_RUNG(1600,0,0.3),
+        SPECIMEN_LOW_BAR(LOW_RUNG.slidePos-800, LOW_RUNG),
+        SPECIMEN_HIGH_BAR(HIGH_RUNG.slidePos-800, HIGH_RUNG),
         CLIMB(1500,0,0);
 
 
@@ -72,7 +72,7 @@ public class Outtake {
             case SPECIMEN_WALL:
                 return new SequentialCommandGroup(
                         new InstantCommand(()->verticalSlide.setSetPoint(500)),
-                        new WaitCommand(700),
+                        new WaitCommand(500),
                         new InstantCommand(()-> arm.setSetPoint(value.armPos,value.armPos)),
                         new InstantCommand(()-> pivot.setSetPoint(value.pivotPos)),
                         new WaitCommand(500),

@@ -53,11 +53,15 @@ public class MecDrive extends SubsystemBase {
 //        powers [lRNum] = (rotY + rotX + rx) / denominator;
 //        powers [rFNum] = (rotY + rotX - rx) / denominator;
 //        powers [rRNum] = (rotY - rotX + rx) / denominator;
-
+//          WORKKK
+//        powers [lFNum] = (rotY + rotX - rx) / denominator;
+//        powers [lRNum] = (rotY - rotX - rx) / denominator;
+//        powers [rFNum] = (rotY - rotX + rx) / denominator;
+//        powers [rRNum] = (rotY + rotX + rx) / denominator;
         powers [lFNum] = (rotY + rotX - rx) / denominator;
-        powers [lRNum] = (rotY - rotX - rx) / denominator;
+        powers [lRNum] = (rotY - rotX + rx) / denominator;
         powers [rFNum] = (rotY - rotX + rx) / denominator;
-        powers [rRNum] = (rotY + rotX + rx) / denominator;
+        powers [rRNum] = (rotY + rotX - rx) / denominator;
 
 //        if(Math.abs(powers[lFNum])<0.5&
 //                Math.abs(powers[lRNum])<0.5&

@@ -15,7 +15,7 @@ public class Claw extends SubsystemBase {
 
     public enum Value{
         OPEN(.538),
-        CLOSE(.72);
+        CLOSE(.78);
 //        OPEN_SPECIMEN(CLOSE_SAMPLE),
 //        CLOSE_SPECIMEN(OPEN_SAMPLE);
         public final double pos;

@@ -37,9 +37,10 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.7' //Roadrunner-Faster Builds
 //    implementation 'org.openftc:easyopencv:1.7.3'   //Need for Camera
 //    implementation 'org.openftc:apriltag:2.1.0'     //Need for April Tags
-    implementation 'org.ftclib.ftclib:core:2.0.1' //FTC Core Things
-    implementation "com.acmerobotics.roadrunner:ftc:0.1.14"
     implementation "com.acmerobotics.roadrunner:core:1.0.0"
     implementation "com.acmerobotics.roadrunner:actions:1.0.0"
     implementation "com.acmerobotics.dashboard:dashboard:0.4.16"
+    implementation "com.acmerobotics.roadrunner:ftc:0.1.13"
+    implementation "com.acmerobotics.dashboard:dashboard:0.4.16"
+    implementation 'org.ftclib.ftclib:core:2.0.1'
 }

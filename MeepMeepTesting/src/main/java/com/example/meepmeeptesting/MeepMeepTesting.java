@@ -17,9 +17,6 @@ public class MeepMeepTesting {
             myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(26, 62, 0))
                             .waitSeconds(3)
 
-                    .lineToXLinearHeading(55,0)
-                    .turn(Math.toRadians(55))
-                            .waitSeconds(4)
 //                    .lineToY(30)
 //                    .turn(Math.toRadians(90))
 //                    .lineToX(0)
