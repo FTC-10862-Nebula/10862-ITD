@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop;
 
+import static org.firstinspires.ftc.teamcode.subsystems.intake.Intake.Value.DOWNI;
 import static org.firstinspires.ftc.teamcode.subsystems.intake.Intake.Value.INTAKE;
 import static org.firstinspires.ftc.teamcode.subsystems.intake.Intake.Value.OUTTAKE;
 import static org.firstinspires.ftc.teamcode.subsystems.intake.Intake.Value.STOP;
@@ -31,7 +32,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.manual.DefaultDriveCommand;
-import org.firstinspires.ftc.teamcode.commands.manual.SlideHorizontalManual;
+//import org.firstinspires.ftc.teamcode.commands.manual.SlideHorizontalManual;
 import org.firstinspires.ftc.teamcode.commands.manual.SlideVerticalManual;
 import org.firstinspires.ftc.teamcode.subsystems.climber.Climber;
 import org.firstinspires.ftc.teamcode.subsystems.drive.MecDrive;
@@ -68,8 +69,9 @@ public class TeleOpMain extends MatchOpMode {
         driverGamepad = new GamepadEx(gamepad1);
         operatorGamepad = new GamepadEx(gamepad2);
 
+
         intake = new Intake(
-                new HorizontalSlide(telemetry, hardwareMap, false),
+                new HorizontalSlide(telemetry, hardwareMap, true),
                 new IntakeServo(telemetry, hardwareMap, true),
                 new PowerIntake(telemetry, hardwareMap, true),
                 telemetry
@@ -104,20 +106,17 @@ public class TeleOpMain extends MatchOpMode {
                 .whenPressed(intake.setPosition(OUTTAKE))
                 .whenHeld(intake.setPosition(OUTTAKE))
                 .whenReleased(intake.setPosition(STOP));
-        Button Subint =(new GamepadButton(driverGamepad, GamepadKeys.Button.LEFT_BUMPER)
-                .whenPressed(intake.setPosition(SUBINT))
-                .whenReleased(intake.setPosition(STOP)));
-        Button Subout = (new GamepadButton(driverGamepad,GamepadKeys.Button.RIGHT_BUMPER)
-                .whenPressed(intake.setPosition(SUBOUT))
-                .whenReleased(intake.setPosition(STOP)));
+        Button IntakeDown =(new GamepadButton(driverGamepad, GamepadKeys.Button.RIGHT_BUMPER)
+                .whenPressed(intake.setPosition(DOWNI)));
+
 
         //OUTTAKE
 
         //SLIDE MANUALS
         outtake.verticalSlide.setDefaultCommand(new SlideVerticalManual(
                 outtake.verticalSlide, operatorGamepad::getRightY));
-        intake.horizontalSlide.setDefaultCommand(new SlideHorizontalManual(intake.horizontalSlide,
-                operatorGamepad::getLeftX));
+//        intake.horizontalSlide.setDefaultCommand(new SlideHorizontalManual(intake.horizontalSlide,
+//                operatorGamepad::getLeftX));
 
         //BUCKET
         Button LowBucket = (new GamepadButton(operatorGamepad, GamepadKeys.Button.X)
@@ -139,14 +138,20 @@ public class TeleOpMain extends MatchOpMode {
 
         //CLIMB
         Trigger Climb =(new GamepadButton(operatorGamepad,GamepadKeys.Button.RIGHT_BUMPER)
-                .whenHeld(outtake.setPosition(CLIMB))
-                .whenReleased(outtake.setPosition(START)));
+                .whenPressed(outtake.setPosition(START)));
 
         //CLAW
         Trigger ClawOpen = (new GamepadTrigger(operatorGamepad,GamepadKeys.Trigger.LEFT_TRIGGER)
                 .whenPressed(outtake.setClawSetPoint(OPEN)));
         Trigger ClawClose = (new GamepadTrigger(operatorGamepad,GamepadKeys.Trigger.RIGHT_TRIGGER)
                 .whenPressed(outtake.setClawSetPoint(CLOSE)));
+        //HORIZONTAL POWER
+        Button HoutPower = (new GamepadButton(operatorGamepad,GamepadKeys.Button.A)
+                .whenPressed(intake.hslidePower(HorizontalSlide.Value.OUT)))
+                .whenReleased(intake.hslidePower(HorizontalSlide.Value.STOP));
+        Button HinPower = (new GamepadButton(operatorGamepad,GamepadKeys.Button.B)
+                .whenPressed(intake.hslidePower(HorizontalSlide.Value.IN))
+                .whenReleased(intake.hslidePower(HorizontalSlide.Value.STOP)));
     }
 
 

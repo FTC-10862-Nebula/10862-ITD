@@ -15,8 +15,9 @@ public class VerticalSlide extends SubsystemBase {
     protected Telemetry telemetry;
     protected NebulaMotor vRSlide,vLSlide;
 
+
     protected PIDFController slideController;
-    protected double output = 0, multiplier =1.5;
+    protected double output = 0;//, multiplier =1;
 
     public VerticalSlide(Telemetry tl, HardwareMap hw, boolean isEnabled) {
         vRSlide = new NebulaMotor(hw,
@@ -24,15 +25,13 @@ public class VerticalSlide extends SubsystemBase {
             NebulaMotor.MotorType.RPM_435, NebulaMotor.Direction.Reverse,
             NebulaMotor.IdleMode.Coast, isEnabled);
         vLSlide = new NebulaMotor(hw,
-                "vLSlide",
-                NebulaMotor.MotorType.RPM_435, NebulaMotor.Direction.Forward,
-                NebulaMotor.IdleMode.Coast, isEnabled);
+            "vLSlide",
+            NebulaMotor.MotorType.RPM_435, NebulaMotor.Direction.Forward,
+            NebulaMotor.IdleMode.Coast, isEnabled);
 
 
         slideController = new PIDFController(
-            0.005,0,0,0,
-            getEncoderDistance(),
-            getEncoderDistance());
+            0.001,0,0,0);
         slideController.setTolerance(10);
         resetEncoder();
         setSetPoint(0);
@@ -42,33 +41,28 @@ public class VerticalSlide extends SubsystemBase {
 
     @Override
     public void periodic() {
+        output = slideController.calculate(getEncoderDistance());
         telemetry.addData("Slide SetPoint:", getSetPoint());
         telemetry.addData("Encoder: ", getEncoderDistance());
-        telemetry.addData("Slide Motor Output:", output* multiplier);
-        output = slideController.calculate(getEncoderDistance());
-        setPower(output* multiplier);
+        telemetry.addData("slide power: ", vRSlide.getCorrectedVelocity());
+        telemetry.addData("Slide Motor OutputNorm:", vRSlide.getCorrectedVelocity());
+        telemetry.addData("Slide Motor Output:", output);
+        setPower(output);
     }
 
     public double getEncoderDistance() {
-        return vRSlide.getPosition();
+        return vRSlide.getEncoder().getDistance();
 //        return vLSlide.getPosition();
     }
     public void setPower(double power) {
         vRSlide.setPower(power);
-        vLSlide.resetEncoder();
+        vLSlide.setPower(power);
     }
     public void resetEncoder() {
         vRSlide.resetEncoder();
         vLSlide.resetEncoder();
     }
     public void setSetPoint(double setPoint) {
-//        if (getEncoderDistance()>setPoint){
-//            multiplier =0.8;
-//            slideController.setP(slideController.getP()*0.6);
-//        } else {
-//            multiplier = 1;
-//            slideController.setP(slideController.getP()*1);
-//        }
         slideController.setSetPoint(setPoint);
     }
     public double getSetPoint() {

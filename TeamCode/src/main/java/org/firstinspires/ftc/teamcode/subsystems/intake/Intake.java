@@ -10,6 +10,7 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.Subsystem;
 import com.arcrobotics.ftclib.command.WaitCommand;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -20,10 +21,14 @@ import kotlin.contracts.ConditionalEffect;
 
 public class Intake {
 
-    private final Telemetry telemetry;
+    private Telemetry telemetry;
 
     public static double DOWN = 0;
     public static double UP = 0.6;
+
+    public Intake(HardwareMap hardwareMap) {
+
+    }
 
     public enum Sample{
         RED,
@@ -32,27 +37,28 @@ public class Intake {
         NONE;
     }
     public enum Value implements Command {
-        START (0,UP,UP,0),
-        OUTTAKE (500,DOWN,DOWN,-0.5),
-        INTAKE  (500,DOWN,DOWN,0.5),
-        SUBINT (2500,DOWN,DOWN,0.5),
-        SUBOUT(2500,DOWN,DOWN,0.5),
-        STOP    (0,UP,UP,0);
+        START (UP,UP,0),
+        OUTTAKE (DOWN,DOWN,-0.5),
+        INTAKE  (DOWN,DOWN,0.5),
+        SUBINT (DOWN,DOWN,0.5),
+        SUBOUT(DOWN,DOWN,0.5),
+        STOP    (UP,UP,0),
+        DOWNI(DOWN, DOWN,0);
 
 
-        public final double slidePos, rPos, lPos, intakePower;
-        Value(double slidePos, double rPos, double lPos, double intakePower) {
-            this.slidePos = slidePos;
+
+        public final double rPos, lPos, intakePower;
+        Value(double rPos, double lPos, double intakePower) {
             this.rPos = rPos;
             this.lPos=lPos;
             this.intakePower = intakePower;
         }
-        Value(double slidePos, Value value) {
-            this.slidePos = value.slidePos;
-            this.rPos = value.rPos;
-            this.lPos=value.lPos;
-            this.intakePower = value.intakePower;
-        }
+//        Value(double slidePower, Value value) {
+//            this.slidePower = value.slidePower;
+//            this.rPos = value.rPos;
+//            this.lPos=value.lPos;
+//            this.intakePower = value.intakePower;
+//        }
 
         @Override
         public Set<Subsystem> getRequirements() {
@@ -60,10 +66,9 @@ public class Intake {
         }
     }
     public Value value = Value.START;
-
-    public HorizontalSlide horizontalSlide;
     public IntakeServo intakeServo;
     public PowerIntake powerIntake;
+    public HorizontalSlide horizontalSlide;
 
     public Intake(HorizontalSlide horizontalSlide, IntakeServo intakeServo, PowerIntake powerIntake, Telemetry telemetry){
         this.horizontalSlide = horizontalSlide;
@@ -77,13 +82,11 @@ public class Intake {
 //                return new SequentialCommandGroup();
             default:
                 return new SequentialCommandGroup(
-                        new InstantCommand(()-> horizontalSlide.setSetPoint(value.slidePos)),
                         new InstantCommand(()-> intakeServo.setSetPoint(value.rPos,value.lPos)),
                         new InstantCommand(()-> powerIntake.setSetPoint(value.intakePower))
                 );
             case OUTTAKE:
                 return new SequentialCommandGroup(
-                        new InstantCommand(()-> horizontalSlide.setSetPoint(value.slidePos)),
                         new InstantCommand(()-> intakeServo.setSetPoint(value.rPos,value.lPos)),
                         new WaitCommand(500),
                         new InstantCommand(()-> powerIntake.setSetPoint(value.intakePower))
@@ -99,9 +102,11 @@ public class Intake {
 
     }
     public void init(){
-        horizontalSlide.setSetPoint(0);
         intakeServo.setSetPoint(UP,UP);
         powerIntake.setSetPoint(0);
+        horizontalSlide.setPower(0);
     }
-
+public Command hslidePower(HorizontalSlide.Value value){
+        return new InstantCommand(()->horizontalSlide.setPower(value.pos));
+}
 }

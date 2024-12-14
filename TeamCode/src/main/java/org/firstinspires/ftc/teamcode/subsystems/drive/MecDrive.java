@@ -6,7 +6,10 @@ import static org.firstinspires.ftc.teamcode.subsystems.drive.RoadrunnerMecanumD
 import static org.firstinspires.ftc.teamcode.subsystems.drive.RoadrunnerMecanumDrive.rRNum;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.arcrobotics.ftclib.command.button.Button;
+import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.geometry.Vector2d;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -54,14 +57,14 @@ public class MecDrive extends SubsystemBase {
 //        powers [rFNum] = (rotY + rotX - rx) / denominator;
 //        powers [rRNum] = (rotY - rotX + rx) / denominator;
 //          WORKKK
-//        powers [lFNum] = (rotY + rotX - rx) / denominator;
-//        powers [lRNum] = (rotY - rotX - rx) / denominator;
-//        powers [rFNum] = (rotY - rotX + rx) / denominator;
-//        powers [rRNum] = (rotY + rotX + rx) / denominator;
         powers [lFNum] = (rotY + rotX - rx) / denominator;
-        powers [lRNum] = (rotY - rotX + rx) / denominator;
+        powers [lRNum] = (rotY - rotX - rx) / denominator;
         powers [rFNum] = (rotY - rotX + rx) / denominator;
-        powers [rRNum] = (rotY + rotX - rx) / denominator;
+        powers [rRNum] = (rotY + rotX + rx) / denominator;
+//        powers [lFNum] = (rotY + rotX - rx) / denominator;
+//        powers [lRNum] = (rotY - rotX + rx) / denominator;
+//        powers [rFNum] = (rotY - rotX + rx) / denominator;
+//        powers [rRNum] = (rotY + rotX - rx) / denominator;
 
 //        if(Math.abs(powers[lFNum])<0.5&
 //                Math.abs(powers[lRNum])<0.5&
@@ -109,5 +112,7 @@ public class MecDrive extends SubsystemBase {
     public Pose2d getPose(){
         return new Pose2d(drivetrain.updatePoseEstimate().component1(),
                 drivetrain.updatePoseEstimate().component2());
+
+
     }
 }
