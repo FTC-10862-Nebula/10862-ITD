@@ -10,6 +10,7 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.subsystems.drive.MecDrive;
@@ -17,6 +18,11 @@ import org.firstinspires.ftc.teamcode.subsystems.intake.HorizontalSlide;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.intake.IntakeServo;
 import org.firstinspires.ftc.teamcode.subsystems.intake.PowerIntake;
+import org.firstinspires.ftc.teamcode.subsystems.outtake.Arm;
+import org.firstinspires.ftc.teamcode.subsystems.outtake.Claw;
+import org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake;
+import org.firstinspires.ftc.teamcode.subsystems.outtake.Pivot;
+import org.firstinspires.ftc.teamcode.subsystems.outtake.VerticalSlide;
 import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
 
 //@Disabled
@@ -24,24 +30,36 @@ import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
 public class NewAuto extends MatchOpMode {
     // Subsystems
     private final MecDrive drive = new MecDrive(hardwareMap);
-//    private final Intake intake = new Intake(
-//            new HorizontalSlide(telemetry, hardwareMap,true),
-//            new IntakeServo(telemetry, hardwareMap,true),
-//            new PowerIntake(telemetry, hardwareMap,true)
-//    private TrajectoryActionBuilder builder = new TrajectoryActionBuilder();
+    private final Intake intake = new Intake(hardwareMap);
+    private final Outtake outtake = new Outtake(hardwareMap);
 
     Action pathOne = drive.drivetrain.actionBuilder(drive.getPose())
-            .lineToX(10)
-//            .splineTo(new Vector2d(0,0), 4)
-//            .turnTo(3)
+            .lineToXConstantHeading(-50)
             .build();
 
-//    Action pathTwo = drive.drivetrain.actionBuilder(new Pose2d(15,20,0))
-//            .splineTo(new Vector2d(5,5), Math.toRadians(90))
-//            .build();
     @Override
-    public void robotInit() {
+    public void robotInit()
+    {
+       MecDrive drive = new MecDrive(hardwareMap);
 
+
+       Intake intake = new Intake(
+                new HorizontalSlide(telemetry, hardwareMap, true),
+                new IntakeServo(telemetry, hardwareMap, true),
+                new PowerIntake(telemetry, hardwareMap, true),
+                telemetry
+        );
+
+        Outtake outtake = new Outtake(
+                new VerticalSlide(telemetry, hardwareMap, true),
+                new Arm(telemetry, hardwareMap, true),
+                new Claw(telemetry, hardwareMap, true),
+                new Pivot(telemetry, hardwareMap, true),
+                telemetry
+        );
+
+        intake.init();
+        outtake.init();
     }
 
     public void matchStart() {
@@ -50,10 +68,7 @@ public class NewAuto extends MatchOpMode {
                 new InstantCommand(
                 ()-> Actions.runBlocking(
                     new SequentialAction(
-                        pathOne // Example of a drive action
-//                        new ParallelAction( // several actions being run in parallel
-//                            pathTwo
-////                            intake.setPositionAction(Intake.Value.INTAKE)//TODO: Does this work
+                        pathOne
                         )
                     )
                 )),
