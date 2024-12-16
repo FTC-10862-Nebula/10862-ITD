@@ -2,19 +2,15 @@ package org.firstinspires.ftc.teamcode.opmode.teleop;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.commands.manual.DefaultDriveCommand;
-import org.firstinspires.ftc.teamcode.subsystems.climber.Climber;
-import org.firstinspires.ftc.teamcode.subsystems.drive.MecDrive;
 import org.firstinspires.ftc.teamcode.subsystems.intake.HorizontalSlide;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.intake.IntakeServo;
 import org.firstinspires.ftc.teamcode.subsystems.intake.PowerIntake;
-import org.firstinspires.ftc.teamcode.subsystems.outtake.Arm;
-import org.firstinspires.ftc.teamcode.subsystems.outtake.Claw;
 import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
-
+@Disabled
 @Config
 @TeleOp
 public class TestColorSensor extends MatchOpMode {

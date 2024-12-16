@@ -16,8 +16,6 @@ public class VerticalSlidePower extends SubsystemBase {
     protected Telemetry telemetry;
     protected NebulaMotor vRSlide,vLSlide;
 
-    protected double output = 0, multiplier =1;
-
     public VerticalSlidePower(Telemetry tl, HardwareMap hw, boolean isEnabled) {
         this.telemetry=tl;
         vRSlide = new NebulaMotor(hw,
@@ -33,15 +31,7 @@ public class VerticalSlidePower extends SubsystemBase {
 
     @Override
     public void periodic() {
-//        telemetry.addData("Encoder: ", getEncoderDistance());
-//        telemetry.addData("slide power: ", vRSlide.getCorrectedVelocity());
-//        telemetry.addData("Slide Motor OutputNorm:", output);
-//        telemetry.addData("Slide Motor Output:", output* multiplier);
-//        setPower(output* multiplier);
-    }
-
-    public double getEncoderDistance() {
-        return vRSlide.getPosition();
+    
     }
     public Command setPower(double power) {
         return new SequentialCommandGroup(

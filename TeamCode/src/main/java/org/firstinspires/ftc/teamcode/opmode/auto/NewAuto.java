@@ -29,28 +29,26 @@ import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
 @Autonomous(preselectTeleOp = "TeleOpMain")
 public class NewAuto extends MatchOpMode {
     // Subsystems
-    private final MecDrive drive = new MecDrive(hardwareMap);
-    private final Intake intake = new Intake(hardwareMap);
-    private final Outtake outtake = new Outtake(hardwareMap);
+    private  MecDrive drive;
+    private  Intake intake;
+    private  Outtake outtake;
 
-    Action pathOne = drive.drivetrain.actionBuilder(drive.getPose())
-            .lineToXConstantHeading(-50)
-            .build();
+    Action pathOne;
 
     @Override
     public void robotInit()
     {
-       MecDrive drive = new MecDrive(hardwareMap);
+        drive = new MecDrive(hardwareMap);
 
 
-       Intake intake = new Intake(
+        intake = new Intake(
                 new HorizontalSlide(telemetry, hardwareMap, true),
                 new IntakeServo(telemetry, hardwareMap, true),
                 new PowerIntake(telemetry, hardwareMap, true),
                 telemetry
         );
 
-        Outtake outtake = new Outtake(
+         outtake = new Outtake(
                 new VerticalSlide(telemetry, hardwareMap, true),
                 new Arm(telemetry, hardwareMap, true),
                 new Claw(telemetry, hardwareMap, true),
@@ -60,6 +58,9 @@ public class NewAuto extends MatchOpMode {
 
         intake.init();
         outtake.init();
+        pathOne = drive.drivetrain.actionBuilder(drive.getPose())
+            .lineToXConstantHeading(-50)
+            .build();
     }
 
     public void matchStart() {

@@ -1,29 +1,15 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop;
 
-import static org.firstinspires.ftc.teamcode.subsystems.intake.Intake.Value.DOWNI;
-import static org.firstinspires.ftc.teamcode.subsystems.intake.Intake.Value.INTAKE;
-import static org.firstinspires.ftc.teamcode.subsystems.intake.Intake.Value.OUTTAKE;
-import static org.firstinspires.ftc.teamcode.subsystems.intake.Intake.Value.STOP;
-import static org.firstinspires.ftc.teamcode.subsystems.intake.Intake.Value.SUBINT;
-import static org.firstinspires.ftc.teamcode.subsystems.intake.Intake.Value.SUBOUT;
-import static org.firstinspires.ftc.teamcode.subsystems.outtake.Claw.Value.CLOSE;
-import static org.firstinspires.ftc.teamcode.subsystems.outtake.Claw.Value.OPEN;
-import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.CLIMB;
-import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.HIGH_BUCKET;
-import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.HIGH_RUNG;
-import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.LOW_BUCKET;
-import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.LOW_RUNG;
-import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.SPECIMEN_HIGH_BAR;
-import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.SPECIMEN_LOW_BAR;
-import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.SPECIMEN_WALL;
+import static org.firstinspires.ftc.teamcode.subsystems.intake.Intake.Value.*;
+import static org.firstinspires.ftc.teamcode.subsystems.outtake.Claw.Value.*;
+import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.*;
 import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.START;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.arcrobotics.ftclib.command.Command;
-import com.arcrobotics.ftclib.command.ConditionalCommand;
-import com.arcrobotics.ftclib.command.SelectCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.command.button.Trigger;
@@ -32,9 +18,8 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.manual.DefaultDriveCommand;
-//import org.firstinspires.ftc.teamcode.commands.manual.SlideHorizontalManual;
+import org.firstinspires.ftc.teamcode.commands.manual.SlidePowerHorizontalManual;
 import org.firstinspires.ftc.teamcode.commands.manual.SlideVerticalManual;
-import org.firstinspires.ftc.teamcode.subsystems.climber.Climber;
 import org.firstinspires.ftc.teamcode.subsystems.drive.MecDrive;
 import org.firstinspires.ftc.teamcode.subsystems.intake.HorizontalSlide;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
@@ -48,7 +33,6 @@ import org.firstinspires.ftc.teamcode.subsystems.outtake.VerticalSlide;
 import org.firstinspires.ftc.teamcode.util.teleop.GamepadTrigger;
 import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
 
-import java.util.function.Supplier;
 
 @Config
 @TeleOp
@@ -93,11 +77,27 @@ public class TeleOpMain extends MatchOpMode {
     public void robotPeriodic(){
         outtake.periodic();
         intake.periodic();
+        
+        if(intake.value == DOWNI){
+            new SequentialCommandGroup(
+                new WaitUntilCommand(()->intake.horizontalSlide.getEncoderDistance()<5),
+                new ParallelCommandGroup(
+                    outtake.setPosition(TRANSFER),
+                    outtake.setClawSetPoint(OPEN)
+                ),
+                new ParallelCommandGroup(
+                    outtake.setPosition(Outtake.Value.TRANSFER),
+                    outtake.setClawSetPoint(CLOSE)
+                )
+            );
+        }
     }
 
     @Override
     public void configureButtons() {
         drive.setDefaultCommand(new DefaultDriveCommand(drive, driverGamepad));
+        intake.horizontalSlide.setDefaultCommand(
+            new SlidePowerHorizontalManual(intake.horizontalSlide, operatorGamepad::getLeftX));
 //INTAKE
         Trigger IntakeOuttake = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER))
                 .whenPressed(intake.setPosition(INTAKE))
@@ -106,8 +106,8 @@ public class TeleOpMain extends MatchOpMode {
                 .whenPressed(intake.setPosition(OUTTAKE))
                 .whenHeld(intake.setPosition(OUTTAKE))
                 .whenReleased(intake.setPosition(STOP));
-        Button IntakeDown =(new GamepadButton(driverGamepad, GamepadKeys.Button.RIGHT_BUMPER)
-                .whenPressed(intake.setPosition(DOWNI)));
+        Button IntakeDown =(new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER))
+                .whenPressed(intake.setPosition(DOWNI));
 
 
         //OUTTAKE
@@ -146,12 +146,12 @@ public class TeleOpMain extends MatchOpMode {
         Trigger ClawClose = (new GamepadTrigger(operatorGamepad,GamepadKeys.Trigger.RIGHT_TRIGGER)
                 .whenPressed(outtake.setClawSetPoint(CLOSE)));
         //HORIZONTAL POWER
-        Button HoutPower = (new GamepadButton(operatorGamepad,GamepadKeys.Button.A)
-                .whenPressed(intake.hslidePower(HorizontalSlide.Value.OUT)))
-                .whenReleased(intake.hslidePower(HorizontalSlide.Value.STOP));
-        Button HinPower = (new GamepadButton(operatorGamepad,GamepadKeys.Button.B)
-                .whenPressed(intake.hslidePower(HorizontalSlide.Value.IN))
-                .whenReleased(intake.hslidePower(HorizontalSlide.Value.STOP)));
+//        Button HoutPower = (new GamepadButton(operatorGamepad,GamepadKeys.Button.A)
+//                .whenPressed(intake.hslidePower(HorizontalSlide.Value.OUT)))
+//                .whenReleased(intake.hslidePower(HorizontalSlide.Value.STOP));
+//        Button HinPower = (new GamepadButton(operatorGamepad,GamepadKeys.Button.B)
+//                .whenPressed(intake.hslidePower(HorizontalSlide.Value.IN))
+//                .whenReleased(intake.hslidePower(HorizontalSlide.Value.STOP)));
     }
 
 

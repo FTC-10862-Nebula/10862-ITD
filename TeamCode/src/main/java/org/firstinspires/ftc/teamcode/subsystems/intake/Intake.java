@@ -26,16 +26,13 @@ public class Intake {
     public static double DOWN = 0;
     public static double UP = 0.6;
 
-    public Intake(HardwareMap hardwareMap) {
-
-    }
-
     public enum Sample{
         RED,
         BLUE,
         YELLOW,
         NONE;
     }
+    
     public enum Value implements Command {
         START (UP,UP,0),
         OUTTAKE (DOWN,DOWN,-0.5),
@@ -79,18 +76,18 @@ public class Intake {
 
     public Command setPosition(Value value){
         switch(value) {
-//                return new SequentialCommandGroup();
+            case OUTTAKE:
+                return new SequentialCommandGroup(
+                    new InstantCommand(()-> intakeServo.setSetPoint(value.rPos,value.lPos)),
+                    new WaitCommand(500),
+                    new InstantCommand(()-> powerIntake.setSetPoint(value.intakePower))
+                );
             default:
                 return new SequentialCommandGroup(
                         new InstantCommand(()-> intakeServo.setSetPoint(value.rPos,value.lPos)),
                         new InstantCommand(()-> powerIntake.setSetPoint(value.intakePower))
                 );
-            case OUTTAKE:
-                return new SequentialCommandGroup(
-                        new InstantCommand(()-> intakeServo.setSetPoint(value.rPos,value.lPos)),
-                        new WaitCommand(500),
-                        new InstantCommand(()-> powerIntake.setSetPoint(value.intakePower))
-                );
+            
         }
     }
     public Action setPositionAction(Value value){
@@ -99,14 +96,13 @@ public class Intake {
 
     public void periodic(){
         telemetry.addData("Red:" + powerIntake.red() + "; Green:" + powerIntake.green() + "Blue:", powerIntake.blue());
-
     }
     public void init(){
         intakeServo.setSetPoint(UP,UP);
         powerIntake.setSetPoint(0);
         horizontalSlide.setPower(0);
     }
-public Command hslidePower(HorizontalSlide.Value value){
-        return new InstantCommand(()->horizontalSlide.setPower(value.pos));
-}
+//    public Command hslidePower(HorizontalSlide.Value value){
+//            return new InstantCommand(()->horizontalSlide.setPower(value.pos));
+//    }
 }

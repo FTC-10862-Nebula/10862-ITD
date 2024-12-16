@@ -16,63 +16,70 @@ import org.firstinspires.ftc.teamcode.util.nebulaHardware.NebulaMotor;
 public class HorizontalSlide extends SubsystemBase {
     protected Telemetry telemetry;
     protected NebulaMotor hSlide;
-    public enum Value{
+    
+    public enum Value {
         IN(0.8),
         OUT(-0.8),
         STOP(0);
         public final double pos;
+        
         Value(double pos) {
             this.pos = pos;
         }
+        
         Value(HorizontalSlide.Value value) {
             this.pos = value.pos;
         }
-
+        
     }
-    protected double output = 0, multiplier =1;
-
+    
+    protected double output = 0;//, multiplier =1;
+    private PIDFController slideController;
+    
     public HorizontalSlide(Telemetry tl, HardwareMap hw, boolean isEnabled) {
-        this.telemetry =tl;
+        this.telemetry = tl;
         hSlide = new NebulaMotor(hw,
-                "hSlide",
-                NebulaMotor.MotorType.RPM_435,
-                NebulaMotor.Direction.Forward,
-                NebulaMotor.IdleMode.Coast,
-                isEnabled);
+            "hSlide",
+            NebulaMotor.MotorType.RPM_435,
+            NebulaMotor.Direction.Forward,
+            NebulaMotor.IdleMode.Coast,
+            isEnabled);
         hSlide.getEncoder().setDirection(Motor.Direction.FORWARD);
-    }
-      //  hSlide.setDistancePerPulse(1);
-
-//        slideController = new PIDFController(0.5,0,0,0, getEncoderDistance(), getEncoderDistance());
+    
+    //  hSlide.setDistancePerPulse(1);
+    
+    slideController =new
+    
+    PIDFController(0.5,0,0,0);
 //        slideController.setTolerance(1);
 //        resetEncoder();
 //        setSetPoint(0);
 //        this.telemetry = tl;
-
+}
 
     @Override
     public void periodic() {
 //        slideController.setF(slideController.getF() *
 //                Math.cos(Math.toRadians(slideController.getSetPoint())));
-//        output = slideController.calculate(getEncoderDistance());
-//        hSlide.setPower(output* multiplier);
+        output = slideController.calculate(getEncoderDistance());
+        hSlide.setPower(output);
 //
-//        telemetry.addData("HorSlide SetPoint:" ,getSetPoint());
-//        telemetry.addData("; HorEncoder: ", hSlide.getPosition());
-//        telemetry.addData("HorSlide Motor Output:", output* multiplier);
-//        telemetry.addData("HorSlide Motor Velocity:", hSlide.getVelocity());
+        telemetry.addData("HorSlide SetPoint:" ,getSetPoint());
+        telemetry.addData("; HorEncoder: ", hSlide.getPosition());
+        telemetry.addData("HorSlide Motor Output:", output);
+        telemetry.addData("HorSlide Motor Velocity:", hSlide.getVelocity());
     }
 
-//    public double getEncoderDistance() {
-//        return hSlide.getPosition();//
-//    }
+    public double getEncoderDistance() {
+        return hSlide.getPosition();//
+    }
     public void setPower(double power) {
         hSlide.setPower(power);
     }
-//    public void resetEncoder() {
-//        hSlide.resetEncoder();
-//    }
-  //  public void setSetPoint(double setPoint) {
+    public void resetEncoder() {
+        hSlide.resetEncoder();
+    }
+    public void setSetPoint(double setPoint) {
 //        if (getEncoderDistance()>setPoint){
 //            multiplier =0.8;
 //            slideController.setP(slideController.getP()*0.6);
@@ -80,10 +87,10 @@ public class HorizontalSlide extends SubsystemBase {
 //            multiplier = 1;
 //            slideController.setP(slideController.getP() * 1);
 //        }
-        //slideController.setSetPoint(setPoint);
-//    }
-//    public double getSetPoint() {
-//        return slideController.getSetPoint();
-//    }
+        slideController.setSetPoint(setPoint);
+    }
+    public double getSetPoint() {
+        return slideController.getSetPoint();
+    }
 
  }

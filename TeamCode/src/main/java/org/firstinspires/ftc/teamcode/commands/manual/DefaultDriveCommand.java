@@ -25,28 +25,19 @@ public class DefaultDriveCommand extends CommandBase {
         if(driverGamepad.getButton(GamepadKeys.Button.LEFT_BUMPER)) {
             multiplier = 0.55;
         } else {
-            multiplier = 1;//10
+            multiplier = 10;//10
         }
 
         if(driverGamepad.getButton(GamepadKeys.Button.A)) {
             drive.drivetrain.resetIMU();
         }
 
-            drive.driveFieldCentric(
-//            0,0,0,0
-                    driverGamepad.getLeftY(),
-                    driverGamepad.getLeftX(),
-                    -driverGamepad.getRightX(),//-
-                   multiplier
-
-            );
-//        else {
-//            drive.driveRobotCentric(
-//                    driverGamepad.getLeftX() * multiplier,
-//                    driverGamepad.getLeftY() * multiplier,
-//                    -driverGamepad.getRightX() * multiplier,
-//                    true);
-//        }
+        drive.driveFieldCentric(
+                driverGamepad.getLeftY(),
+                driverGamepad.getLeftX(),
+                -driverGamepad.getRightX(),
+               multiplier
+        );
    }
 
 

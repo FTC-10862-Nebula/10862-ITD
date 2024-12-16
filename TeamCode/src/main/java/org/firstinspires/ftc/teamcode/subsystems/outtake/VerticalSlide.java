@@ -31,7 +31,7 @@ public class VerticalSlide extends SubsystemBase {
 
 
         slideController = new PIDFController(
-            0.001,0,0,0);
+            0.005,0,0,0);
         slideController.setTolerance(10);
         resetEncoder();
         setSetPoint(0);

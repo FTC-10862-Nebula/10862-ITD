@@ -28,7 +28,7 @@ public class Claw extends SubsystemBase {
     }
 
     Telemetry telemetry;
-    private final NebulaServo  clawServo;     //Claw
+    private final NebulaServo  clawServo;
 
     public Claw(Telemetry tl, HardwareMap hw, boolean isEnabled) {
 //        turnServo = new NebulaServo(hw,
@@ -49,19 +49,16 @@ public class Claw extends SubsystemBase {
     @Override
     public void periodic() {
     }
-    public void setTurnSetPoint(double turnPos){
+//    public void setTurnSetPoint(double turnPos){
 //        clawServo.setPosition(clawPos);//.356
-        //Claw close: 0.72   Claw open:0.20
-    }
+//        //Claw close: 0.72   Claw open:0.20
+//    }
 
     public void setClawSetPoint(Value value){
         clawServo.setPosition(value.pos);
     }
 
-   // public double getTurnPos(){
-     //   return turnServo.getPosition();
-    //}
     public double getClawPos(){
-        return  clawServo.getPosition();
+        return clawServo.getPosition();
     }
 }

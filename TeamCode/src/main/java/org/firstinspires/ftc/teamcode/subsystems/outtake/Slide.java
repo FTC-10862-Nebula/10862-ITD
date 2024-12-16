@@ -11,17 +11,28 @@ import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.util.nebulaHardware.NebulaMotor;
 
 public class Slide extends SubsystemBase {
+    protected NebulaMotor left, right;
 
-    private final MotorEx right =  new MotorEx(hardwareMap, "vRSlide")
-            , left=  new MotorEx(hardwareMap, "vLSlide");
+//    private final MotorEx right, left;
     protected PIDFController slideController = new PIDFController(0,0,0,0);
 //    private final HardwareMap hardwareMap;
     private final Telemetry telemetry;
 
-    public Slide (HardwareMap hardwareMap, Telemetry telemetry){
+    public Slide (HardwareMap hw, Telemetry telemetry, boolean isEnabled){
         this.telemetry = telemetry;
+        
+        right = new NebulaMotor(hw,
+            "vRSlide",
+            NebulaMotor.MotorType.RPM_435, NebulaMotor.Direction.Reverse,
+            NebulaMotor.IdleMode.Coast, isEnabled);
+        left = new NebulaMotor(hw,
+            "vLSlide",
+            NebulaMotor.MotorType.RPM_435, NebulaMotor.Direction.Forward,
+            NebulaMotor.IdleMode.Coast, isEnabled);
+        
 ////        this.hardwareMap = hardwareMap;
 //        left = new MotorEx(hardwareMap, "vLSlide");
 //        right = new MotorEx(hardwareMap, "vRSlide");
@@ -31,17 +42,17 @@ public class Slide extends SubsystemBase {
 
     @Override
     public void periodic(){
-//        double output = slideController.calculate(right.getCurrentPosition());
-//        telemetry.addData("setPoint", slideController.getSetPoint());
-//        telemetry.addData("encoder", right.getCurrentPosition());
-//        telemetry.addData("output", output);
-//        telemetry.addData("slide power: ", right.getCorrectedVelocity());
+        double output = slideController.calculate(right.getPosition());
+        telemetry.addData("setPoint", slideController.getSetPoint());
+        telemetry.addData("encoder", right.getPosition());
+        telemetry.addData("output", output);
+        telemetry.addData("slide power: ", right.getCorrectedVelocity());
 
-//        right.set(output);
-//        left.set(output);
+        right.setPower(output);
+        left.setPower(output);
     }
 
-//    public Command setSetPoint(double num){
-//        return new InstantCommand(()-> slideController.setSetPoint(num));
-//    }
+    public Command setSetPoint(double num){
+        return new InstantCommand(()-> slideController.setSetPoint(num));
+    }
 }

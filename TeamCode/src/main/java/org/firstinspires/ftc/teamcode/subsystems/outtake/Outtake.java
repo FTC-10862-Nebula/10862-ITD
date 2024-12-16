@@ -12,9 +12,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Outtake {
     private Telemetry telemetry;
 
-    public Outtake(HardwareMap hardwareMap) {
-
-    }
     //Arm
 //    private static final double INTAKE =0.05,
 //        SCORE_SAMPLE = 1,
@@ -29,7 +26,8 @@ public class Outtake {
         HIGH_RUNG(1700,0.6,0.5),
         SPECIMEN_LOW_BAR(LOW_RUNG.slidePos-600, LOW_RUNG),
         SPECIMEN_HIGH_BAR(HIGH_RUNG.slidePos-800, HIGH_RUNG),
-        CLIMB(1500,0,1);
+        CLIMB(1500,0,1),
+        TRANSFER(0,0,0);
 
 
 
@@ -65,7 +63,6 @@ public class Outtake {
         this.value=value;
         switch(value) {
             default:
-
                 return new ParallelCommandGroup(
                     new InstantCommand(()-> verticalSlide.setSetPoint(value.slidePos)),
                     new InstantCommand(()-> arm.setSetPoint(value.armPos,value.armPos)),
@@ -75,23 +72,20 @@ public class Outtake {
     }
 
     public void periodic(){
-        telemetry.addData("Outtake Position:", value);
-        telemetry.addData("SlideSetPoint:", verticalSlide.getSetPoint());
-        telemetry.addData("SlideR Encoder: ", verticalSlide.getEncoderDistance());
-        telemetry.addData("Slide Motor Output:", verticalSlide.output);
+//        telemetry.addData("Outtake Position:", value);
+//        telemetry.addData("SlideSetPoint:", verticalSlide.getSetPoint());
+//        telemetry.addData("SlideR Encoder: ", verticalSlide.getEncoderDistance());
+//        telemetry.addData("Slide Motor Output:", verticalSlide.output);
 //        telemetry.addData("ArmR Pos: " + arm.getRPosition() +"; ArmLPos: "+ arm.getLPosition()+"; PivotPos:",pivot.getPosition());
 //        telemetry.addData("Turn Servo: " + claw.getTurnPos() + "; Claw: ", claw.getClawPos());
     }
 
     public void init(){
-    claw.setClawSetPoint(Claw.Value.CLOSE);
-    pivot.setSetPoint(0);
-    arm.setSetPoint(0,0);
+        claw.setClawSetPoint(Claw.Value.CLOSE);
+        pivot.setSetPoint(0);
+        arm.setSetPoint(0,0);
         value= Value.START;
     }
-
-//    public boolean getIfHigh(){return (value==Outtake.Value.HIGH_RUNG);
-//    }
 
     public Command setClawSetPoint(Claw.Value value) {
         return new InstantCommand(()->claw.setClawSetPoint(value));
