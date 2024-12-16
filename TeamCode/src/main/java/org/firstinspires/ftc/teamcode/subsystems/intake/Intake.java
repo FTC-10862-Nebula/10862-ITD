@@ -25,6 +25,7 @@ public class Intake {
 
     public static double DOWN = 0;
     public static double UP = 0.6;
+    public static double START = 0.8;
 
     public enum Sample{
         RED,
@@ -34,7 +35,7 @@ public class Intake {
     }
     
     public enum Value implements Command {
-        START (UP,UP,0),
+        START (Intake.START,Intake.START,0),
         OUTTAKE (DOWN,DOWN,-0.5),
         INTAKE  (DOWN,DOWN,0.5),
         SUBINT (DOWN,DOWN,0.5),

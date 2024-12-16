@@ -20,7 +20,7 @@ public class Outtake {
     public enum Value{
         START   (0,0,0),
         LOW_BUCKET(1500,0.7,0.5),
-        HIGH_BUCKET(3550,0.7,0.8),
+        HIGH_BUCKET(3000,0.7,0.8),//3550
         SPECIMEN_WALL(150,1,0.2),
         LOW_RUNG(600,0.6,0.48),
         HIGH_RUNG(1700,0.6,0.5),
@@ -46,12 +46,12 @@ public class Outtake {
     }
 
     public Value value = Value.START;
-    public VerticalSlide verticalSlide;
+    public Slide verticalSlide;
     public Arm arm;
     public Claw claw;
     public Pivot pivot;
 
-    public Outtake(VerticalSlide verticalSlide, Arm arm, Claw claw, Pivot pivot, Telemetry telemetry){
+    public Outtake(Slide verticalSlide, Arm arm, Claw claw, Pivot pivot, Telemetry telemetry){
         this.verticalSlide = verticalSlide;
         this.arm = arm;
         this.claw = claw;
@@ -61,17 +61,27 @@ public class Outtake {
 
     public Command setPosition(Value value){
         this.value=value;
-        switch(value) {
-            default:
-                return new ParallelCommandGroup(
-                    new InstantCommand(()-> verticalSlide.setSetPoint(value.slidePos)),
+        return new SequentialCommandGroup( //ParallelCommandGroup
+                new InstantCommand(()-> verticalSlide.setSetPoint(value.slidePos)),
+                new WaitCommand(500),
+                new ParallelCommandGroup(
                     new InstantCommand(()-> arm.setSetPoint(value.armPos,value.armPos)),
                     new InstantCommand(()-> pivot.setSetPoint(value.pivotPos))
-                );
-        }
+                )
+
+        );
+//        switch(value) {
+//            default:
+//                return new ParallelCommandGroup(
+//                    new InstantCommand(()-> verticalSlide.setSetPoint(value.slidePos)),
+//                    new InstantCommand(()-> arm.setSetPoint(value.armPos,value.armPos)),
+//                    new InstantCommand(()-> pivot.setSetPoint(value.pivotPos))
+//                );
+//        }
     }
 
     public void periodic(){
+        telemetry.addData("Slide Value:", value);
 //        telemetry.addData("Outtake Position:", value);
 //        telemetry.addData("SlideSetPoint:", verticalSlide.getSetPoint());
 //        telemetry.addData("SlideR Encoder: ", verticalSlide.getEncoderDistance());
@@ -84,6 +94,7 @@ public class Outtake {
         claw.setClawSetPoint(Claw.Value.CLOSE);
         pivot.setSetPoint(0);
         arm.setSetPoint(0,0);
+        verticalSlide.resetEncoder();
         value= Value.START;
     }
 
