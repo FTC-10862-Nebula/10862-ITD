@@ -15,22 +15,19 @@ import org.firstinspires.ftc.teamcode.util.nebulaHardware.NebulaMotor;
 
 public class Slide extends SubsystemBase {
     protected NebulaMotor left, right;
-
-//    private final MotorEx right, left;
-    protected PIDFController slideController = new PIDFController(0,0,0,0);
-//    private final HardwareMap hardwareMap;
+    protected PIDFController slideController = new PIDFController(0.004,0,0,0);
     private final Telemetry telemetry;
 
-    public Slide (HardwareMap hw, Telemetry telemetry, boolean isEnabled){
+    public Slide (Telemetry telemetry,HardwareMap hw, boolean isEnabled){
         this.telemetry = telemetry;
         
         right = new NebulaMotor(hw,
             "vRSlide",
-            NebulaMotor.MotorType.RPM_435, NebulaMotor.Direction.Reverse,
+            NebulaMotor.MotorType.RPM_435, NebulaMotor.Direction.Forward,
             NebulaMotor.IdleMode.Coast, isEnabled);
         left = new NebulaMotor(hw,
             "vLSlide",
-            NebulaMotor.MotorType.RPM_435, NebulaMotor.Direction.Forward,
+            NebulaMotor.MotorType.RPM_435, NebulaMotor.Direction.Reverse,
             NebulaMotor.IdleMode.Coast, isEnabled);
         
 ////        this.hardwareMap = hardwareMap;
@@ -42,17 +39,30 @@ public class Slide extends SubsystemBase {
 
     @Override
     public void periodic(){
-        double output = slideController.calculate(right.getPosition());
-        telemetry.addData("setPoint", slideController.getSetPoint());
-        telemetry.addData("encoder", right.getPosition());
-        telemetry.addData("output", output);
-        telemetry.addData("slide power: ", right.getCorrectedVelocity());
+        double output = slideController.calculate(getPosition());
+        telemetry.addData("Slide SetPoint", slideController.getSetPoint());
+        telemetry.addData("Slide Encoder", getPosition());
+        telemetry.addData("Slide output", output);
+        telemetry.addData("Slide Power: ", right.getCorrectedVelocity());
 
         right.setPower(output);
         left.setPower(output);
     }
 
-    public Command setSetPoint(double num){
-        return new InstantCommand(()-> slideController.setSetPoint(num));
+    public double getPosition(){
+        return right.getPosition();
+//        return left.getPosition();
+    }
+
+    public void setSetPoint(double num){
+        slideController.setSetPoint(num);
+    }
+    public void resetEncoder() {
+        right.resetEncoder();
+        left.resetEncoder();
+    }
+
+    public double getSetPoint(){
+        return slideController.getSetPoint();
     }
 }

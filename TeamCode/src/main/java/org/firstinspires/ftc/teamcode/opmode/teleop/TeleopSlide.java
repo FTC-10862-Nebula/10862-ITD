@@ -9,6 +9,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.commands.manual.SlideVerticalManual;
 import org.firstinspires.ftc.teamcode.subsystems.outtake.Slide;
 import org.firstinspires.ftc.teamcode.subsystems.outtake.VerticalSlidePower;
 import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
@@ -30,25 +31,20 @@ public class TeleopSlide extends MatchOpMode {
         operatorGamepad = new GamepadEx(gamepad2);
 
 //        slide = new VerticalSlidePower(telemetry, hardwareMap, true);
-        slide = new Slide(hardwareMap,telemetry, true);
+        slide = new Slide(telemetry,hardwareMap, true);
         
     }
 
 
     @Override
     public void configureButtons() {
+        slide.setDefaultCommand(new SlideVerticalManual(slide,
+                ()-> driverGamepad.getRightX()));
+        
 //        Button HoutPower = (new GamepadButton(operatorGamepad,GamepadKeys.Button.A)
-//                .whenPressed(slide.setPower(-1)))
-//                .whenReleased(slide.setPower(0));
+//            .whenPressed(Slide.setSetPoint(2000)));
 //        Button HinPower = (new GamepadButton(operatorGamepad,GamepadKeys.Button.B)
-//                .whenPressed(slide.setPower(1))
-//                .whenReleased(slide.setPower(0)));
-        
-        
-        Button HoutPower = (new GamepadButton(operatorGamepad,GamepadKeys.Button.A)
-            .whenPressed(slide.setSetPoint(1000)));
-        Button HinPower = (new GamepadButton(operatorGamepad,GamepadKeys.Button.B)
-            .whenPressed(slide.setSetPoint(300)));
+//            .whenPressed(slide.setSetPoint(1500)));
     }
 
 

@@ -20,12 +20,12 @@ public class VerticalSlidePower extends SubsystemBase {
         this.telemetry=tl;
         vRSlide = new NebulaMotor(hw,
             "vRSlide",
-            NebulaMotor.MotorType.RPM_435, NebulaMotor.Direction.Reverse,
+            NebulaMotor.MotorType.RPM_435, NebulaMotor.Direction.Forward,
             NebulaMotor.IdleMode.Coast, isEnabled);
         vLSlide = new NebulaMotor(hw,
-                "vLSlide",
-                NebulaMotor.MotorType.RPM_435, NebulaMotor.Direction.Forward,
-                NebulaMotor.IdleMode.Coast, isEnabled);
+            "vLSlide",
+            NebulaMotor.MotorType.RPM_435, NebulaMotor.Direction.Reverse,
+            NebulaMotor.IdleMode.Coast, isEnabled);
 
     }
 
