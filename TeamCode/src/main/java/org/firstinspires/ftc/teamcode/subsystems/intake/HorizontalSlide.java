@@ -45,6 +45,7 @@ public class HorizontalSlide extends SubsystemBase {
             NebulaMotor.IdleMode.Coast,
             isEnabled);
         hSlide.getEncoder().setDirection(Motor.Direction.FORWARD);
+        //CHANGED F TO R 12/27 TEST
     
     //  hSlide.setDistancePerPulse(1);
     

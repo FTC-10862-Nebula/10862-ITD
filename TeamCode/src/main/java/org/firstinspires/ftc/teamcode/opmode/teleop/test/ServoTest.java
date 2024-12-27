@@ -8,13 +8,14 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class ServoTest extends OpMode {
     Servo servo1;
  Servo servo2;
+
      double servoPos=0;
     @Override
     public void init() {
-        servo1 =hardwareMap.get(Servo.class, "intakeL");
-        servo1.setDirection(Servo.Direction.REVERSE);
-        servo2 =hardwareMap.get(Servo.class, "intakeR");
-        servo2.setDirection(Servo.Direction.FORWARD);
+        servo1 =hardwareMap.get(Servo.class, "armL");
+        servo1.setDirection(Servo.Direction.FORWARD);
+        servo2 =hardwareMap.get(Servo.class, "armR");
+        servo2.setDirection(Servo.Direction.REVERSE);
 
 
         servo1.setPosition(0);
@@ -29,12 +30,12 @@ public class ServoTest extends OpMode {
         }
        else if (gamepad1.a) {
            servo1.setPosition(servo1.getPosition() - 0.001);
-           servo2.setPosition(servo2.getPosition() - 0.001);
+          servo2.setPosition(servo2.getPosition() - 0.001);
         }
 
         if (gamepad1.x) {
             servo1.setPosition(1);
-            servo2.setPosition(1);
+           servo2.setPosition(1);
         }
         else if (gamepad1.y) {
             servo1.setPosition(0);

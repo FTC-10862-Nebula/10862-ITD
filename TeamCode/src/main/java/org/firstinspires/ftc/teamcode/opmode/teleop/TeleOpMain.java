@@ -18,6 +18,8 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.commands.ColorIntakeCommand;
+import org.firstinspires.ftc.teamcode.commands.ScoreCommand;
 import org.firstinspires.ftc.teamcode.commands.manual.DefaultDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.manual.SlidePowerHorizontalManual;
 import org.firstinspires.ftc.teamcode.commands.manual.SlideVerticalManual;
@@ -26,6 +28,7 @@ import org.firstinspires.ftc.teamcode.subsystems.intake.HorizontalSlide;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.intake.IntakeServo;
 import org.firstinspires.ftc.teamcode.subsystems.intake.PowerIntake;
+import org.firstinspires.ftc.teamcode.subsystems.intake.SensorColor;
 import org.firstinspires.ftc.teamcode.subsystems.outtake.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.outtake.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake;
@@ -45,6 +48,7 @@ public class TeleOpMain extends MatchOpMode {
     private MecDrive drive;
 //    private Climber climb;
     private Intake intake;
+    private SensorColor sensorColor;
 
     public TeleOpMain() {}
 
@@ -53,20 +57,21 @@ public class TeleOpMain extends MatchOpMode {
         drive = new MecDrive(hardwareMap);
         driverGamepad = new GamepadEx(gamepad1);
         operatorGamepad = new GamepadEx(gamepad2);
+        sensorColor = new SensorColor(telemetry, hardwareMap);
 
 
         intake = new Intake(
-                new HorizontalSlide(telemetry, hardwareMap, false),
-                new IntakeServo(telemetry, hardwareMap, false),
-                new PowerIntake(telemetry, hardwareMap, false),
+                new HorizontalSlide(telemetry, hardwareMap, true),
+                new IntakeServo(telemetry, hardwareMap, true),
+                new PowerIntake(telemetry, hardwareMap, true),
                 telemetry
         );
 
         outtake = new Outtake(
                 new Slide(telemetry, hardwareMap, true),
-                new Arm(telemetry, hardwareMap, false),
-                new Claw(telemetry, hardwareMap, false),
-                new Pivot(telemetry, hardwareMap, false),
+                new Arm(telemetry, hardwareMap, true),
+                new Claw(telemetry, hardwareMap, true),
+                new Pivot(telemetry, hardwareMap, true),
                 telemetry
         );
 
@@ -97,15 +102,7 @@ public class TeleOpMain extends MatchOpMode {
     @Override
     public void configureButtons() {
 
-//        Button HoutPower = (new GamepadButton(operatorGamepad,GamepadKeys.Button.A)
-//                .whenPressed(outtake.verticalSlide.setSetPoint(2000)));
-//        Button HinPower = (new GamepadButton(operatorGamepad,GamepadKeys.Button.B)
-//                .whenPressed(outtake.verticalSlide.setSetPoint(1500)));
-
-
-//        drive.setDefaultCommand(new DefaultDriveCommand(drive, driverGamepad));
-//        intake.horizontalSlide.setDefaultCommand(
-//            new SlidePowerHorizontalManual(intake.horizontalSlide, operatorGamepad::getLeftX));
+  //      drive.setDefaultCommand(new DefaultDriveCommand(drive, driverGamepad));
 ////INTAKE
         Trigger IntakeOuttake = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER))
                 .whenPressed(intake.setPosition(INTAKE))
@@ -128,40 +125,54 @@ public class TeleOpMain extends MatchOpMode {
 //
         //BUCKET
         Button LowBucket = (new GamepadButton(operatorGamepad, GamepadKeys.Button.X)
-                .whenPressed(outtake.setPosition(LOW_BUCKET)));
+                .whenPressed(outtake.setPosition(LOW_BUCKET))
+                .whenPressed(outtake.setClawSetPoint(CLOSE)));
         Button HighBucket = (new GamepadButton(operatorGamepad, GamepadKeys.Button.Y)
-                .whenPressed(outtake.setPosition(HIGH_BUCKET)));
+                .whenPressed(outtake.setPosition(HIGH_BUCKET))
+                .whenPressed(outtake.setClawSetPoint(CLOSE)));
 //
 //        //SPECIMEN
         Button IntakeSpecimen = (new GamepadButton(operatorGamepad,GamepadKeys.Button.LEFT_BUMPER)
-                .whenPressed(outtake.setPosition(SPECIMEN_WALL)));
+                .whenPressed(outtake.setPosition(SPECIMEN_WALL))
+                .whenPressed(outtake.setClawSetPoint(OPEN)));
         Button HighRung = (new GamepadButton(operatorGamepad, GamepadKeys.Button.DPAD_UP)
-                .whenPressed(outtake.setPosition(HIGH_RUNG)));
+                .whenPressed(outtake.setPosition(HIGH_RUNG))
+                .whenPressed(outtake.setClawSetPoint(CLOSE)));
         Button lowRung = (new GamepadButton(operatorGamepad,GamepadKeys.Button.DPAD_LEFT)
-                .whenPressed(outtake.setPosition(LOW_RUNG)));
+                .whenPressed(outtake.setPosition(LOW_RUNG))
+                .whenPressed(outtake.setClawSetPoint(CLOSE)));
 
-        Button SpecimenHigh = (new GamepadButton(operatorGamepad,GamepadKeys.Button.DPAD_DOWN)
-                .whenPressed(outtake.setPosition(SPECIMEN_HIGH_BAR)));
-        Button SpecimenLow = (new GamepadButton(operatorGamepad,GamepadKeys.Button.DPAD_RIGHT)
-                .whenPressed(outtake.setPosition(SPECIMEN_LOW_BAR)));
+        Button reset =(new GamepadButton(operatorGamepad,GamepadKeys.Button.DPAD_DOWN)
+                .whenPressed(outtake.setPosition(START))
+                .whenPressed(outtake.setClawSetPoint(OPEN)));
 
 
-        //CLIMB
-        Trigger Climb =(new GamepadButton(operatorGamepad,GamepadKeys.Button.RIGHT_BUMPER)
-                .whenPressed(outtake.setPosition(START)));
+        Button score = (new GamepadButton(operatorGamepad,GamepadKeys.Button.RIGHT_BUMPER)
+                .whenPressed(new ScoreCommand(outtake)));
+
+//        Button SpecimenHigh = (new GamepadButton(operatorGamepad,GamepadKeys.Button.DPAD_DOWN)
+//                .whenPressed(outtake.setPosition(SPECIMEN_HIGH_BAR)));
+//        Button SpecimenLow = (new GamepadButton(operatorGamepad,GamepadKeys.Button.DPAD_RIGHT)
+//                .whenPressed(outtake.setPosition(SPECIMEN_LOW_BAR)));
+
+
+//        Trigger Climb =(new GamepadButton(operatorGamepad,GamepadKeys.Button.DPAD_DOWN)
+//                .whenPressed(outtake.setPosition(START)));
 
         //CLAW
-        Trigger ClawOpen = (new GamepadTrigger(operatorGamepad,GamepadKeys.Trigger.LEFT_TRIGGER)
-                .whenPressed(outtake.setClawSetPoint(OPEN)));
-        Trigger ClawClose = (new GamepadTrigger(operatorGamepad,GamepadKeys.Trigger.RIGHT_TRIGGER)
-                .whenPressed(outtake.setClawSetPoint(CLOSE)));
-//        //HORIZONTAL POWER
-////        Button HoutPower = (new GamepadButton(operatorGamepad,GamepadKeys.Button.A)
-////                .whenPressed(intake.hslidePower(HorizontalSlide.Value.OUT)))
-////                .whenReleased(intake.hslidePower(HorizontalSlide.Value.STOP));
-////        Button HinPower = (new GamepadButton(operatorGamepad,GamepadKeys.Button.B)
-////                .whenPressed(intake.hslidePower(HorizontalSlide.Value.IN))
-////                .whenReleased(intake.hslidePower(HorizontalSlide.Value.STOP)));
+//        Trigger ClawOpen = (new GamepadTrigger(operatorGamepad,GamepadKeys.Trigger.LEFT_TRIGGER)
+//                .whenPressed(outtake.setClawSetPoint(OPEN)));
+//        Trigger ClawClose = (new GamepadTrigger(operatorGamepad,GamepadKeys.Trigger.RIGHT_TRIGGER)
+//                .whenPressed(outtake.setClawSetPoint(CLOSE)));
+        outtake.claw.setDefaultCommand(new ColorIntakeCommand(outtake.claw, sensorColor));
+
+        //HORIZONTAL POWER
+        Button HoutPower = (new GamepadButton(operatorGamepad,GamepadKeys.Button.A)
+                .whenPressed(intake.hslidePower(HorizontalSlide.Value.OUT)))
+                .whenReleased(intake.hslidePower(HorizontalSlide.Value.STOP));
+        Button HinPower = (new GamepadButton(operatorGamepad,GamepadKeys.Button.B)
+                .whenPressed(intake.hslidePower(HorizontalSlide.Value.IN))
+                .whenReleased(intake.hslidePower(HorizontalSlide.Value.STOP)));
     }
 
 

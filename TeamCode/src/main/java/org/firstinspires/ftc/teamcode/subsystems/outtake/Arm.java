@@ -17,13 +17,13 @@ public class Arm extends SubsystemBase
     public Arm(Telemetry tl, HardwareMap hw, boolean isEnabled) {
         armR = new NebulaServo(hw,
             "armR",
-            NebulaServo.Direction.Forward,
+            NebulaServo.Direction.Reverse,
             0,
             360,
             isEnabled);
         armL = new NebulaServo(hw,
             "armL",
-            NebulaServo.Direction.Reverse,
+            NebulaServo.Direction.Forward,
             0,
             360,
             isEnabled);

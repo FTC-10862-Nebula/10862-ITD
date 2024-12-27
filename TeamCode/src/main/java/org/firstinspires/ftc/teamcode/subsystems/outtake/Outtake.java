@@ -13,19 +13,29 @@ public class Outtake {
     private Telemetry telemetry;
 
     //Arm
-//    private static final double INTAKE =0.05,
-//        SCORE_SAMPLE = 1,
-//        SPECIMEN = 1;
+    private static final double
+        ARM_SAMPLE = 1,
+        ARM_INTAKE =0.19,
+        ARM_SPECIMEN = 0;
+    private static final double
+        PIVOT_SAMPLE = .8,
+        PIVOT_INTAKE =0.36,
+        PIVOT_SPECIMEN = 0;
 
     public enum Value{
-        START   (0,0,0),
-        LOW_BUCKET(1500,0.7,0.5),
-        HIGH_BUCKET(3000,0.7,0.8),//3550
-        SPECIMEN_WALL(150,1,0.2),
-        LOW_RUNG(600,0.6,0.48),
-        HIGH_RUNG(1700,0.6,0.5),
-        SPECIMEN_LOW_BAR(LOW_RUNG.slidePos-600, LOW_RUNG),
-        SPECIMEN_HIGH_BAR(HIGH_RUNG.slidePos-800, HIGH_RUNG),
+        START   (0,ARM_INTAKE,PIVOT_INTAKE),
+
+        LOW_BUCKET(1500,ARM_SAMPLE,PIVOT_SAMPLE),
+        HIGH_BUCKET(3000,ARM_SAMPLE,PIVOT_SAMPLE),
+
+        SPECIMEN_WALL(600,ARM_SPECIMEN,PIVOT_SPECIMEN),
+        LOW_RUNG(1200,ARM_SPECIMEN,PIVOT_SPECIMEN),
+        HIGH_RUNG(2200,ARM_SPECIMEN,PIVOT_SPECIMEN),
+
+        SPECIMEN_LOW_BAR(LOW_RUNG.slidePos-300, ARM_SPECIMEN,PIVOT_SPECIMEN),
+        SPECIMEN_HIGH_BAR(HIGH_RUNG.slidePos-300,ARM_SPECIMEN,PIVOT_SPECIMEN),
+
+
         CLIMB(1500,0,1),
         TRANSFER(0,0,0);
 
@@ -37,15 +47,14 @@ public class Outtake {
             this.pivotPos = pivotPos;
             this.armPos = armPos;
         }
-        Value(double slidePos, Value value){
-            this.slidePos = slidePos;
-            this.armPos = value.armPos;
-            this.pivotPos = value.pivotPos;
-
-        }
+//        Value(double slidePos, Value value){
+//            this.slidePos = slidePos;
+//            this.armPos = value.armPos;
+//            this.pivotPos = value.pivotPos;
+//        }
     }
 
-    public Value value = Value.START;
+    public Value value;
     public Slide verticalSlide;
     public Arm arm;
     public Claw claw;
@@ -60,42 +69,53 @@ public class Outtake {
     }
 
     public Command setPosition(Value value){
-        this.value=value;
-        return new SequentialCommandGroup( //ParallelCommandGroup
-                new InstantCommand(()-> verticalSlide.setSetPoint(value.slidePos)),
-                new WaitCommand(500),
-                new ParallelCommandGroup(
-                    new InstantCommand(()-> arm.setSetPoint(value.armPos,value.armPos)),
-                    new InstantCommand(()-> pivot.setSetPoint(value.pivotPos))
-                )
+        switch (value){
+            case SPECIMEN_LOW_BAR:
+            case SPECIMEN_HIGH_BAR:
+                return new SequentialCommandGroup(
+                    new ParallelCommandGroup(
+                        new InstantCommand(()-> arm.setSetPoint(value.armPos,value.armPos)),
+                        new InstantCommand(()-> pivot.setSetPoint(value.pivotPos)),
+                        new WaitCommand(500),
+                        new InstantCommand(()-> verticalSlide.setSetPoint(value.slidePos)),
+                        setClawSetPoint(Claw.Value.OPEN)),
+                        new InstantCommand(()->setValue(value))
+                );
 
-        );
-//        switch(value) {
-//            default:
-//                return new ParallelCommandGroup(
-//                    new InstantCommand(()-> verticalSlide.setSetPoint(value.slidePos)),
-//                    new InstantCommand(()-> arm.setSetPoint(value.armPos,value.armPos)),
-//                    new InstantCommand(()-> pivot.setSetPoint(value.pivotPos))
-//                );
-//        }
+            case START:
+                return new SequentialCommandGroup(
+                        new ParallelCommandGroup(
+                                new InstantCommand(()-> arm.setSetPoint(value.armPos,value.armPos)),
+                                new InstantCommand(()-> pivot.setSetPoint(value.pivotPos)),
+                        new WaitCommand(500),
+                    new InstantCommand(()-> verticalSlide.setSetPoint(value.slidePos))),
+                        new InstantCommand(()->setValue(value))
+            );
+            default:
+                return new SequentialCommandGroup(
+                        new InstantCommand(()-> verticalSlide.setSetPoint(value.slidePos)),
+                        new WaitCommand(500),
+                        new ParallelCommandGroup(
+                                new InstantCommand(()-> arm.setSetPoint(value.armPos,value.armPos)),
+                                new InstantCommand(()-> pivot.setSetPoint(value.pivotPos))),
+                        new InstantCommand(()->setValue(value))
+                );
+        }
     }
 
+    public void setValue(Value value){
+        this.value = value;
+    }
     public void periodic(){
         telemetry.addData("Slide Value:", value);
-//        telemetry.addData("Outtake Position:", value);
-//        telemetry.addData("SlideSetPoint:", verticalSlide.getSetPoint());
-//        telemetry.addData("SlideR Encoder: ", verticalSlide.getEncoderDistance());
-//        telemetry.addData("Slide Motor Output:", verticalSlide.output);
-//        telemetry.addData("ArmR Pos: " + arm.getRPosition() +"; ArmLPos: "+ arm.getLPosition()+"; PivotPos:",pivot.getPosition());
-//        telemetry.addData("Turn Servo: " + claw.getTurnPos() + "; Claw: ", claw.getClawPos());
     }
 
     public void init(){
         claw.setClawSetPoint(Claw.Value.CLOSE);
-        pivot.setSetPoint(0);
-        arm.setSetPoint(0,0);
+        pivot.setSetPoint(Value.START.pivotPos);
+        arm.setSetPoint(Value.START.armPos,Value.START.armPos);
         verticalSlide.resetEncoder();
-        value= Value.START;
+        value = Value.START;
     }
 
     public Command setClawSetPoint(Claw.Value value) {
