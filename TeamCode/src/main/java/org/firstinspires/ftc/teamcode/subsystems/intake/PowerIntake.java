@@ -24,7 +24,7 @@ public class PowerIntake extends SubsystemBase {
         this.telemetry = tl;
     }
 
-    public PowerIntake(HorizontalSlide tl, IntakeServo intakeServo, PowerIntake powerIntake) {
+    public PowerIntake(HorizontalSlide tl, IntakeServo intakeServo, PowerIntake powerIntake, ColorSensor colorSensor) {
     }
 
     @Override

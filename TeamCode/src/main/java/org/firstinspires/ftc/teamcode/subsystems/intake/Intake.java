@@ -24,8 +24,8 @@ public class Intake {
     private Telemetry telemetry;
 
     public static double DOWN = 0;
-    public static double UP = 0.6;
-    public static double START = 0.8;
+    public static double UP = 0.7;
+    public static double START = 0.7;
 
     public enum Sample{
         RED,
@@ -37,11 +37,8 @@ public class Intake {
     public enum Value implements Command {
         START (Intake.START,Intake.START,0),
         OUTTAKE (DOWN,DOWN,-0.5),
-        INTAKE  (DOWN,DOWN,0.5),
-        SUBINT (DOWN,DOWN,0.5),
-        SUBOUT(DOWN,DOWN,0.5),
-        STOP    (UP,UP,0),
-        DOWNI(DOWN, DOWN,0);
+        INTAKE  (DOWN,DOWN,0.8),
+        STOP    (UP,UP,0);
 
 
 
@@ -103,7 +100,7 @@ public class Intake {
         powerIntake.setSetPoint(0);
         horizontalSlide.setPower(0);
     }
-//    public Command hslidePower(HorizontalSlide.Value value){
-//            return new InstantCommand(()->horizontalSlide.setPower(value.pos));
-//    }
+    public Command hslidePower(HorizontalSlide.Value value){
+            return new InstantCommand(()->horizontalSlide.setPower(value.pos));
+    }
 }
