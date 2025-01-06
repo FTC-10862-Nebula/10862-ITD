@@ -1,76 +1,91 @@
 //package org.firstinspires.ftc.teamcode.opmode.auto;
-//
-//
-//import com.acmerobotics.roadrunner.Action;
-//import com.acmerobotics.roadrunner.SequentialAction;
-//import com.acmerobotics.roadrunner.ftc.Actions;
-//import com.arcrobotics.ftclib.command.InstantCommand;
-//import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+//import com.acmerobotics.roadrunner.Pose2d;
+//import com.acmerobotics.roadrunner.Trajectory;
+//import com.acmerobotics.roadrunner.TrajectoryBuilder;
+//import com.arcrobotics.ftclib.trajectory.TrajectoryConfig;
 //import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+//import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 //
 //import org.firstinspires.ftc.teamcode.subsystems.drive.MecDrive;
+//import org.firstinspires.ftc.teamcode.subsystems.drive.RoadrunnerMecanumDrive;
 //import org.firstinspires.ftc.teamcode.subsystems.intake.HorizontalSlide;
 //import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
 //import org.firstinspires.ftc.teamcode.subsystems.intake.IntakeServo;
 //import org.firstinspires.ftc.teamcode.subsystems.intake.PowerIntake;
+//import org.firstinspires.ftc.teamcode.subsystems.intake.SensorColor;
 //import org.firstinspires.ftc.teamcode.subsystems.outtake.Arm;
 //import org.firstinspires.ftc.teamcode.subsystems.outtake.Claw;
 //import org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake;
 //import org.firstinspires.ftc.teamcode.subsystems.outtake.Pivot;
-//import org.firstinspires.ftc.teamcode.subsystems.outtake.VerticalSlide;
-//import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
+//import org.firstinspires.ftc.teamcode.subsystems.outtake.Slide;
 //
-////@Disabled
+//import java.util.List;
+//
+//
 //@Autonomous(preselectTeleOp = "TeleOpMain")
-//public class NewAutoRed extends MatchOpMode {
-//    // Subsystems
-//    private final MecDrive drive = new MecDrive(hardwareMap);
-//    private final Intake intake = new Intake(hardwareMap);
-//    private final Outtake outtake = new Outtake(hardwareMap);
+//    public class NewAutoRed extends LinearOpMode {
 //
-//    Action pathOne = drive.drivetrain.actionBuilder(drive.getPose())
-//            .lineToXConstantHeading(16)
-//            .build();
+//    private Outtake outtake;
+//    private MecDrive drive;
+//    private Intake intake;
+//    private SensorColor sensorColor;
 //
-//    @Override
-//    public void robotInit()
-//    {
-//       MecDrive drive = new MecDrive(hardwareMap);
+//    public void runOpMode() throws InterruptedException {
+//
+//    Pose2d startPose = new Pose2d(-16, 60, 300);
+//    Pose2d specimen = new Pose2d(-12,-34,300);
+//    Pose2d intakeS1 = new Pose2d(-34,-32,185.35);
+//    Pose2d intakeS2 = new Pose2d(-39,-26,185.35);
+//    Pose2d sample1 = new Pose2d(-54,-56,0.8);
+//    Pose2d sample2 = new Pose2d(-54,-56,0.8);
+//    Pose2d Park = new Pose2d(-26,-10,185.35);
 //
 //
-//       Intake intake = new Intake(
-//                new HorizontalSlide(telemetry, hardwareMap, true),
-//                new IntakeServo(telemetry, hardwareMap, true),
-//                new PowerIntake(telemetry, hardwareMap, true),
-//                telemetry
-//        );
+//        class DropSpecimen {
 //
-//        Outtake outtake = new Outtake(
-//                new VerticalSlide(telemetry, hardwareMap, true),
-//                new Arm(telemetry, hardwareMap, true),
-//                new Claw(telemetry, hardwareMap, true),
-//                new Pivot(telemetry, hardwareMap, true),
-//                telemetry
-//        );
+//            private final RoadrunnerMecanumDrive drive;  // Assuming you're using a Mecanum drive system
 //
-//        intake.init();
-//        outtake.init();
-//    }
+//            public Pose2d startPose = new Pose2d(-16, 60, Math.toRadians(300)); // Convert degrees to radians
 //
-//    public void matchStart() {
-//        schedule(
-//            new ParallelCommandGroup(
-//                new InstantCommand(
-//                ()-> Actions.runBlocking(
-//                    new SequentialAction(
-//                        pathOne
-//                        )
-//                    )
-//                )),
+//            public DropSpecimen(RoadrunnerMecanumDrive drive) {
+//                this.drive = drive;
+//            }
 //
-////                intake.setPosition(Intake.Value.INTAKE)//TODO: Or This
-//            run(() -> MecDrive.currentPose = drive.getPose()),
-//           run(this::stop)
-//        );
+//            // Method to build the trajectory
+//            public List<Trajectory> goBar() {
+//                // Create a TrajectoryConfig with max velocity and max acceleration
+//                TrajectoryConfig config = new TrajectoryConfig(10, 10); // Adjust max velocity and acceleration as needed
+//
+//                // Initialize TrajectoryBuilder with the MecanumDrive
+//                TrajectoryBuilder builder = new TrajectoryBuilder(startPose, config);
+//                // Create and return the trajectory using the builder
+//                return builder.splineToLinearHeading(new Pose2d(-12, -34, Math.toRadians(300)), 0)
+//                    .build(); // Return the built trajectory
+//            }
+//        }
+//
+//
+////    @Override
+////    public void roboInit(){
+////    drive = new MecDrive(hardwareMap);
+////    sensorColor = new SensorColor(telemetry, hardwareMap);
+////    intake = new Intake(
+////            new HorizontalSlide(telemetry, hardwareMap, true),
+////            new IntakeServo(telemetry, hardwareMap, true),
+////            new PowerIntake(telemetry, hardwareMap, true),
+////    telemetry
+////        );
+////
+////    outtake = new Outtake(
+////            new Slide(telemetry, hardwareMap, true),
+////            new Arm(telemetry, hardwareMap, true),
+////            new Claw(telemetry, hardwareMap, true),
+////            new Pivot(telemetry, hardwareMap, true),
+////    telemetry
+////        );
+////        intake.init();
+////        outtake.init();
+////        }
 //    }
 //}
+//

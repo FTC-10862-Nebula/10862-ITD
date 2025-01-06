@@ -18,6 +18,7 @@ import com.acmerobotics.roadrunner.ftc.LazyImu;
 import com.acmerobotics.roadrunner.ftc.ManualFeedforwardTuner;
 import com.acmerobotics.roadrunner.ftc.MecanumMotorDirectionDebugger;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegistrar;
@@ -29,19 +30,30 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public final class TuningOpModes {
+@Autonomous
+public final class TuningOpModes extends OpMode{
     public static final Class<?> DRIVE_CLASS = RoadrunnerMecanumDrive.class;
 
     public static final String GROUP = "quickstart";
     public static final boolean DISABLED = false;
 
     private TuningOpModes() {}
-
+    
+    @Override
+    public void init() {
+    
+    }
+    
+    @Override
+    public void loop() {
+    
+    }
+    
     private static OpModeMeta metaForClass(Class<? extends OpMode> cls) {
         return new OpModeMeta.Builder()
                 .setName(cls.getSimpleName())
                 .setGroup(GROUP)
-                .setFlavor(OpModeMeta.Flavor.TELEOP)
+                .setFlavor(OpModeMeta.Flavor.AUTONOMOUS)
                 .build();
     }
 

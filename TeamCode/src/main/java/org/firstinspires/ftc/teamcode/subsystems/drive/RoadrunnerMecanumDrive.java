@@ -157,24 +157,21 @@ public final class RoadrunnerMecanumDrive {
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-//        leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
-//        leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
-//        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
-//        rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
         rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
         rightBack.setDirection(DcMotorSimple.Direction.FORWARD);
+        localizer = new DriveLocalizer();
 
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
-        localizer = new DriveLocalizer();
 
         FlightRecorder.write("MECANUM_PARAMS", PARAMS);
         motors = new DcMotorEx[]{leftFront, leftBack, rightBack, rightFront};
     }
+    
     public class DriveLocalizer implements Localizer {
         public final Encoder leftFront, leftBack, rightBack, rightFront;
 
@@ -183,18 +180,18 @@ public final class RoadrunnerMecanumDrive {
         private boolean initialized;
 
         public DriveLocalizer() {
+//            imu = hardwareMap.get(IMU.class, "imu");
+//            IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+//                PARAMS.logoFacingDirection, PARAMS.usbFacingDirection));
+//            imu.initialize(parameters)
+            lazyIMU = new LazyImu(hardwareMap, "imu", new RevHubOrientationOnRobot(
+                PARAMS.logoFacingDirection, PARAMS.usbFacingDirection));
+            imu = lazyIMU.get();
+            
             leftFront = new OverflowEncoder(new RawEncoder(RoadrunnerMecanumDrive.this.leftFront));
             leftBack = new OverflowEncoder(new RawEncoder(RoadrunnerMecanumDrive.this.leftBack));
             rightBack = new OverflowEncoder(new RawEncoder(RoadrunnerMecanumDrive.this.rightBack));
             rightFront = new OverflowEncoder(new RawEncoder(RoadrunnerMecanumDrive.this.rightFront));
-
-
-            imu = hardwareMap.get(IMU.class, "imu");
-            IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                    PARAMS.logoFacingDirection, PARAMS.usbFacingDirection));
-            imu.initialize(parameters);
-
-            //   leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         }
 
         @Override
