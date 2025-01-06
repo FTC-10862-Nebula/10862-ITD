@@ -25,8 +25,9 @@ public class Intake {
 
     public static double DOWN = 0;
     public static double UP = 0.7;
-    public static double START = 0.7;
-
+    public static double INIT = 0.95;
+    
+    
     public enum Sample{
         RED,
         BLUE,
@@ -35,17 +36,20 @@ public class Intake {
     }
     
     public enum Value implements Command {
-        START (Intake.START,Intake.START,0),
-        OUTTAKE (DOWN,DOWN,-0.5),
-        INTAKE  (DOWN,DOWN,0.8),
-        STOP    (UP,UP,0);
+        START (0, INIT,0),
+        OUTTAKE (500, DOWN,-0.4),
+        INTAKE  (1000, DOWN,0.4),
+        STOP    (0,UP,0),
+        SAMPLE(250,UP,0);
+        
 
 
 
-        public final double rPos, lPos, intakePower;
-        Value(double rPos, double lPos, double intakePower) {
+        public final double horizontalSlide, rPos, lPos, intakePower;
+        Value(double horizontalSlide, double rPos, double intakePower) {
+            this.horizontalSlide = horizontalSlide;
             this.rPos = rPos;
-            this.lPos=lPos;
+            this.lPos=rPos;
             this.intakePower = intakePower;
         }
 //        Value(double slidePower, Value value) {
@@ -76,12 +80,14 @@ public class Intake {
         switch(value) {
             case OUTTAKE:
                 return new SequentialCommandGroup(
-                    new InstantCommand(()-> intakeServo.setSetPoint(value.rPos,value.lPos)),
+                        new InstantCommand(()-> horizontalSlide.setSetPoint(value.horizontalSlide)),
+                        new InstantCommand(()-> intakeServo.setSetPoint(value.rPos,value.lPos)),
                     new WaitCommand(500),
                     new InstantCommand(()-> powerIntake.setSetPoint(value.intakePower))
                 );
             default:
                 return new SequentialCommandGroup(
+                        new InstantCommand(()-> horizontalSlide.setSetPoint(value.horizontalSlide)),
                         new InstantCommand(()-> intakeServo.setSetPoint(value.rPos,value.lPos)),
                         new InstantCommand(()-> powerIntake.setSetPoint(value.intakePower))
                 );
@@ -93,14 +99,16 @@ public class Intake {
     }
 
     public void periodic(){
-        telemetry.addData("Red:" + powerIntake.red() + "; Green:" + powerIntake.green() + "Blue:", powerIntake.blue());
+//        telemetry.addData("Red:", powerIntake.red());
+//        telemetry.addData("Green:" , powerIntake.green());
+//        telemetry.addData("Blue:", powerIntake.blue());
     }
     public void init(){
-        intakeServo.setSetPoint(UP,UP);
+        intakeServo.setSetPoint(INIT,INIT);
         powerIntake.setSetPoint(0);
         horizontalSlide.setPower(0);
     }
     public Command hslidePower(HorizontalSlide.Value value){
-            return new InstantCommand(()->horizontalSlide.setPower(value.pos));
+        return new InstantCommand(()->horizontalSlide.setSetPoint(value.pos));
     }
 }

@@ -16,10 +16,11 @@ import org.firstinspires.ftc.teamcode.util.nebulaHardware.NebulaMotor;
 public class HorizontalSlide extends SubsystemBase {
     protected Telemetry telemetry;
     protected NebulaMotor hSlide;
+    public final double MIN =0, MAX= 2000;
     
     public enum Value {
         IN(0.8),
-        OUT(-0.8),
+        OUT(1000),
         STOP(0);
         public final double pos;
         
@@ -41,17 +42,13 @@ public class HorizontalSlide extends SubsystemBase {
         hSlide = new NebulaMotor(hw,
             "hSlide",
             NebulaMotor.MotorType.RPM_435,
-            NebulaMotor.Direction.Forward,
+            NebulaMotor.Direction.Reverse,
             NebulaMotor.IdleMode.Coast,
             isEnabled);
-        hSlide.getEncoder().setDirection(Motor.Direction.FORWARD);
-        //CHANGED F TO R 12/27 TEST
-    
+
     //  hSlide.setDistancePerPulse(1);
     
-    slideController =new
-    
-    PIDFController(0.5,0,0,0);
+    slideController =new PIDFController(0.004,0,0,0);
 //        slideController.setTolerance(1);
 //        resetEncoder();
 //        setSetPoint(0);
@@ -60,10 +57,10 @@ public class HorizontalSlide extends SubsystemBase {
 
     @Override
     public void periodic() {
-//        slideController.setF(slideController.getF() *
-//                Math.cos(Math.toRadians(slideController.getSetPoint())));
+        slideController.setF(slideController.getF() *
+                Math.cos(Math.toRadians(slideController.getSetPoint())));
         output = slideController.calculate(getEncoderDistance());
-        hSlide.setPower(output);
+        hSlide.setPower(-output);
 //
         telemetry.addData("HorSlide SetPoint:" ,getSetPoint());
         telemetry.addData("; HorEncoder: ", hSlide.getPosition());
@@ -81,12 +78,10 @@ public class HorizontalSlide extends SubsystemBase {
         hSlide.resetEncoder();
     }
     public void setSetPoint(double setPoint) {
-//        if (getEncoderDistance()>setPoint){
-//            multiplier =0.8;
-//            slideController.setP(slideController.getP()*0.6);
-//        } else {
-//            multiplier = 1;
-//            slideController.setP(slideController.getP() * 1);
+//        if (setPoint>MAX){
+//            setPoint = MAX;
+//        } else if (setPoint<MIN){
+//            setPoint = MIN;
 //        }
         slideController.setSetPoint(setPoint);
     }

@@ -15,15 +15,24 @@ public class Outtake {
     //Arm
     private static final double
         ARM_SAMPLE = 1,
-        ARM_INTAKE =0.19,
+        ARM_INTAKE =0.2,
+        ARM_WAIT = 0.3,
         ARM_SPECIMEN = 0;
+    
     private static final double
         PIVOT_SAMPLE = .8,
-        PIVOT_INTAKE =0.36,
+        PIVOT_INTAKE =0.3,
         PIVOT_SPECIMEN = 0;
+    
 
+    
     public enum Value{
-        START   (0,ARM_INTAKE,PIVOT_INTAKE),
+        START(0,ARM_INTAKE,PIVOT_INTAKE),
+        SAMPLE_WAIT(0,ARM_WAIT,PIVOT_INTAKE),
+        OUTTAKE_SAMPLE(0,ARM_SAMPLE,PIVOT_SAMPLE),
+        
+        OUTTAKE_SPECIMEN(0,ARM_SPECIMEN,PIVOT_SPECIMEN),
+        
 
         LOW_BUCKET(1500,ARM_SAMPLE,PIVOT_SAMPLE),
         HIGH_BUCKET(3000,ARM_SAMPLE,PIVOT_SAMPLE),
@@ -33,12 +42,8 @@ public class Outtake {
         HIGH_RUNG(2200,ARM_SPECIMEN,PIVOT_SPECIMEN),
 
         SPECIMEN_LOW_BAR(LOW_RUNG.slidePos-300, ARM_SPECIMEN,PIVOT_SPECIMEN),
-        SPECIMEN_HIGH_BAR(HIGH_RUNG.slidePos-300,ARM_SPECIMEN,PIVOT_SPECIMEN),
-
-
-        CLIMB(1500,0,1),
-        TRANSFER(0,0,0);
-
+        SPECIMEN_HIGH_BAR(HIGH_RUNG.slidePos-300,ARM_SPECIMEN,PIVOT_SPECIMEN);
+        
 
 
         public final double slidePos, armPos, pivotPos;
@@ -78,17 +83,20 @@ public class Outtake {
                         new InstantCommand(()-> pivot.setSetPoint(value.pivotPos)),
                         new WaitCommand(500),
                         new InstantCommand(()-> verticalSlide.setSetPoint(value.slidePos)),
+                        new WaitCommand(500),
                         setClawSetPoint(Claw.Value.OPEN)),
                         new InstantCommand(()->setValue(value))
                 );
 
             case START:
+            case SAMPLE_WAIT:
                 return new SequentialCommandGroup(
                         new ParallelCommandGroup(
                                 new InstantCommand(()-> arm.setSetPoint(value.armPos,value.armPos)),
                                 new InstantCommand(()-> pivot.setSetPoint(value.pivotPos)),
-                        new WaitCommand(500),
-                    new InstantCommand(()-> verticalSlide.setSetPoint(value.slidePos))),
+                                new WaitCommand(500),
+                                new InstantCommand(()-> verticalSlide.setSetPoint(value.slidePos))
+                        ),
                         new InstantCommand(()->setValue(value))
             );
             default:
@@ -111,7 +119,7 @@ public class Outtake {
     }
 
     public void init(){
-        claw.setClawSetPoint(Claw.Value.CLOSE);
+        claw.setClawSetPoint(Claw.Value.OPEN);
         pivot.setSetPoint(Value.START.pivotPos);
         arm.setSetPoint(Value.START.armPos,Value.START.armPos);
         verticalSlide.resetEncoder();

@@ -5,13 +5,14 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-
-
     public class SensorColor extends SubsystemBase {
-
         private final ColorSensor colorSensor;
         private final Telemetry telemetry;
-
+        
+        //red (255,0,0)
+        //blue (0,0,255)
+        //yellow (0,255, 255)
+        
         public SensorColor(Telemetry tl, HardwareMap hardwareMap) {
             this.colorSensor = hardwareMap.get(ColorSensor.class, "colorS");
             this.telemetry = tl;
@@ -26,10 +27,40 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
         public boolean grabbedYellowSample() {
             telemetry.addLine("Got yellow Sample");
-            return (colorSensor.blue() > 250 && colorSensor.red() > 1000 && colorSensor.green() > 1000);
+            return (colorSensor.blue() > 110 &&
+                    colorSensor.red() > 390 &&
+                    colorSensor.green() > 455);
         }
 
-        public boolean grabbedSample(ColorSensor colorSensor) {
-            return grabbedSample(this.colorSensor);
+        public boolean grabbedSample(Intake.Sample sample) {
+            if(Intake.Sample.BLUE==sample){
+                return (colorSensor.blue() > 1000 &&
+                        colorSensor.green() > 1000);
+            } else if(Intake.Sample.RED==sample){
+                return (colorSensor.red() > 260 &&
+                    colorSensor.green() > 125 &&
+                    colorSensor.blue() > 70);
+            } else{
+                return false;
+            }
         }
+        public int red(){
+            return colorSensor.red();
+        }
+        public int blue(){
+            return colorSensor.blue();
+        }
+        public int green(){
+            return colorSensor.green();
+        }
+        
+//        public Intake.Sample getSampleColors(){
+//            if(colorSensor.red()>255){
+//                return Intake.Sample.RED; //TODO: Works?
+//            } else if(colorSensor.green()>255&&colorSensor.blue()>255){
+//                return Intake.Sample.YELLOW; //TODO: Works?
+//            } else if(colorSensor.blue()>255){
+//                return Intake.Sample.BLUE; //TODO: Works?
+//            } else return  Intake.Sample.NONE;
+//        }
     }

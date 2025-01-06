@@ -101,7 +101,6 @@ public class MecDrive extends SubsystemBase {
     public Pose2d getPose(){
         return new Pose2d(drivetrain.updatePoseEstimate().component1(),
                 drivetrain.updatePoseEstimate().component2());
-
-
+        
     }
 }
