@@ -9,17 +9,17 @@ import org.firstinspires.ftc.teamcode.subsystems.drive.MecDrive;
 public class DefaultDriveCommand extends CommandBase {
     private final MecDrive drive;
     private final GamepadEx driverGamepad;
-
+    
     protected double multiplier;
-
+    
     public DefaultDriveCommand(MecDrive drive,
                                GamepadEx driverGamepad) {
-
+        
         this.drive = drive;
         this.driverGamepad = driverGamepad;
         addRequirements(this.drive);
     }
-
+    
     @Override
     public void execute() {
         if(driverGamepad.getButton(GamepadKeys.Button.LEFT_BUMPER)) {
@@ -27,21 +27,21 @@ public class DefaultDriveCommand extends CommandBase {
         } else {
             multiplier = 10;//10
         }
-
+        
         if(driverGamepad.getButton(GamepadKeys.Button.A)) {
             drive.drivetrain.resetIMU();
         }
-
+        
         drive.driveFieldCentric(
-                driverGamepad.getLeftY(),
-                driverGamepad.getLeftX(),
-                -driverGamepad.getRightX(),
-               multiplier
+            driverGamepad.getLeftY(),
+            driverGamepad.getLeftX(),
+            -driverGamepad.getRightX(),
+            multiplier
         );
-   }
-
-
-
+    }
+    
+    
+    
     @Override
     public void end(boolean interrupted) {
         drive.stop();

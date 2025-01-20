@@ -14,8 +14,8 @@ import org.firstinspires.ftc.teamcode.util.nebulaHardware.NebulaServo;
 public class Claw extends SubsystemBase {
 
     public enum Value{
-        OPEN(1),
-        CLOSE(0.83);
+        OPEN(0.34),
+        CLOSE(0.47);
 //        OPEN_SPECIMEN(CLOSE_SAMPLE),
 //        CLOSE_SPECIMEN(OPEN_SAMPLE);
         public final double pos;
@@ -39,7 +39,7 @@ public class Claw extends SubsystemBase {
 //            isEnabled);
         clawServo = new NebulaServo(hw,
             "clawS",
-            NebulaServo.Direction.Reverse,
+            NebulaServo.Direction.Forward,
             0,
             360,
             isEnabled);

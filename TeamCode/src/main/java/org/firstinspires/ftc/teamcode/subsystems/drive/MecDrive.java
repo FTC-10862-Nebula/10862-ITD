@@ -6,81 +6,65 @@ import static org.firstinspires.ftc.teamcode.subsystems.drive.RoadrunnerMecanumD
 import static org.firstinspires.ftc.teamcode.subsystems.drive.RoadrunnerMecanumDrive.rRNum;
 
 import com.acmerobotics.roadrunner.Pose2d;
-import com.arcrobotics.ftclib.command.button.Button;
-import com.arcrobotics.ftclib.command.button.GamepadButton;
-import com.arcrobotics.ftclib.drivebase.MecanumDrive;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.arcrobotics.ftclib.geometry.Vector2d;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-
 public class MecDrive extends SubsystemBase {
-    /**
-     * Simple static field serving as a storage medium for the bot's pose.
-     * This allows different classes/opmodes to set and read from a central source of truth.
-     * A static field allows data to persist between opmodes.
-     */
-    public static Pose2d currentPose = new Pose2d(0,0,0);
-
-    double[] powers = new double[4];
+    
+    // Static field for storing the robot's pose across op modes
+    public static Pose2d currentPose = new Pose2d(0, 0, 0);
+    
+    // Array to hold motor power values
+    private final double[] powers = new double[4];
+    
+    // Drivetrain object
     public final RoadrunnerMecanumDrive drivetrain;
-    public MecDrive(HardwareMap hardwareMap){
-        drivetrain =
-                new RoadrunnerMecanumDrive(hardwareMap, new Pose2d(0,0,0));
+    
+    public MecDrive(HardwareMap hardwareMap) {
+        drivetrain = new RoadrunnerMecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
     }
-
+    
     @Override
     public void periodic() {
         drivetrain.localizer.update();
     }
-
-
-    public void  driveFieldCentric(double y, double x, double rx, double multiplier){
-//        double theta = -imu.getAngularOrientation().firstAngle;
-       double theta = -drivetrain.getYaw();
-
+    
+    /**
+     * Drives the robot in a field-centric manner.
+     *
+     * @param y          Forward/backward input (positive = forward)
+     * @param x          Strafe input (positive = right)
+     * @param rx         Rotation input (positive = clockwise)
+     * @param multiplier A scaling factor for the overall motor power
+     */
+    public void driveFieldCentric(double y, double x, double rx, double multiplier) {
+        // Get the robot's heading from the drivetrain (in radians)
+        double theta = -Math.toRadians(drivetrain.getYaw()); // Negative for counterclockwise
+        
+        // Apply the field-centric transformation
         double rotX = x * Math.cos(theta) - y * Math.sin(theta);
         double rotY = x * Math.sin(theta) + y * Math.cos(theta);
-        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-
-        // ^^^^^^ Denominator is the largest motor power (absolute value) or 1
-        // This ensures all the powers maintain the same ratio, but only when
-        // at least one is out of the range [-1, 1]
-
-//          WORKKK
-        powers [lFNum] = (rotY + rotX - rx) / denominator;
-        powers [lRNum] = (rotY - rotX - rx) / denominator;
-        powers [rFNum] = (rotY - rotX + rx) / denominator;
-        powers [rRNum] = (rotY + rotX + rx) / denominator;
-//        if(Math.abs(powers[lFNum])<0.5&
-//                Math.abs(powers[lRNum])<0.5&
-//                Math.abs(powers[rFNum])<0.5&
-//                Math.abs(powers[rRNum])<0.5){
-//            for (int i = 0; i <= 3; i++) {
-//                powers[i] = squareInput(powers[i]);
-////                powers[i] = cubeInput(powers[i]);
-//            }
-//        }
-        drivetrain.setDrivePowers(powers[lFNum]* multiplier,
-                powers[lRNum]* multiplier,
-                powers[rFNum]* multiplier,
-                powers[rRNum]* multiplier);
-
+        
+        // Calculate the denominator for scaling
+        double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
+        
+        // Calculate motor powers based on transformed inputs
+        powers[lFNum] = (rotY + rotX - rx) / denominator;
+        powers[lRNum] = (rotY - rotX - rx) / denominator;
+        powers[rFNum] = (rotY - rotX + rx) / denominator;
+        powers[rRNum] = (rotY + rotX + rx) / denominator;
+        
+        // Set motor powers with the multiplier applied
+        drivetrain.setDrivePowers(
+            powers[lFNum] * multiplier,
+            powers[lRNum] * multiplier,
+            powers[rFNum] * multiplier,
+            powers[rRNum] * multiplier
+        );
     }
-
-    private double squareInput(double power) {
-        return power * Math.abs(power);
-    }
-    private double cubeInput(double power) {
-        return power*Math.abs(power)*Math.abs(power);
-    }
-
-
+    
     /**
-     * Drives the motors directly with the specified motor powers.
+     * Drives the motors directly with specified motor powers.
      *
      * @param frontLeftSpeed    the speed of the front left motor
      * @param frontRightSpeed   the speed of the front right motor
@@ -94,13 +78,11 @@ public class MecDrive extends SubsystemBase {
         drivetrain.motors[rRNum].setPower(backRightSpeed);
         drivetrain.motors[rFNum].setPower(frontRightSpeed);
     }
-
+    
+    /**
+     * Stops the drivetrain motors.
+     */
     public void stop() {
-        driveWithMotorPowers(0,0,0,0);
-    }
-    public Pose2d getPose(){
-        return new Pose2d(drivetrain.updatePoseEstimate().component1(),
-                drivetrain.updatePoseEstimate().component2());
-        
+        driveWithMotorPowers(0, 0, 0, 0);
     }
 }

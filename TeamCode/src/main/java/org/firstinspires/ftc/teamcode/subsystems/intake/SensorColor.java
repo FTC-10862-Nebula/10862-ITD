@@ -27,19 +27,21 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
         public boolean grabbedYellowSample() {
             telemetry.addLine("Got yellow Sample");
-            return (colorSensor.blue() > 110 &&
-                    colorSensor.red() > 390 &&
-                    colorSensor.green() > 455);
+            return (colorSensor.blue() > 130 &&
+                    colorSensor.red() > 470 &&
+                    colorSensor.green() > 555);
         }
 
         public boolean grabbedSample(Intake.Sample sample) {
             if(Intake.Sample.BLUE==sample){
-                return (colorSensor.blue() > 1000 &&
-                        colorSensor.green() > 1000);
+                return (colorSensor.blue() > 290 &&
+                        colorSensor.green() > 135)&&
+                        colorSensor.red()>70;
+                
             } else if(Intake.Sample.RED==sample){
-                return (colorSensor.red() > 260 &&
-                    colorSensor.green() > 125 &&
-                    colorSensor.blue() > 70);
+                return (colorSensor.red() > 355 &&
+                    colorSensor.green() > 165 &&
+                    colorSensor.blue() > 75);
             } else{
                 return false;
             }

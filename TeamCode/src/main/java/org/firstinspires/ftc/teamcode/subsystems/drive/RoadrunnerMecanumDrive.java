@@ -43,6 +43,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.commands.manual.DefaultDriveCommand;
 import org.firstinspires.ftc.teamcode.opmode.roadrunner.Drawing;
 import org.firstinspires.ftc.teamcode.opmode.roadrunner.Localizer;
 import org.firstinspires.ftc.teamcode.subsystems.drive.messages.DriveCommandMessage;
@@ -57,7 +58,8 @@ import java.util.List;
 
 @Config
 public final class RoadrunnerMecanumDrive {
-
+    
+    
     public static class Params {
         // IMU orientation
         // see https://ftc-docs.firstinspires.org/en/latest/programming_resources/imu/imu.html?highlight=imu#physical-hub-mounting
@@ -67,19 +69,19 @@ public final class RoadrunnerMecanumDrive {
                 RevHubOrientationOnRobot.UsbFacingDirection.LEFT;
 
         // drive model parameters
-        public double inPerTick = 1;
-        public double lateralInPerTick = inPerTick;
-        public double trackWidthTicks = 0;
+        public double inPerTick = 0.11549815498;
+        public double lateralInPerTick = 0.11357142857;
+        public double trackWidthTicks = 17841.637574528366;
 
         // feedforward parameters (in tick units)
-        public double kS = 0;
-        public double kV = 0;
-        public double kA = 0;
+        public double kS =  2.4974684567638876;
+        public double kV = 0.003957377638182419;
+        public double kA = 0.00025;
 
         // path profile parameters (in inches)
-        public double maxWheelVel = 50;
-        public double minProfileAccel = -30;
-        public double maxProfileAccel = 50;
+        public double maxWheelVel = 73.17330064499293;
+        public double minProfileAccel = -73.17330064499293;
+        public double maxProfileAccel = 73.17330064499293;
 
         // turn profile parameters (in radians) PI=180deg
         public double maxAngVel = Math.PI; // shared with path

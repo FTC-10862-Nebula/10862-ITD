@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.subsystems.drive.RoadrunnerMecanumDrive;
 
 
 public final class ManualFeedbackTuner extends LinearOpMode {
-    public static double DISTANCE = 24;
+    public static double DISTANCE = 100;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -21,9 +21,11 @@ public final class ManualFeedbackTuner extends LinearOpMode {
                 Actions.runBlocking(
                     drive.actionBuilder(new Pose2d(0, 0, 0))
                             .lineToX(DISTANCE)
-                            .lineToX(1)
+                            .lineToX(0)
                             .build());
             }
+            telemetry.addData("Pose", drive.updatePoseEstimate());
+            telemetry.update();
         } else {
             throw new RuntimeException();
         }

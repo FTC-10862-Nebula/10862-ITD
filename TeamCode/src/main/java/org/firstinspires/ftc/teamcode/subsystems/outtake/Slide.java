@@ -15,7 +15,9 @@ import org.firstinspires.ftc.teamcode.util.nebulaHardware.NebulaMotor;
 
 public class Slide extends SubsystemBase {
     protected NebulaMotor left, right;
-    protected PIDFController slideController = new PIDFController(0.004,0,0,0);
+    protected PIDFController slideController
+        = new PIDFController
+        (0.004,0,0,0);
     private final Telemetry telemetry;
 
     public Slide (Telemetry telemetry,HardwareMap hw, boolean isEnabled){

@@ -14,35 +14,35 @@ public class Outtake {
 
     //Arm
     private static final double
-        ARM_SAMPLE = 1,
-        ARM_INTAKE =0.2,
-        ARM_WAIT = 0.3,
-        ARM_SPECIMEN = 0;
+        ARM_SAMPLE = 0.91,
+        ARM_INTAKE =0.35,
+        ARM_WAIT = 0.49,
+        ARM_HOLD = 0.4,
+        ARM_SPECIMEN = 0.18;
+//        ARM_ALIGN = 0.076,
+//        ARM_SSCORE = 0.076;
     
     private static final double
-        PIVOT_SAMPLE = .8,
-        PIVOT_INTAKE =0.3,
-        PIVOT_SPECIMEN = 0;
+        PIVOT_SAMPLE = .5,
+        PIVOT_INTAKE =0.33,
+        PIVOT_SPECIMENWALL = 0,
+        PIVOT_SPECIMEN= 0.7;
     
 
     
     public enum Value{
         START(0,ARM_INTAKE,PIVOT_INTAKE),
         SAMPLE_WAIT(0,ARM_WAIT,PIVOT_INTAKE),
-        OUTTAKE_SAMPLE(0,ARM_SAMPLE,PIVOT_SAMPLE),
-        
-        OUTTAKE_SPECIMEN(0,ARM_SPECIMEN,PIVOT_SPECIMEN),
-        
-
-        LOW_BUCKET(1500,ARM_SAMPLE,PIVOT_SAMPLE),
-        HIGH_BUCKET(3000,ARM_SAMPLE,PIVOT_SAMPLE),
-
-        SPECIMEN_WALL(600,ARM_SPECIMEN,PIVOT_SPECIMEN),
-        LOW_RUNG(1200,ARM_SPECIMEN,PIVOT_SPECIMEN),
-        HIGH_RUNG(2200,ARM_SPECIMEN,PIVOT_SPECIMEN),
-
-        SPECIMEN_LOW_BAR(LOW_RUNG.slidePos-300, ARM_SPECIMEN,PIVOT_SPECIMEN),
-        SPECIMEN_HIGH_BAR(HIGH_RUNG.slidePos-300,ARM_SPECIMEN,PIVOT_SPECIMEN);
+        OUTTAKE_SAMPLE(0,ARM_SAMPLE,PIVOT_INTAKE),
+        LOW_BUCKET(1000,ARM_SAMPLE,PIVOT_SAMPLE),
+        HIGH_BUCKET(3620,ARM_SAMPLE,PIVOT_SAMPLE),
+        SPECIMEN_WALL(400,ARM_SPECIMEN, PIVOT_SPECIMENWALL),
+        LOW_RUNG(220,ARM_SAMPLE,PIVOT_SPECIMEN),
+        HIGH_RUNG(1600,ARM_SAMPLE,PIVOT_SPECIMEN),
+        SPECIMEN_LOW_BAR(LOW_RUNG.slidePos-200,
+            ARM_SAMPLE,PIVOT_SPECIMEN),
+        SPECIMEN_HIGH_BAR(HIGH_RUNG.slidePos-200,
+            ARM_SAMPLE,PIVOT_SPECIMEN);
         
 
 
@@ -81,22 +81,28 @@ public class Outtake {
                     new ParallelCommandGroup(
                         new InstantCommand(()-> arm.setSetPoint(value.armPos,value.armPos)),
                         new InstantCommand(()-> pivot.setSetPoint(value.pivotPos)),
-                        new WaitCommand(500),
                         new InstantCommand(()-> verticalSlide.setSetPoint(value.slidePos)),
-                        new WaitCommand(500),
                         setClawSetPoint(Claw.Value.OPEN)),
                         new InstantCommand(()->setValue(value))
                 );
-
+            case SPECIMEN_WALL:
+                return  new SequentialCommandGroup(
+                        new InstantCommand(()-> verticalSlide.setSetPoint(600)),
+                    new WaitCommand(1000),
+                        new InstantCommand(()-> arm.setSetPoint(value.armPos,value.armPos)),
+                        new InstantCommand(()-> pivot.setSetPoint(value.pivotPos)),
+                        new InstantCommand(()-> verticalSlide.setSetPoint(value.slidePos)),
+                        setClawSetPoint(Claw.Value.OPEN)
+                );
             case START:
             case SAMPLE_WAIT:
                 return new SequentialCommandGroup(
                         new ParallelCommandGroup(
                                 new InstantCommand(()-> arm.setSetPoint(value.armPos,value.armPos)),
-                                new InstantCommand(()-> pivot.setSetPoint(value.pivotPos)),
+                                new InstantCommand(()-> pivot.setSetPoint(value.pivotPos))
+                            ),
                                 new WaitCommand(500),
-                                new InstantCommand(()-> verticalSlide.setSetPoint(value.slidePos))
-                        ),
+                                new InstantCommand(()-> verticalSlide.setSetPoint(value.slidePos)),
                         new InstantCommand(()->setValue(value))
             );
             default:

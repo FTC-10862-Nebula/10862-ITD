@@ -37,8 +37,8 @@ public class Intake {
     
     public enum Value implements Command {
         START (0, INIT,0),
-        OUTTAKE (500, DOWN,-0.4),
-        INTAKE  (1000, DOWN,0.4),
+        OUTTAKE (500, DOWN,-0.6),
+        INTAKE  (1000, DOWN,0.65),
         STOP    (0,UP,0),
         SAMPLE(250,UP,0);
         

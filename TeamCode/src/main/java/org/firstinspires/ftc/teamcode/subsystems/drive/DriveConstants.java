@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode.roadrunner;
+package org.firstinspires.ftc.teamcode.subsystems.drive;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -59,9 +59,9 @@ public class DriveConstants {
 //	public static double kV = 1.0 / rpmToVelocity(MAX_RPM);
 //	public static double kA = 0;
 //	public static double kStatic = 0;
-	public static double kV = 0.0105;//0.0185
-	public static double kA = 0.0023; //0.01610 //0.0030
-	public static double kStatic = 0.06;
+	public static double kV = 0.003957377638182419;//0.0185
+	public static double kA = 0.00025; //0.01610 //0.0030
+	public static double kStatic = 2.4974684567638876;
 	/*
 	 * These values are used to generate the trajectories for you robot. To ensure proper operation,
 	 * the constraints should never exceed ~80% of the robot's actual capabilities. While Road

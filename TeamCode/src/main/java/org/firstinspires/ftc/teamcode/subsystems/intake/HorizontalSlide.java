@@ -37,7 +37,8 @@ public class HorizontalSlide extends SubsystemBase {
     protected double output = 0;//, multiplier =1;
     private PIDFController slideController;
     
-    public HorizontalSlide(Telemetry tl, HardwareMap hw, boolean isEnabled) {
+    public HorizontalSlide(Telemetry tl,
+                           HardwareMap hw, boolean isEnabled) {
         this.telemetry = tl;
         hSlide = new NebulaMotor(hw,
             "hSlide",
@@ -45,14 +46,8 @@ public class HorizontalSlide extends SubsystemBase {
             NebulaMotor.Direction.Reverse,
             NebulaMotor.IdleMode.Coast,
             isEnabled);
-
-    //  hSlide.setDistancePerPulse(1);
-    
-    slideController =new PIDFController(0.004,0,0,0);
-//        slideController.setTolerance(1);
-//        resetEncoder();
-//        setSetPoint(0);
-//        this.telemetry = tl;
+            slideController =new PIDFController
+                 (0.004,0,0,0);
 }
 
     @Override

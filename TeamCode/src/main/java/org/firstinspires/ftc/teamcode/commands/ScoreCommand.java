@@ -13,14 +13,18 @@ public class ScoreCommand extends SequentialCommandGroup {
         this.outtake = outtake;
         addRequirements();
         addCommands(
+          
                 new ConditionalCommand(
                         outtake.setClawSetPoint(Claw.Value.OPEN),
                         new ConditionalCommand(
-                                outtake.setPosition(Outtake.Value.SPECIMEN_HIGH_BAR),
-                                outtake.setPosition(Outtake.Value.SPECIMEN_LOW_BAR),
+                                outtake.setPosition(
+                                    Outtake.Value.SPECIMEN_HIGH_BAR),
+                                outtake.setPosition(
+                                    Outtake.Value.SPECIMEN_LOW_BAR),
                                 this::isHighSpecimen
                         ),
                         this::isBucket
+               
                 )
         );
     }
@@ -29,7 +33,8 @@ public class ScoreCommand extends SequentialCommandGroup {
         return (outtake.value== Outtake.Value.HIGH_BUCKET)
                 ||(outtake.value== Outtake.Value.LOW_BUCKET);
     }
-    public boolean isHighSpecimen(){
-        return (outtake.value== Outtake.Value.HIGH_RUNG);
+    public boolean isHighSpecimen() {
+        return (outtake.value == Outtake.Value.HIGH_RUNG);
     }
-}
+    }
+
