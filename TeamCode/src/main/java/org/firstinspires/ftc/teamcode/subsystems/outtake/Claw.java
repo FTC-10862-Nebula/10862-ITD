@@ -14,8 +14,8 @@ import org.firstinspires.ftc.teamcode.util.nebulaHardware.NebulaServo;
 public class Claw extends SubsystemBase {
 
     public enum Value{
-        OPEN(0.34),
-        CLOSE(0.47);
+        OPEN(0.05),
+        CLOSE(0.18);
 //        OPEN_SPECIMEN(CLOSE_SAMPLE),
 //        CLOSE_SPECIMEN(OPEN_SAMPLE);
         public final double pos;

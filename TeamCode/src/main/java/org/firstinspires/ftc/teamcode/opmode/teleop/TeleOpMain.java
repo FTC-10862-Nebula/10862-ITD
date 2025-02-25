@@ -1,27 +1,21 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop;
 
 import static org.firstinspires.ftc.teamcode.subsystems.intake.Intake.Value.INTAKE;
+import static org.firstinspires.ftc.teamcode.subsystems.intake.Intake.Value.INTAKEMORE;
 import static org.firstinspires.ftc.teamcode.subsystems.intake.Intake.Value.OUTTAKE;
 import static org.firstinspires.ftc.teamcode.subsystems.intake.Intake.Value.STOP;
 import static org.firstinspires.ftc.teamcode.subsystems.outtake.Claw.Value.CLOSE;
 import static org.firstinspires.ftc.teamcode.subsystems.outtake.Claw.Value.OPEN;
+import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.CLIMB;
 import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.HIGH_BUCKET;
 import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.HIGH_RUNG;
 import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.LOW_BUCKET;
 import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.LOW_RUNG;
 import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.SAMPLE_WAIT;
 import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.SPECIMEN_WALL;
-
-import android.graphics.Path;
+import static org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake.Value.START;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.Pose2d;
-import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.acmerobotics.dashboard.config.Config;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
-import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.command.button.Trigger;
@@ -31,12 +25,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.ColorIntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.ScoreCommand;
-import org.firstinspires.ftc.teamcode.commands.manual.DefaultDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.manual.SlideHorizontalManual;
-import org.firstinspires.ftc.teamcode.commands.manual.SlidePowerHorizontalManual;
 import org.firstinspires.ftc.teamcode.commands.manual.SlideVerticalManual;
-import org.firstinspires.ftc.teamcode.subsystems.drive.MecDrive;
-import org.firstinspires.ftc.teamcode.subsystems.drive.RoadrunnerMecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystems.drive.MecDrive2;
 import org.firstinspires.ftc.teamcode.subsystems.intake.HorizontalSlide;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.intake.IntakeServo;
@@ -54,30 +45,29 @@ import org.firstinspires.ftc.teamcode.util.teleop.MatchOpMode;
 @Config
 @TeleOp
 public class TeleOpMain extends MatchOpMode {
-	//TODO: Add a on/off switch for drivetrain
 	private GamepadEx driverGamepad, operatorGamepad;
 	
 	private Outtake outtake;
-	private MecDrive drive;
-	//    private Climber climb;
+	private MecDrive2 mechdrive2;
 	private Intake intake;
-	private SensorColor sensorColor;
+	//private SensorColor sensorColor;
+	
+	private boolean drivetrainEnabled = true; // Toggle for drivetrain
 	
 	public TeleOpMain() {
 	}
 	
 	@Override
 	public void robotInit() {
-		drive = new MecDrive(hardwareMap);
+		mechdrive2 = new MecDrive2(this);
 		driverGamepad = new GamepadEx(gamepad1);
 		operatorGamepad = new GamepadEx(gamepad2);
-		sensorColor = new SensorColor(telemetry, hardwareMap);
-		
+	//	sensorColor = new SensorColor(telemetry, hardwareMap);
 		
 		intake = new Intake(
-			new HorizontalSlide(telemetry, hardwareMap, false),
-			new IntakeServo(telemetry, hardwareMap, false),
-			new PowerIntake(telemetry, hardwareMap, false),
+			new HorizontalSlide(telemetry, hardwareMap, true),
+			new IntakeServo(telemetry, hardwareMap, true),
+			new PowerIntake(telemetry, hardwareMap, true),
 			telemetry
 		);
 		outtake = new Outtake(
@@ -94,38 +84,48 @@ public class TeleOpMain extends MatchOpMode {
 	
 	@Override
 	public void robotPeriodic() {
+		if (drivetrainEnabled) {
+			mechdrive2.fieldCentric(); // Run field-centric drive
+		}
 		outtake.periodic();
 		intake.periodic();
 	}
 	
 	@Override
 	public void configureButtons() {
+		// Drivetrain toggle
+		Button drivetrainToggle = new GamepadButton(driverGamepad, GamepadKeys.Button.START)
+			.whenPressed(() -> drivetrainEnabled = !drivetrainEnabled);
 		
-		      drive.setDefaultCommand(new DefaultDriveCommand(drive, driverGamepad));
-    //INTAKE
-		Trigger IntakeOuttake = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER))
+		// INTAKE
+		Trigger intakeOuttake = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER))
 			.whenHeld(intake.setPosition(INTAKE))
 			.whenReleased(intake.setPosition(STOP));
-		Trigger IntakeIntake = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER))
+		Trigger intakeIntake = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER))
 			.whenHeld(intake.setPosition(OUTTAKE))
 			.whenReleased(intake.setPosition(STOP));
+		Button ledSlide = (new GamepadButton(driverGamepad, GamepadKeys.Button.RIGHT_BUMPER))
+			.whenPressed(intake.setPosition(INTAKEMORE));
 		
-    //OUTTAKE
 		
-		//BUCKET
-		Button LowBucket = (new GamepadButton(operatorGamepad, GamepadKeys.Button.X)
+		// OUTTAKE
+		Button lowBucket = (new GamepadButton(operatorGamepad, GamepadKeys.Button.X)
 			.whenPressed(outtake.setClawSetPoint(CLOSE))
 			.whenPressed(outtake.setPosition(LOW_BUCKET)));
 		
-		Button HighBucket = (new GamepadButton(operatorGamepad, GamepadKeys.Button.Y)
-			.whenPressed(outtake.setClawSetPoint(CLOSE)))
-			.whenPressed(outtake.setPosition(HIGH_BUCKET));
+		Button highBucket = (new GamepadButton(operatorGamepad, GamepadKeys.Button.Y)
+			.whenPressed(outtake.setClawSetPoint(CLOSE))
+			.whenPressed(outtake.setPosition(HIGH_BUCKET)));
+		Button climb = (new GamepadButton(operatorGamepad, GamepadKeys.Button.A)
+			.whenPressed(outtake.setPosition(CLIMB)));
+		Button start =(new GamepadButton(operatorGamepad, GamepadKeys.Button.B)
+			.whenPressed(outtake.setPosition(START)));
 		
-        //SPECIMEN
-		Button IntakeSpecimen = (new GamepadButton(operatorGamepad, GamepadKeys.Button.LEFT_BUMPER)
+		// SPECIMEN
+		Button intakeSpecimen = (new GamepadButton(operatorGamepad, GamepadKeys.Button.LEFT_BUMPER)
 			.whenPressed(outtake.setClawSetPoint(OPEN))
 			.whenPressed(outtake.setPosition(SPECIMEN_WALL)));
-		Button HighRung = (new GamepadButton(operatorGamepad, GamepadKeys.Button.DPAD_UP)
+		Button highRung = (new GamepadButton(operatorGamepad, GamepadKeys.Button.DPAD_UP)
 			.whenPressed(outtake.setClawSetPoint(CLOSE))
 			.whenPressed(outtake.setPosition(HIGH_RUNG)));
 		Button lowRung = (new GamepadButton(operatorGamepad, GamepadKeys.Button.DPAD_LEFT)
@@ -140,25 +140,21 @@ public class TeleOpMain extends MatchOpMode {
 		
 		Trigger specimenWall = (new GamepadTrigger(operatorGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER))
 			.whenPressed(outtake.setClawSetPoint(CLOSE));
-		Trigger forSpecimen = (new GamepadTrigger(operatorGamepad, GamepadKeys.Trigger.LEFT_TRIGGER)
-			.whenPressed(outtake.setClawSetPoint(OPEN)));
-	//SLIDE MANUALS
+		Trigger forSpecimen = (new GamepadTrigger(operatorGamepad, GamepadKeys.Trigger.LEFT_TRIGGER))
+			.whenPressed(outtake.setClawSetPoint(OPEN));
+		
+		// SLIDE MANUALS
 		outtake.verticalSlide.setDefaultCommand(new SlideVerticalManual(
 			outtake.verticalSlide, operatorGamepad::getRightY));
-//        intake.horizontalSlide.setDefaultCommand(new SlideHorizontalManual(intake.horizontalSlide,
-//                operatorGamepad::getLeftX));
-
-//        Trigger Climb =(new GamepadButton(operatorGamepad,GamepadKeys.Button.DPAD_DOWN)
-//                .whenPressed(outtake.setPosition(START)));
+		intake.horizontalSlide.setDefaultCommand(new SlideHorizontalManual(
+			intake.horizontalSlide, operatorGamepad::getLeftX));
 		
-		outtake.claw.setDefaultCommand(new ColorIntakeCommand(intake,outtake, sensorColor, Intake.Sample.RED));
-		
-
+		//outtake.claw.setDefaultCommand(new ColorIntakeCommand(intake, outtake, sensorColor, Intake.Sample.RED));
 	}
-	
 	
 	@Override
 	public void matchStart() {
+		// Reset IMU yaw when the match starts
+		mechdrive2.imu.resetYaw();
 	}
-	
 }

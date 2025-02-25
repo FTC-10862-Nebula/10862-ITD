@@ -43,11 +43,11 @@ public class HorizontalSlide extends SubsystemBase {
         hSlide = new NebulaMotor(hw,
             "hSlide",
             NebulaMotor.MotorType.RPM_435,
-            NebulaMotor.Direction.Reverse,
+            NebulaMotor.Direction.Forward,
             NebulaMotor.IdleMode.Coast,
             isEnabled);
             slideController =new PIDFController
-                 (0.004,0,0,0);
+                 (0.001,0,0,0);
 }
 
     @Override
